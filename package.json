@@ -6,5 +6,15 @@
   "repository": "git@github.com:L2jLiga/xd2svg.git",
   "author": "L2jLiga <L2jLiga@mail.ru>",
   "license": "MIT",
-  "private": null
+  "scripts": {
+    "build": "gulp build",
+    "serve": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "gulp": "gulpjs/gulp#4.0"
+  }
 }
