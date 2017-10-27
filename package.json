@@ -1,0 +1,10 @@
+{
+  "name": "xd2svg",
+  "version": "0.0.1",
+  "description": "Utility for converting Adobe XD files (*.xd) to SVG",
+  "main": "index.js",
+  "repository": "git@github.com:L2jLiga/xd2svg.git",
+  "author": "L2jLiga <L2jLiga@mail.ru>",
+  "license": "MIT",
+  "private": null
+}
