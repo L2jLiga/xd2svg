@@ -3,14 +3,22 @@ Utility for converting Adobe eXperience Design files into SVG
 
 ## Installation
 
+1. via npm
+
    ```npm
-    npm install
+    npm install xd2svg -g
+   ```
+
+2. via yarn
+
+   ```npm
+    yarn global add xd2svg
    ```
 
 ## Usage
 
    ```npm
-    npm run xd2svg input.xd [output.svg]
+    xd2svg input.xd [output.svg]
    ```
 
 ## Defenition list
