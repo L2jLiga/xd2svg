@@ -2,7 +2,15 @@
   "name": "xd2svg",
   "version": "0.0.1",
   "description": "Utility for converting Adobe XD files (*.xd) to SVG",
-  "keywords": ["svg", "xd", "adobe xd", "adobe experience design", "converter", "verctor", "graphics"],
+  "keywords": [
+    "svg",
+    "xd",
+    "adobe xd",
+    "adobe experience design",
+    "converter",
+    "verctor",
+    "graphics"
+  ],
   "main": "bin/xd2svg-cli.js",
   "homepage": "https://github.com/L2jLiga/xd2svg",
   "repository": "git@github.com:L2jLiga/xd2svg.git",
@@ -10,13 +18,16 @@
   "author": "L2jLiga <L2jLiga@mail.ru>",
   "license": "MIT",
   "files": [
-  	"bin/*.js",
-  	"lib/*.js"
+    "bin/*.js",
+    "lib/*.js"
   ],
   "engines": {
     "node": ">=8.0.0"
   },
   "bin": {
-  	"xd2svg-cli": "bin/xd2svg-cli.js" 
+    "xd2svg-cli": "bin/xd2svg-cli.js"
+  },
+  "dependencies": {
+    "unzip": "^0.1.11"
   }
 }
