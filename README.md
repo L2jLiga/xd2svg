@@ -3,27 +3,15 @@ Utility for converting Adobe eXperience Design files into SVG
 
 ## Installation
 
-```npm
-npm install
-```
+   ```npm
+    npm install
+   ```
 
 ## Usage
 
-1. You need to build project
-
    ```npm
-    npm run build
+    npm run xd2svg input.xd [output.svg]
    ```
-
-2. After build run project
-
-   ```npm
-    npm run serve
-   ```
-
-3. Open in your browser
-
-   [http://localhost:9987](http://localhost:9987/)
 
 ## Defenition list
 
@@ -39,6 +27,8 @@ npm install
 </dl>
 
 ## Structure of XD files
+
+Zip data (MIME type "application/vnd.adobe.sparkler.project+dcxucf")
 
 - [__DIR__] artwork
   - [__DIR__] artboard-{uuid}
