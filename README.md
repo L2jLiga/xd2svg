@@ -1,4 +1,4 @@
-# xd2json
+# xd2svg
 Utility for converting Adobe eXperience Design files into SVG
 
 ## Installation
