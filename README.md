@@ -18,7 +18,7 @@ Utility for converting Adobe eXperience Design files into SVG
 ## Usage
 
    ```npm
-    xd2svg input.xd [output.svg]
+    xd2svg-cli input.xd [output.svg]
    ```
 
 ## Defenition list
