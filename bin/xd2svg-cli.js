@@ -3,9 +3,10 @@
 (() => {
   'use strict';
 
-  const [fs, unzip] = [
+  const [fs, unzip, tmp] = [
     require('fs'),
-    require('extract-zip')
+    require('extract-zip'),
+    require('tmp')
   ];
 
   const artBoardConverter = require('../lib/artBoardConverter.js');
@@ -33,10 +34,14 @@
     outputFile = inputName.join('.');
   }
 
-  unzip(inputFile, {dir: `.tmp-${inputFile}`}, function (error) {
+  let directory = tmp.dirSync({
+    unsafeCleanup: true
+  });
+
+  unzip(inputFile, {dir: directory.name}, function (error) {
     if (error) throw error;
 
-    let json = fs.readFileSync(`.tmp-${inputFile}/manifest`, 'utf-8');
+    let json = fs.readFileSync(`${directory.name}/manifest`, 'utf-8');
 
     let manifest = JSON.parse(json);
 
@@ -45,7 +50,7 @@
     let convertedArtboards = [];
 
     manifestInfo.artboards.forEach(artboardItem => {
-      let json = fs.readFileSync(`.tmp-${inputFile}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
+      let json = fs.readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
       let artboard = JSON.parse(json);
 
@@ -61,24 +66,10 @@
 
     let totalSvg = `<?xml version="1.0" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" id="${manifestInfo.id}" version="1.1">${convertedArtboards.join('')}</svg>`;
 
-    deleteFolderRecursive(`.tmp-${inputFile}`);
+    directory.removeCallback();
 
     fs.writeFile(outputFile, totalSvg, 'utf-8');
   });
-
-  function deleteFolderRecursive(path) {
-    if (fs.existsSync(path)) {
-      fs.readdirSync(path).forEach(function (file) {
-        let curPath = path + '/' + file;
-        if (fs.lstatSync(curPath).isDirectory()) {
-          deleteFolderRecursive(curPath);
-        } else {
-          fs.unlinkSync(curPath);
-        }
-      });
-      fs.rmdirSync(path);
-    }
-  }
 
   console.log(inputFile, outputFile);
 })();
