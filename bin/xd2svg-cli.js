@@ -33,10 +33,10 @@
     outputFile = inputName.join('.');
   }
 
-  unzip(inputFile, {dir: `${__dirname}/tmp-${inputFile}`}, function (error) {
+  unzip(inputFile, {dir: `.tmp-${inputFile}`}, function (error) {
     if (error) throw error;
 
-    let json = fs.readFileSync(`${__dirname}/tmp-${inputFile}/manifest`, 'utf-8');
+    let json = fs.readFileSync(`.tmp-${inputFile}/manifest`, 'utf-8');
 
     let manifest = JSON.parse(json);
 
@@ -45,7 +45,7 @@
     let convertedArtboards = [];
 
     manifestInfo.artboards.forEach(artboardItem => {
-      let json = fs.readFileSync(`${__dirname}/tmp-${inputFile}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
+      let json = fs.readFileSync(`.tmp-${inputFile}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
       let artboard = JSON.parse(json);
 
@@ -61,7 +61,7 @@
 
     let totalSvg = `<?xml version="1.0" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" id="${manifestInfo.id}" version="1.1">${convertedArtboards.join('')}</svg>`;
 
-    deleteFolderRecursive(`${__dirname}/tmp-${inputFile}`);
+    deleteFolderRecursive(`.tmp-${inputFile}`);
 
     fs.writeFile(outputFile, totalSvg, 'utf-8');
   });

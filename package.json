@@ -1,6 +1,6 @@
 {
   "name": "xd2svg",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Utility for converting Adobe XD files (*.xd) to SVG",
   "keywords": [
     "svg",
@@ -10,6 +10,12 @@
     "converter",
     "verctor",
     "graphics"
+  ],
+  "maintainers": [
+    {
+      "name": "Andrey Chalkin",
+      "email": "l2jliga@mail.ru"
+    }
   ],
   "main": "bin/xd2svg-cli.js",
   "homepage": "https://github.com/L2jLiga/xd2svg",
