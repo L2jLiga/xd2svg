@@ -9,7 +9,7 @@
     require('tmp')
   ];
 
-  const artBoardConverter = require('../lib/artBoardConverter.js');
+  const artBoardConverter = require('../lib/artboardConverter.js');
   const manifestParser = require('../lib/manifestParser');
 
   const inputFile = process.argv[2];
