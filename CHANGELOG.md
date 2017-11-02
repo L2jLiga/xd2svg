@@ -6,11 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [Released]
+
 ## 0.1.3 &ndash; 2017-11-02
 ### Fixes
 + Use temporary directories for passing files
-
-## [Released]
 
 ## 0.1.2 &ndash; 2017-11-02
 ### Changes
