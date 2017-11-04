@@ -15,9 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## 0.1.5 &ndash; 2017-11-04
 ### Added
-+ Accessibility to create valid viewbox
-+ Accessibility to create valid viewport
-+ Accessibility to add title for each svg
++ Ability to create valid viewbox
++ Ability to create valid viewport
++ Ability to add title for each svg
 
 ### Changes
 + Default fill color set to `white`
