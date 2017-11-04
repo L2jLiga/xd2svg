@@ -17,8 +17,21 @@ Utility for converting Adobe eXperience Design files into SVG
 
 ## Usage
 
+You can use utility from CLI
+
    ```npm
     xd2svg-cli input.xd [output.svg]
+   ```
+
+or require it directly in your scripts
+
+   ```js
+    const xd2svg = require('xd2svg');
+
+    let inputFileName = 'someFile.xd';
+    let outputFileName = 'someFile.svg';
+    
+    xd2svg(inputFileName, outputFileName);
    ```
 
 ## Defenition list
