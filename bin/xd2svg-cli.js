@@ -49,22 +49,48 @@
 
     let convertedArtboards = [];
 
+    let viewbox = {
+      x1: null,
+      x2: null,
+      y1: null,
+      y2: null
+    };
+
     manifestInfo.artboards.forEach(artboardItem => {
       let json = fs.readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
       let artboard = JSON.parse(json);
 
+      console.log(artboardItem);
+
       let artboardInfo = {
+        title: artboardItem.name,
+        x1: artboardItem['uxdesign#bounds'].x,
+        y1: artboardItem['uxdesign#bounds'].y,
         width: artboardItem['uxdesign#bounds'].width,
         height: artboardItem['uxdesign#bounds'].height
       };
+
+      artboardInfo.x2 = artboardInfo.x1 + artboardInfo.width;
+      artboardInfo.y2 = artboardInfo.y1 + artboardInfo.height;
+
+      viewbox.x1 = viewbox.x1 === null || viewbox.x1 > artboardInfo.x1 ? artboardInfo.x1 : viewbox.x1;
+      viewbox.x2 = viewbox.x2 === null || viewbox.x2 < artboardInfo.x2 ? artboardInfo.x2 : viewbox.x2;
+      viewbox.y1 = viewbox.y1 === null || viewbox.y1 > artboardInfo.y1 ? artboardInfo.y1 : viewbox.y1;
+      viewbox.y2 = viewbox.y2 === null || viewbox.y2 < artboardInfo.y2 ? artboardInfo.y2 : viewbox.y2;
 
       let contentOfArtboard = artBoardConverter(artboard, artboardInfo).join('');
 
       convertedArtboards.push(contentOfArtboard);
     });
 
-    let totalSvg = `<?xml version="1.0" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" id="${manifestInfo.id}" version="1.1">${convertedArtboards.join('')}</svg>`;
+    let totalSvg = `<?xml version="1.0" standalone="no"?>
+    <svg xmlns="http://www.w3.org/2000/svg"
+         id="${manifestInfo.id}"
+         version="1.1"
+         viewbox="${viewbox.x1} ${viewbox.y1} ${viewbox.x2} ${viewbox.y2}">
+      ${convertedArtboards.join('')}
+    </svg>`;
 
     directory.removeCallback();
 
