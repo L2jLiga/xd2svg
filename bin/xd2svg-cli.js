@@ -61,14 +61,13 @@
 
       let artboard = JSON.parse(json);
 
-      console.log(artboardItem);
-
       let artboardInfo = {
         title: artboardItem.name,
         x1: artboardItem['uxdesign#bounds'].x,
         y1: artboardItem['uxdesign#bounds'].y,
         width: artboardItem['uxdesign#bounds'].width,
-        height: artboardItem['uxdesign#bounds'].height
+        height: artboardItem['uxdesign#bounds'].height,
+        viewport: artboardItem['uxdesign#viewport']
       };
 
       artboardInfo.x2 = artboardInfo.x1 + artboardInfo.width;
