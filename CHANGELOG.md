@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [Released]
+
+## 0.1.5 &ndash; 2017-11-04
 ### Added
 + Accessibility to create valid viewbox
 + Accessibility to create valid viewport
@@ -14,11 +18,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 + Default fill color set to `white`
 
 ### Fixes
-+ Fix invalid x coordinate when text elemenet haven't got that
++ Fix invalid x coordinate when text element haven't got that
 
-## [Released]
-
-## 0.1.4
+## 0.1.4 &ndash; 2017-11-03
 ### Fixes
 + Fixed issue with crash when `fill` or `stroke` doesn't contain color
 
