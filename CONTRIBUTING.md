@@ -5,8 +5,10 @@
 
 #### Did you find a bug?
 
-   + Check [Issues](https://github.com/L2jLiga/xd2svg/issues) and make sure that the bug was not reported yet
+   + Check [Issues](https://github.com/L2jLiga/xd2svg/issues) and make sure that the bug was not reported yet.
+   
    + If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/L2jLiga/xd2svg/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
+   
    + If possible, use the bug report templates to create the issue.
 
 #### Did you write a patch that fixed bug?
@@ -28,7 +30,7 @@
    You can ask any question via E-Mail
 
 ### Submitting changes
-   Please send a [GitHub Pull Request to xd2svg](https://github.com/L2jLiga/xd2svg/pull/new/master) with a clear list of what you've done (read more about [pull requests](http://help.github.com/pull-requests/)). Please follow our coding conventions (below) and make sure all of your commits are atomic (one feature per commit).
+   Please send a [GitHub Pull Request to xd2svg](https://github.com/L2jLiga/xd2svg/pull/new/master) with a clear list of what you've done (read more [about pull requests](https://help.github.com/articles/about-pull-requests/)). Please follow our coding conventions (below) and make sure all of your commits are atomic (one feature per commit).
 
    Always write a clear log message for your commits. One-line messages are fine for small changes, but bigger changes should look like this:
 
@@ -38,5 +40,5 @@
 
 ### [WIP] Coding conventions
 
-   + Describing Fn by JSDoc 3
+   + Describing function with JSDoc 3
    + Indent using two spaces (soft tabs)
