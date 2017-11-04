@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 + Accessibility to create valid viewbox
 + Accessibility to create valid viewport
++ Accessibility to add title for each svg
+
+### Changes
++ Default fill color set to `white`
+
+### Fixes
++ Fix invalid x coordinate when text elemenet haven't got that
 
 ## [Released]
 
