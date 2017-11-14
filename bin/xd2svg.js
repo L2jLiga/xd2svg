@@ -7,21 +7,18 @@ module.exports = function (inputFile, outputFile) {
     require('tmp')
   ];
 
-  const artBoardConverter = require('../lib/artboardConverter.js');
-  const manifestParser = require('../lib/manifestParser');
-
   let directory = tmp.dirSync({
     unsafeCleanup: true
   });
 
-  unzip(inputFile, {dir: directory.name}, function (error) {
-    if (error) throw error;
+  unzip(inputFile, {dir: directory.name}, workWithFile);
 
-    let json = fs.readFileSync(`${directory.name}/manifest`, 'utf-8');
+  function workWithFile(error) {
+    if (error) throw new Error(error);
 
-    let manifest = JSON.parse(json);
-
-    let manifestInfo = manifestParser(manifest);
+    const artBoardConverter = require('../lib/artboardConverter.js');
+    const manifestInfo = require('../lib/manifestParser')(directory);
+    const resourcesInfo = require('../lib/resourcesParser')(directory);
 
     let convertedArtboards = [];
 
@@ -30,16 +27,7 @@ module.exports = function (inputFile, outputFile) {
 
       let artboard = JSON.parse(json);
 
-      let artboardInfo = {
-        title: artboardItem.name,
-        x: artboardItem['uxdesign#bounds'].x,
-        y: artboardItem['uxdesign#bounds'].y,
-        width: artboardItem['uxdesign#bounds'].width,
-        height: artboardItem['uxdesign#bounds'].height,
-        viewport: artboardItem['uxdesign#viewport']
-      };
-
-      let contentOfArtboard = artBoardConverter(artboard, artboardInfo).join('');
+      let contentOfArtboard = artBoardConverter(artboard, resourcesInfo.artboards[artboardItem.name]).join('');
 
       convertedArtboards.push(contentOfArtboard);
     });
@@ -54,6 +42,5 @@ module.exports = function (inputFile, outputFile) {
     directory.removeCallback();
 
     fs.writeFile(outputFile, totalSvg, 'utf-8');
-  });
-
+  }
 };
