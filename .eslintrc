@@ -1,0 +1,18 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "nodejs",
+    "google"
+  ],
+  "rules": {
+    "max-len": [
+      2,
+      {
+        "code": 160,
+        "tabWidth": 2,
+        "ignoreUrls": true
+      }
+    ],
+    "no-console": "off"
+  }
+}
