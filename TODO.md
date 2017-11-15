@@ -11,6 +11,8 @@ This file contain list of tasks which need to perform. For example it may be tas
 - [ ] Implement functionality to work with resources
    - [ ] Raster graphics
    - [ ] Gradients
+      - [x] Linear
+      - [ ] Radial
    - [ ] Fonts
 - [ ] Implement all functionality needed to work with element styles
 - [ ] Implement functionality to switch active svg image by `location.hash()`

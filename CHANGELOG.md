@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 + Ability to use utility from scripts
++ Support for linearGradients
 
 ### Changed
 + Get information about artboards from resources directory
