@@ -1,17 +1,16 @@
 #!/usr/bin/env node
+'use strict';
 
 (() => {
-  'use strict';
+  const inputFileName = process.argv[2];
+  let outputFileName = process.argv[3];
 
-  const inputFile = process.argv[2];
-  let outputFile = process.argv[3];
-
-  if (!inputFile) {
+  if (!inputFileName) {
     return;
   }
 
-  if (!outputFile) {
-    let inputName = inputFile.split('.');
+  if (!outputFileName) {
+    const inputName = inputFileName.split('.');
 
     if (inputName.length > 1) {
       inputName.pop();
@@ -19,10 +18,10 @@
 
     inputName.push('svg');
 
-    outputFile = inputName.join('.');
+    outputFileName = inputName.join('.');
   }
 
-  require('./xd2svg')(inputFile, outputFile);
+  require('./xd2svg')(inputFileName, outputFileName);
 
-  console.log(inputFile, outputFile);
+  console.log(inputFileName, outputFileName);
 })();

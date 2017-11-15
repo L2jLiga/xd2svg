@@ -2,10 +2,10 @@
 This file contain list of tasks which need to perform. For example it may be tasks about some functionality or criticals bugs.
 
 #### Code-guide
-- [ ] Select one of popular code style for project
-   - [ ] Adapt it to suit one's need
-   - [ ] Apply it on project
-   - [ ] Describe it in CONTRIBUTING.md
+- [x] Select one of popular code style for project
+   - [x] Adapt it to suit one's need
+   - [x] Apply it on project
+   - [x] Describe it in CONTRIBUTING.md
 
 #### Functionality
 - [ ] Implement functionality to work with resources

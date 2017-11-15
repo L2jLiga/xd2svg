@@ -1,18 +1,22 @@
-module.exports = function (inputFile, outputFile) {
-  'use strict';
+'use strict';
 
+module.exports = function xd2svg(inputFile, outputFile) {
   const [fs, unzip, tmp] = [
     require('fs'),
     require('extract-zip'),
-    require('tmp')
+    require('tmp'),
   ];
 
-  let directory = tmp.dirSync({
-    unsafeCleanup: true
+  const directory = tmp.dirSync({
+    unsafeCleanup: true,
   });
 
   unzip(inputFile, {dir: directory.name}, workWithFile);
 
+  /**
+   * Callback which was called when xd was unpacked
+   * @param {*} error - Error message
+   */
   function workWithFile(error) {
     if (error) throw new Error(error);
 
@@ -20,19 +24,19 @@ module.exports = function (inputFile, outputFile) {
     const manifestInfo = require('../lib/manifestParser')(directory);
     const resourcesInfo = require('../lib/resourcesParser')(directory);
 
-    let convertedArtboards = [];
+    const convertedArtboards = [];
 
-    manifestInfo.artboards.forEach(artboardItem => {
-      let json = fs.readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
+    manifestInfo.artboards.forEach((artboardItem) => {
+      const json = fs.readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
-      let artboard = JSON.parse(json);
+      const artboard = JSON.parse(json);
 
-      let contentOfArtboard = artBoardConverter(artboard, resourcesInfo.artboards[artboardItem.name]).join('');
+      const contentOfArtboard = artBoardConverter(artboard, resourcesInfo.artboards[artboardItem.name]).join('');
 
       convertedArtboards.push(contentOfArtboard);
     });
 
-    let totalSvg = `<?xml version="1.0" standalone="no"?>
+    const totalSvg = `<?xml version="1.0" standalone="no"?>
     <svg xmlns="http://www.w3.org/2000/svg"
          id="${manifestInfo.id}"
          version="1.1">

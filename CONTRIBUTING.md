@@ -38,7 +38,14 @@
     > 
     > A paragraph describing what changed and its impact."
 
-### [WIP] Coding conventions
+### Coding conventions
+The code must pass the eslint check, used rules:
 
-   + Describing function with JSDoc 3
-   + Indent using two spaces (soft tabs)
+Basic
+   + eslint:recommend
+   + eslint-config-nodejs
+   + eslint-config-google
+
+Custom
+   + Maximal line length = 160
+   + Allow to use `console`
