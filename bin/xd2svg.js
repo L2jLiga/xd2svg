@@ -36,7 +36,8 @@ module.exports = function (inputFile, outputFile) {
     <svg xmlns="http://www.w3.org/2000/svg"
          id="${manifestInfo.id}"
          version="1.1">
-      ${convertedArtboards.join('')}
+      ${resourcesInfo.gradients}
+      ${convertedArtboards.join('\r\n')}
     </svg>`;
 
     directory.removeCallback();
