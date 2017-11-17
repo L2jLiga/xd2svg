@@ -1,4 +1,6 @@
 # xd2svg
+[![npm version](https://badge.fury.io/js/xd2svg.svg)](https://badge.fury.io/js/xd2svg)
+
 Utility for converting Adobe eXperience Design files into SVG
 
 ## Installation
