@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Released]
+
+## 0.1.6 &ndash; 2017-11-18
 ### Added
 + Ability to use utility from scripts
 + Support for linearGradients
@@ -12,8 +14,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 + Get information about artboards from resources directory
 + Separate functionality from CLI
-
-## [Released]
 
 ## 0.1.5 &ndash; 2017-11-04
 ### Added
