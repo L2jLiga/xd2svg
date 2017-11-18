@@ -33,6 +33,9 @@
   "bin": {
     "xd2svg-cli": "bin/xd2svg-cli.js"
   },
+  "scripts": {
+    "lint": "eslint ./**/*.js"
+  },
   "dependencies": {
     "extract-zip": "^1.6.6",
     "jsdom": "^11.3.0",
