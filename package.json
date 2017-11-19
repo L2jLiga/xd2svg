@@ -39,6 +39,7 @@
   "dependencies": {
     "extract-zip": "^1.6.6",
     "jsdom": "^11.3.0",
+    "svgo": "^1.0.3",
     "tmp": "^0.0.33"
   },
   "devDependencies": {

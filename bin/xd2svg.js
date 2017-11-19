@@ -1,10 +1,11 @@
 'use strict';
 
 module.exports = function xd2svg(inputFile, outputFile) {
-  const [fs, unzip, tmp] = [
+  const [fs, unzip, tmp, svgo] = [
     require('fs'),
     require('extract-zip'),
     require('tmp'),
+    require('../lib/svgo'),
   ];
 
   const directory = tmp.dirSync({
@@ -47,6 +48,12 @@ module.exports = function xd2svg(inputFile, outputFile) {
 
     directory.removeCallback();
 
-    fs.writeFile(outputFile, totalSvg, 'utf-8');
+    svgo.optimize(totalSvg)
+
+      .then((result) => fs.writeFile(outputFile, result.data), (error) => {
+        throw new Error(error);
+      })
+
+      .then(() => console.log('XD2SVG finished their work'));
   }
 };
