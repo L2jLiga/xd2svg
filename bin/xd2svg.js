@@ -38,6 +38,7 @@ module.exports = function xd2svg(inputFile, outputFile) {
 
     const totalSvg = `<?xml version="1.0" standalone="no"?>
     <svg xmlns="http://www.w3.org/2000/svg"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
          id="${manifestInfo.id}"
          version="1.1">
       ${resourcesInfo.gradients}
