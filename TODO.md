@@ -9,7 +9,7 @@ This file contain list of tasks which need to perform. For example it may be tas
 
 #### Functionality
 - [ ] Implement functionality to work with resources
-   - [ ] Raster graphics
+   - [x] Raster graphics
    - [ ] Gradients
       - [x] Linear
       - [ ] Radial
