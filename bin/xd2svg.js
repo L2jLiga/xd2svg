@@ -31,7 +31,7 @@ module.exports = function xd2svg(inputFile, outputFile) {
 
       const artboard = JSON.parse(json);
 
-      const contentOfArtboard = artBoardConverter(artboard, resourcesInfo.artboards[artboardItem.name]).join('');
+      const contentOfArtboard = artBoardConverter(artboard, resourcesInfo.artboards[artboardItem.name], manifestInfo.resources).join('');
 
       convertedArtboards.push(contentOfArtboard);
     });
