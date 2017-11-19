@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 + Implement `lint` task
 + Implement raster graphics functionality
 
+### Changes
++ Improve font style functionality
+
 ## [Released]
 
 ## 0.1.6 &ndash; 2017-11-18
