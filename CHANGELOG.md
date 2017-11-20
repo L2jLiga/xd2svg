@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 + SVGO
++ Support for text attributes `text-align` and `line-height`
++ Support for element opacity
+
+### Fixed
++ Positioning of text elements
+
+### Changes
++ Optimized font styles generator
 
 ## [Released]
 

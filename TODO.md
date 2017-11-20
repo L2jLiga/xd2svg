@@ -15,6 +15,16 @@ This file contain list of tasks which need to perform. For example it may be tas
       - [ ] Radial
    - [ ] Fonts
 - [ ] Implement all functionality needed to work with element styles
+   - [ ] Fill and stroke
+      - [x] Color/solid
+      - [x] Pattern
+      - [ ] Gradient
+   - [x] Opacity
+   - [ ] Filters
+   - [ ] Text attributes
+      - [x] Line height
+      - [x] Text align
+      - [ ] Other attrs
 - [ ] Implement functionality to switch active svg image by `location.hash()`
 
 #### Project
