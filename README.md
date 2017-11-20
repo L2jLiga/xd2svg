@@ -69,7 +69,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Andrey Chalkin** - *Initial work* - [PurpleBooth](https://github.com/L2jLiga)
+* **Andrey Chalkin** - *Initial work* - [L2jLiga](https://github.com/L2jLiga)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
