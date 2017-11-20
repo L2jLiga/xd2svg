@@ -20,7 +20,7 @@ This file contain list of tasks which need to perform. For example it may be tas
       - [x] Pattern
       - [ ] Gradient
    - [x] Opacity
-   - [ ] Filters
+   - [x] Filters
    - [ ] Text attributes
       - [x] Line height
       - [x] Text align
