@@ -65,7 +65,13 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/spec/v2.0.0.html) for versioning.
+For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+
+## Changelog
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+For the versions changelog, see the [CHANGELOG.md](CHANGELOG.md)
 
 ## Authors
 
