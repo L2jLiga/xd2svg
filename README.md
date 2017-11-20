@@ -6,19 +6,22 @@
 
 Utility for converting Adobe eXperience Design files into SVG.
 
-## Table of content
+## Table of Contents
+
    * [xd2svg](#xd2svg)
-      * [Table of content](#table-of-content)
+      * [Table of Contents](#table-of-contents)
       * [Getting started](#getting-started)
          * [Prerequisites](#prerequisites)
          * [Installation](#installation)
          * [Using](#using)
       * [Contributing](#contributing)
       * [Versioning](#versioning)
+      * [Changelog](#changelog)
       * [Authors](#authors)
       * [License](#license)
       * [Defenition list](#defenition-list)
       * [Structure of XD files](#structure-of-xd-files)
+
 
 ## Getting started
 
