@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 + Base support for filters
++ Build task
+
+### Changes
++ Support for node.js >= 6.10
 
 ## [Released]
 
