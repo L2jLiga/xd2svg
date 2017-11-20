@@ -22,4 +22,6 @@ gulp.task('build', ['lint'], () => gulp.src('./src/**/*.js')
 
   .pipe(gulp.dest('./')));
 
+gulp.task('watch', () => gulp.watch('./src/**/*.js', ['build']));
+
 gulp.task('default', ['build']);
