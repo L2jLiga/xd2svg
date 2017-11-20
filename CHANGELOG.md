@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ## [Released]
 
+## 0.2.1 &ndash 2017-11-20
+### Fixes
++ Fixed unexpected behaviour when trying to run utility
+
 ## 0.2.0 &ndash; 2017-11-20
 ### Added
 + Base support for filters
