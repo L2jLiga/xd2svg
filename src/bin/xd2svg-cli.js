@@ -4,7 +4,6 @@
 (() => {
   const inputFileName = process.argv[2];
   let outputFileName = process.argv[3];
-
   if (!inputFileName) {
     return;
   }
