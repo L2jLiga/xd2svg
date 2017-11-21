@@ -1,10 +1,7 @@
 'use strict';
 
 const context = new (require('jsdom').JSDOM)();
-const createColor = require('./styles/colorTransformer');
-const textAttributes = require('./styles/textAttributes');
-const fontStyles = require('./styles/fontStyles');
-const filtersStyle = require('./styles/filters');
+const createStyles = require('./createStyles');
 
 module.exports = artboardConverter.bind(context.window, context.window.document);
 
@@ -80,72 +77,6 @@ function artboardConverter(document, artboard, artboardInfo, resources) {
   }
 
   /**
-   * Generate styles property for node
-   * TODO: Make it universal
-   * @param {Element} node - Element which should be stylized
-   * @param {Object} stylesObject - Styles for element
-   * @param {String} uuid - unique identifier of element
-   * @return {void}
-   */
-  function generateStyles(node, stylesObject, uuid) {
-    const colorStyles = ['stroke', 'fill'];
-
-    if (stylesObject.textAttributes) {
-      const currentStyleString = node.getAttribute('style') || '';
-      const newStyleString = currentStyleString + textAttributes(stylesObject.textAttributes);
-
-      node.setAttribute('style', newStyleString);
-    }
-
-    if (stylesObject.filters) node.setAttribute('filter', filtersStyle(stylesObject.filters));
-
-    colorStyles.forEach((styleName) => {
-      const styleObject = stylesObject[styleName];
-
-      if (styleObject) {
-        switch (styleObject.type) {
-          case 'color':
-            node.setAttribute(styleName, createColor(styleObject.fill.color));
-
-            break;
-          case 'gradient':
-            node.setAttribute(styleName, `url(#${styleObject.gradient.ref})`);
-
-            break;
-          case 'pattern':
-            // TODO: write to patterns new pattern with image and add it to defs in xd2svg
-            patterns.push(`<pattern id="${uuid}"
-                                    width="100%" height="100%">
-                            <image xlink:href="${resources[styleObject.pattern.meta.ux.uid]}"
-                                   width="${styleObject.pattern.width}" height="${styleObject.pattern.height}" />
-                           </pattern>`);
-
-            node.setAttribute(styleName, `url(#${uuid})`);
-
-            break;
-          case 'none':
-            node.setAttribute(styleName, 'none');
-
-            break;
-          default:
-            node.setAttribute(styleName, createColor(styleObject.color));
-        }
-
-        if (styleObject.width) node.setAttribute(styleName + '-width', styleObject.width);
-      }
-    });
-
-    if (stylesObject.opacity) node.setAttribute('opacity', stylesObject.opacity);
-
-    if (stylesObject.font) {
-      const currentStyleString = node.getAttribute('style') || '';
-      const newStyleString = currentStyleString + fontStyles(stylesObject.font);
-
-      node.setAttribute('style', newStyleString);
-    }
-  }
-
-  /**
    * Transform element
    * @param {Element} node - Element which should be transformed
    * @param {Object} transformationObject - Object with transform values
@@ -177,7 +108,7 @@ function artboardConverter(document, artboard, artboardInfo, resources) {
       }
 
       if (svgObject.style) {
-        generateStyles(node, svgObject.style, svgObject.id);
+        node.setAttribute('style', createStyles(svgObject.style, parentElement, svgObject.id, resources));
       }
 
       if (svgObject.transform) {
@@ -207,7 +138,7 @@ function artboardConverter(document, artboard, artboardInfo, resources) {
     backGround.setAttribute('transform', `translate(${artboardInfo.x} ${artboardInfo.y})`);
     backGround.setAttribute('width', artboardInfo.width);
     backGround.setAttribute('height', artboardInfo.height);
-    generateStyles(backGround, imageRootObject.style);
+    backGround.setAttribute('style', createStyles(imageRootObject.style, svg, imageRootObject.id, resources));
 
     svg.setAttribute('id', imageRootObject.id);
     svg.setAttribute('viewBox', `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);

@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 + Implement `watch` task
 
+### Changes
++ Styles parser moved to separated file
+
 ## [Released]
 
 ## 0.2.1 &ndash 2017-11-20
