@@ -1,7 +1,7 @@
 'use strict';
 
 const createColor = require('../utils/colorTransformer');
-const camelToDash = require('../camelToDash');
+const camelToDash = require('../utils/camelToDash');
 
 module.exports = filters;
 
