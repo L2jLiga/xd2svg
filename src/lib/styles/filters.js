@@ -3,7 +3,14 @@
 const createColor = require('./colorTransformer');
 const camelToDash = require('../camelToDash');
 
-module.exports = function filters(filters) {
+module.exports = filters;
+
+/**
+ * Generate filter style property from object
+ * @param {Object} filters - Object representing filters properties
+ * @return {String} Filter properties
+ */
+function filters(filters) {
   let filtersStyle = '';
 
   filters.forEach((filter) => {
@@ -22,4 +29,4 @@ module.exports = function filters(filters) {
   });
 
   return filtersStyle;
-};
+}
