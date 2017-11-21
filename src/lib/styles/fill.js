@@ -1,9 +1,19 @@
 'use strict';
 
 const document = new (require('jsdom').JSDOM)().window.document;
-const colorTransformer = require('./colorTransformer');
+const colorTransformer = require('../utils/colorTransformer');
 
-module.exports = function fill(fill, parentElement, uuid, resources) {
+module.exports = fill;
+
+/**
+ * Generate fill style property from object
+ * @param {Object} fill - Object representing fill properties
+ * @param {Element} parentElement - Element which contain target element
+ * @param {String} uuid - Unique identifier for element
+ * @param {Object} resources - Object representing images for patterns
+ * @return {String} String representing fill style properties
+ */
+function fill(fill, parentElement, uuid, resources) {
   switch (fill.type) {
     case 'color':
       return colorTransformer(fill.fill.color);
@@ -18,7 +28,7 @@ module.exports = function fill(fill, parentElement, uuid, resources) {
     default:
       return colorTransformer(fill.color);
   }
-};
+}
 
 /**
  * Create pattern for image fill

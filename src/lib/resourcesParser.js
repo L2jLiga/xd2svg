@@ -75,7 +75,7 @@ module.exports = function resourceParser(directory) {
         const elem = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
 
         elem.setAttribute('offset', stop.offset);
-        elem.setAttribute('stop-color', require('./styles/colorTransformer')(stop.color));
+        elem.setAttribute('stop-color', require('./utils/colorTransformer')(stop.color));
 
         currentGradient.appendChild(elem);
       });

@@ -1,12 +1,14 @@
 'use strict';
 
+module.exports = colorTransformer;
+
 /**
  * Convert color from color object to string
  * TODO: Add support for another modes
  * @param {Object} fillColor - Color object
  * @return {String} Created color
  */
-module.exports = function colorTransformer(fillColor) {
+function colorTransformer(fillColor) {
   let color;
 
   if (!fillColor) return 'white';
@@ -27,4 +29,4 @@ module.exports = function colorTransformer(fillColor) {
   }
 
   return color;
-};
+}
