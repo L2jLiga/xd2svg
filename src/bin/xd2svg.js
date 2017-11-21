@@ -50,7 +50,9 @@ module.exports = function xd2svg(inputFile, outputFile) {
 
     svgo.optimize(totalSvg)
 
-      .then((result) => fs.writeFile(outputFile, result.data), (error) => {
+      .then((result) => fs.writeFile(outputFile, result.data, (error) => {
+        if (error) throw new Error(error);
+      }), (error) => {
         throw new Error(error);
       })
 

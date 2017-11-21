@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 + Implement `watch` task
 
+### Fixes
++ Fixed message about calling async function w/o callback
+
 ### Changes
 + Styles parser moved to separated file
 
