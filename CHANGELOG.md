@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changes
 + Styles parser moved to separated file
++ Added option `ecma: 6` to uglifyES
 
 ## [Released]
 

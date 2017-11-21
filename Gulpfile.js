@@ -17,7 +17,9 @@ gulp.task('build', ['lint'], () => gulp.src('./src/**/*.js')
 
   .pipe(sourcemaps.init())
   .pipe(babel())
-  .pipe(uglify())
+  .pipe(uglify({
+    ecma: 6,
+  }))
   .pipe(sourcemaps.write('./'))
 
   .pipe(gulp.dest('./')));
