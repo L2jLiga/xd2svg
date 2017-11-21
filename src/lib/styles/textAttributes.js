@@ -3,7 +3,7 @@
 module.exports = textAttributes;
 
 /**
- * Convert textAttributes object to css string
+ * Generate filter text attributes properties from object
  * @param {Object} textAttributes - Object representing text attributes
  * @return {String} Attributes coverted to css inline-style string
  */

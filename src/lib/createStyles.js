@@ -33,12 +33,12 @@ module.exports = createStyles;
 /**
  * Create value for style attr from object
  * @param {Object} stylesObject - Object representing styles
- * @param {Element} parrentElement - Element which contain target element
+ * @param {Element} parentElement - Element which contain target element
  * @param {String} uuid - Unique identifier for element
  * @param {Object} resources - Object representing images for patterns
  * @return {String} String representing styles
  */
-function createStyles(stylesObject, parrentElement, uuid, resources) {
+function createStyles(stylesObject, parentElement, uuid, resources) {
   let styleAttr = '';
 
   supportedStyles.forEach((styleName) => {
@@ -47,7 +47,7 @@ function createStyles(stylesObject, parrentElement, uuid, resources) {
     const parser = parsers[styleName];
 
     const ruleName = parser.name ? parser.name + ':' : '';
-    const ruleValue = parser.parse(stylesObject[styleName], parrentElement, uuid, resources);
+    const ruleValue = parser.parse(stylesObject[styleName], parentElement, uuid, resources);
 
     styleAttr += `;${ruleName + ruleValue};`;
   });
