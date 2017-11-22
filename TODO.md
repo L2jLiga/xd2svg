@@ -28,7 +28,7 @@ This file contain list of tasks which need to perform. For example it may be tas
 - [ ] Implement functionality to switch active svg image by `location.hash()`
 
 #### Project
-- [x] Implement task to build project with support for Node.JS 6.x.x
+- [x] Implement task to build project with support for Node.JS 6.10
    - [x] Select tasks runner (Grunt, Gulp or Webpack)
    - [x] Configure babel
 - [ ] Implement task to test functionality
