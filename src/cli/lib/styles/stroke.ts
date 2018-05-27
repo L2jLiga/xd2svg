@@ -1,8 +1,12 @@
 'use strict';
 
-const fill = require('./fill');
+import fill from './fill';
 
-module.exports = stroke;
+export default {
+  name: 'stroke',
+  parse: stroke
+}
+
 
 /**
  * Generate stroke style property from object
@@ -13,5 +17,5 @@ module.exports = stroke;
  * @return {String} String representing stroke style properties
  */
 function stroke(stroke, parentElement, uuid, resources) {
-  return fill(stroke, parentElement, uuid, resources) + `;stroke-width:${stroke.width}px`;
+  return fill.parse(stroke, parentElement, uuid, resources) + `;stroke-width:${stroke.width}px`;
 }

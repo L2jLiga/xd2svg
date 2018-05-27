@@ -1,5 +1,3 @@
-'use strict';
-
 const SVGO = require('svgo');
 
 const svgoConfig = {
@@ -39,6 +37,4 @@ const svgoConfig = {
   removeDimensions: false,
 };
 
-const svgo = new SVGO(svgoConfig);
-
-module.exports = svgo;
+export default new SVGO(svgoConfig);

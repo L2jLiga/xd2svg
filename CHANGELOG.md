@@ -6,15 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Added
-+ Implement `watch` task
-
+## 0.3.0
 ### Fixes
 + Fixed message about calling async function w/o callback
++ Fixed FC when unknown filter
 
 ### Changes
-+ Styles parser moved to separated file
-+ Added option `ecma: 6` to uglifyES
++ Moved to TypeScript
++ Moved to Webpack
 
 ## [Released]
 

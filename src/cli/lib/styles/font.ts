@@ -9,7 +9,7 @@ const fontWeightVariants = {
   Black: 900,
 };
 
-module.exports = font;
+export default {parse: font};
 
 /**
  * Generate font style property from object

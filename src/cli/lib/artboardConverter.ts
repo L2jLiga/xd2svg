@@ -1,9 +1,9 @@
 'use strict';
 
 const context = new (require('jsdom').JSDOM)();
-const createStyles = require('./createStyles');
+import createStyles from './createStyles';
 
-module.exports = artboardConverter.bind(context.window, context.window.document);
+export default artboardConverter.bind(context.window, context.window.document);
 
 /**
  * Convert all artboards element to one svg image

@@ -1,9 +1,10 @@
-'use strict';
+import colorTransformer from "./utils/colorTransformer";
 
 const fs = require('fs');
-const document = (new (require('jsdom').JSDOM)()).window.document;
+const jsdom = require('jsdom');
+const document = (new jsdom.JSDOM()).window.document;
 
-module.exports = function resourceParser(directory) {
+export default function resourceParser(directory) {
   const json = fs.readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
 
   const resources = JSON.parse(json);
@@ -75,7 +76,7 @@ module.exports = function resourceParser(directory) {
         const elem = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
 
         elem.setAttribute('offset', stop.offset);
-        elem.setAttribute('stop-color', require('./utils/colorTransformer')(stop.color));
+        elem.setAttribute('stop-color', colorTransformer(stop.color));
 
         currentGradient.appendChild(elem);
       });
