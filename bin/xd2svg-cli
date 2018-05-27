@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+'use strict';
+
+process.title = 'xd2svg';
+
+require('../dist/xd2svg-cli.js');

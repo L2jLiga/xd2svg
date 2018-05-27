@@ -24,6 +24,7 @@
   "author": "L2jLiga <L2jLiga@mail.ru>",
   "license": "MIT",
   "files": [
+  	"bin",
     "dist"
   ],
   "engines": {
@@ -31,7 +32,7 @@
     "yarn": ">=1.2.0"
   },
   "bin": {
-    "xd2svg-cli": "dist/xd2svg-cli.js"
+    "xd2svg-cli": "bin/xd2svg-cli"
   },
   "scripts": {
     "build": "npm run build:cli && npm run build:ui",
