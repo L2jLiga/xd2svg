@@ -1,16 +1,5 @@
-export default colorTransformer;
-
-/**
- * Convert color from color object to string
- * TODO: Add support for another modes
- * @param {Object} fillColor - Color object
- * @return {String} Created color
- */
-function colorTransformer(fillColor) {
-  let color;
-
-  if (!fillColor) return 'white';
-
+export default function colorTransformer(fillColor: any = {}): string {
+  /* TODO: Add support for another modes */
   switch (fillColor.mode) {
     case 'RGB':
       if (fillColor.alpha) {
@@ -24,7 +13,7 @@ function colorTransformer(fillColor) {
       } else {
         return 'hsl(' + fillColor.value.h + ',' + fillColor.value.s + ',' + fillColor.value.l + ')';
       }
+    default:
+      return 'white';
   }
-
-  return color;
 }

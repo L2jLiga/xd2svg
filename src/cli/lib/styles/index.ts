@@ -5,7 +5,7 @@ import opacity from './opacity';
 import stroke from './stroke';
 import textAttributes from './textAttributes';
 
-export default {
+const parsers: {[parser: string]: Parser} = {
   fill,
   filters,
   font,
@@ -13,3 +13,10 @@ export default {
   stroke,
   textAttributes
 };
+
+export interface Parser {
+  name?: string;
+  parse: (...args) => string;
+}
+
+export default parsers;

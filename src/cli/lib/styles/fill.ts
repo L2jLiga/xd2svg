@@ -1,8 +1,9 @@
 import colorTransformer from '../utils/colorTransformer';
+import { Parser } from "./index";
 
-const document = new (require('jsdom').JSDOM)().window.document;
+const document: Document = new (require('jsdom').JSDOM)().window.document;
 
-export default {
+const fillParser: Parser = {
   name: 'fill',
   parse: fill
 };
@@ -15,7 +16,7 @@ export default {
  * @param {Object} resources - Object representing images for patterns
  * @return {String} String representing fill style properties
  */
-function fill(fill, parentElement, uuid, resources) {
+function fill(fill, parentElement: Element, uuid: string, resources): string {
   switch (fill.type) {
     case 'color':
       return colorTransformer(fill.fill.color);
@@ -39,9 +40,9 @@ function fill(fill, parentElement, uuid, resources) {
  * @param {Object} patternObject - Object representing pattern
  * @return {Element} Created pattern
  */
-function createPattern(uuid, resources, patternObject) {
-  const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
-  const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+function createPattern(uuid: string, resources, patternObject): Element {
+  const pattern: Element = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+  const image: Element = document.createElementNS('http://www.w3.org/2000/svg', 'image');
 
   pattern.setAttribute('id', uuid);
 
@@ -53,3 +54,5 @@ function createPattern(uuid, resources, patternObject) {
 
   return pattern;
 }
+
+export default fillParser;

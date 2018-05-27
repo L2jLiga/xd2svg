@@ -1,12 +1,10 @@
-'use strict';
-
 import fill from './fill';
+import { Parser } from "./index";
 
-export default {
+const strokeParser: Parser = {
   name: 'stroke',
   parse: stroke
-}
-
+};
 
 /**
  * Generate stroke style property from object
@@ -19,3 +17,5 @@ export default {
 function stroke(stroke, parentElement, uuid, resources) {
   return fill.parse(stroke, parentElement, uuid, resources) + `;stroke-width:${stroke.width}px`;
 }
+
+export default strokeParser;

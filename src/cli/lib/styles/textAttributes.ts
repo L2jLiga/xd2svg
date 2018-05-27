@@ -1,6 +1,6 @@
-'use strict';
+import { Parser } from "./index";
 
-export default {
+const textAttributesParser: Parser = {
   parse: textAttributes
 };
 
@@ -9,8 +9,8 @@ export default {
  * @param {Object} textAttributes - Object representing text attributes
  * @return {String} Attributes coverted to css inline-style string
  */
-function textAttributes(textAttributes) {
-  let textAttrsStyles = '';
+function textAttributes(textAttributes): string {
+  let textAttrsStyles: string = '';
 
   if (textAttributes.lineHeight) textAttrsStyles += `;line-height: ${textAttributes.lineHeight}px`;
 
@@ -18,3 +18,5 @@ function textAttributes(textAttributes) {
 
   return textAttrsStyles;
 }
+
+export default textAttributesParser;

@@ -1,10 +1,13 @@
 import colorTransformer from "./utils/colorTransformer";
+import { DirSyncObject } from "../models/dir-sync-object";
+import { Resource } from "../models/resource";
+import { ArtboardInfo } from "../models/artboard-info";
 
 const fs = require('fs');
 const jsdom = require('jsdom');
-const document = (new jsdom.JSDOM()).window.document;
+const document: Document = (new jsdom.JSDOM()).window.document;
 
-export default function resourceParser(directory) {
+export default function resourceParser(directory: DirSyncObject): Resource {
   const json = fs.readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
 
   const resources = JSON.parse(json);
@@ -14,74 +17,58 @@ export default function resourceParser(directory) {
 
     gradients: buildGradients(resources.resources.gradients),
   };
-
-  /**
-   * Parse artboards in resources
-   * @param {Object} artboards
-   * @return {Object}
-   */
-  function buildArtboardsInfo(artboards) {
-    const artboardsList = {};
-
-    Object.keys(artboards).forEach((artboardId) => {
-      artboardsList[artboards[artboardId].name] = {
-        name: artboards[artboardId].name,
-        x: artboards[artboardId].x,
-        y: artboards[artboardId].y,
-        width: artboards[artboardId].width,
-        height: artboards[artboardId].height,
-        viewportWidth: artboards[artboardId].viewportWidth,
-        viewportHeight: artboards[artboardId].viewportHeight,
-      };
-    });
-
-    return artboardsList;
-  }
-
-  /**
-   * Build gradients from object
-   * @param {Object} gradients - Object with gradients
-   * @return {String} Builded gradients as html
-   */
-  function buildGradients(gradients) {
-    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-
-    const gradientsId = Object.keys(gradients);
-
-    let gradientsCount = gradientsId.length - 1;
-
-    for (; gradientsCount > 0; gradientsCount--) {
-      const gradientId = gradientsId[gradientsCount];
-
-      const buildedElement = buildElement(gradients[gradientId], gradientId);
-
-      defs.appendChild(buildedElement);
-    }
-
-    return defs.innerHTML;
-
-    /**
-     * Build gradient element from presented data
-     * @param {Object} gradient - Gradient data
-     * @param {String} gradientId - Identificator of gradient
-     * @return {Element} Builded gradient element
-     */
-    function buildElement(gradient, gradientId) {
-      const currentGradient = document.createElementNS('http://www.w3.org/2000/svg', gradient.type + 'Gradient');
-      currentGradient.setAttribute('id', gradientId);
-
-      const stops = gradient.stops;
-
-      stops.forEach((stop) => {
-        const elem = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-
-        elem.setAttribute('offset', stop.offset);
-        elem.setAttribute('stop-color', colorTransformer(stop.color));
-
-        currentGradient.appendChild(elem);
-      });
-
-      return currentGradient;
-    }
-  }
 };
+
+function buildArtboardsInfo(artboards: { [id: string]: any }): { [name: string]: ArtboardInfo } {
+  const artboardsInfoList: { [name: string]: ArtboardInfo } = {};
+
+  Object.keys(artboards).forEach((artboardId: string) => {
+    artboardsInfoList[artboards[artboardId].name] = {
+      name: artboards[artboardId].name,
+      x: artboards[artboardId].x,
+      y: artboards[artboardId].y,
+      width: artboards[artboardId].width,
+      height: artboards[artboardId].height,
+      viewportWidth: artboards[artboardId].viewportWidth,
+      viewportHeight: artboards[artboardId].viewportHeight,
+    };
+  });
+
+  return artboardsInfoList;
+}
+
+function buildGradients(gradients): string {
+  const defs: Element = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+
+  const gradientsId: string[] = Object.keys(gradients);
+
+  let gradientsCount: number = gradientsId.length - 1;
+
+  for (; gradientsCount > 0; gradientsCount--) {
+    const gradientId: string = gradientsId[gradientsCount];
+
+    const buildedElement: Element = buildElement(gradients[gradientId], gradientId);
+
+    defs.appendChild(buildedElement);
+  }
+
+  return defs.innerHTML;
+}
+
+function buildElement(gradient: { [key: string]: any }, gradientId: string): Element {
+  const currentGradient = document.createElementNS('http://www.w3.org/2000/svg', gradient.type + 'Gradient');
+  currentGradient.setAttribute('id', gradientId);
+
+  const stops = gradient.stops;
+
+  stops.forEach((stop) => {
+    const elem = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+
+    elem.setAttribute('offset', stop.offset);
+    elem.setAttribute('stop-color', colorTransformer(stop.color));
+
+    currentGradient.appendChild(elem);
+  });
+
+  return currentGradient;
+}

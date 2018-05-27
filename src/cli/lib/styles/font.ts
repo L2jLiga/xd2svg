@@ -1,4 +1,4 @@
-'use strict';
+import { Parser } from "./index";
 
 const fontWeightVariants = {
   Light: 300,
@@ -9,7 +9,7 @@ const fontWeightVariants = {
   Black: 900,
 };
 
-export default {parse: font};
+const fontParser: Parser = {parse: font};
 
 /**
  * Generate font style property from object
@@ -23,3 +23,5 @@ function font(font) {
   ;font-size:${font.size}px
   ;font-weight:${fontStyle}`;
 }
+
+export default fontParser;

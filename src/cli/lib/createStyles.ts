@@ -1,4 +1,4 @@
-import parsers from './styles';
+import parsers, { Parser } from './styles';
 
 const supportedStyles = Object.keys(parsers);
 
@@ -10,21 +10,19 @@ const supportedStyles = Object.keys(parsers);
  * @param {Object} resources - Object representing images for patterns
  * @return {String} String representing styles
  */
-export default function createStyles(stylesObject, parentElement, uuid, resources) {
-  let styleAttr = '';
+export default function createStyles(stylesObject, parentElement: Element, uuid: string, resources): string {
+  let styleAttr: string = '';
 
-  supportedStyles.forEach((styleName) => {
+  supportedStyles.forEach((styleName: string) => {
     if (!stylesObject[styleName]) return;
 
-    const parser = parsers[styleName];
+    const parser: Parser = parsers[styleName];
 
-    const ruleName = parser.name ? parser.name + ':' : '';
-    const ruleValue = parser.parse(stylesObject[styleName], parentElement, uuid, resources);
+    const ruleName: string = parser.name ? `${parser.name}: ` : '';
+    const ruleValue: string = parser.parse(stylesObject[styleName], parentElement, uuid, resources);
 
-    styleAttr += `;${ruleName + ruleValue};`;
+    styleAttr += `;${ruleName} ${ruleValue};`;
   });
-
-
 
   return styleAttr;
 }

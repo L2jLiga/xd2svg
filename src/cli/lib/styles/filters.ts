@@ -1,7 +1,8 @@
 import createColor from '../utils/colorTransformer';
 import camelToDash from '../utils/camelToDash';
+import { Parser } from "./index";
 
-export default {
+const filterParser: Parser = {
   name: 'filter',
   parse: filters
 };
@@ -11,7 +12,7 @@ export default {
  * @param {Object} filters - Object representing filters properties
  * @return {String} String representing stroke style properties
  */
-function filters(filters) {
+function filters(filters): string {
   let filtersStyle = '';
 
   filters.forEach((filter) => {
@@ -35,3 +36,5 @@ function filters(filters) {
 
   return filtersStyle;
 }
+
+export default filterParser;

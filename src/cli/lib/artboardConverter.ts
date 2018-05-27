@@ -1,19 +1,13 @@
-'use strict';
-
-const context = new (require('jsdom').JSDOM)();
+import {ArtboardInfo} from "../models/artboard-info";
 import createStyles from './createStyles';
 
-export default artboardConverter.bind(context.window, context.window.document);
+const context = new (require('jsdom').JSDOM)();
 
-/**
- * Convert all artboards element to one svg image
- * @param {Document} document - Document
- * @param {Object} artboard - Current artboard for convertation
- * @param {Object} artboardInfo - Information about current artboard
- * @param {Object} resources - Object representing graphics resources
- * @return {String[]} Array of serialized svgs
- */
-function artboardConverter(document, artboard, artboardInfo, resources) {
+export default function contextWrapper(artboard, artboardInfo: ArtboardInfo, resources) {
+  return artboardConverter(context.document, artboard, artboardInfo, resources);
+};
+
+function artboardConverter(document: Document, artboard, artboardInfo: ArtboardInfo, resources): string[] {
   const svgImages = [];
   const patterns = [];
 
@@ -136,15 +130,15 @@ function artboardConverter(document, artboard, artboardInfo, resources) {
     backGround.setAttribute('x', '0');
     backGround.setAttribute('y', '0');
     backGround.setAttribute('transform', `translate(${artboardInfo.x} ${artboardInfo.y})`);
-    backGround.setAttribute('width', artboardInfo.width);
-    backGround.setAttribute('height', artboardInfo.height);
+    backGround.setAttribute('width', `${artboardInfo.width}`);
+    backGround.setAttribute('height', `${artboardInfo.height}`);
     backGround.setAttribute('style', createStyles(imageRootObject.style, svg, imageRootObject.id, resources));
 
     svg.setAttribute('id', imageRootObject.id);
     svg.setAttribute('viewBox', `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);
     svg.setAttribute('enable-background', `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);
-    artboardInfo.viewportWidth ? svg.setAttribute('width', artboardInfo.viewportWidth) : null;
-    artboardInfo.viewportHeight ? svg.setAttribute('height', artboardInfo.viewportHeight) : null;
+    artboardInfo.viewportWidth ? svg.setAttribute('width', `${artboardInfo.viewportWidth}`) : null;
+    artboardInfo.viewportHeight ? svg.setAttribute('height', `${artboardInfo.viewportHeight}`) : null;
     svg.appendChild(title);
     svg.appendChild(backGround);
 

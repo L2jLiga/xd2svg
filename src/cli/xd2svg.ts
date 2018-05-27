@@ -1,4 +1,4 @@
-const fs = require('fs');
+import {DirSyncObject} from "./models/dir-sync-object";
 import unzip from 'extract-zip';
 import tmp from 'tmp';
 
@@ -6,9 +6,12 @@ import svgo from './lib/svgo'
 import artBoardConverter from './lib/artboardConverter';
 import manifestParser from './lib/manifestParser';
 import resourcesParser from './lib/resourcesParser'
+import {Resource} from "./models/resource";
+
+const fs = require('fs');
 
 export default function xd2svg(inputFile: string, outputFile: string) {
-  const directory = tmp.dirSync({
+  const directory: DirSyncObject = tmp.dirSync({
     unsafeCleanup: true,
   });
 
@@ -16,15 +19,11 @@ export default function xd2svg(inputFile: string, outputFile: string) {
 
   unzip(inputFile, {dir: directory.name}, workWithFile);
 
-  /**
-   * Callback which was called when xd was unpacked
-   * @param {*} error - Error message
-   */
-  function workWithFile(error: any) {
+  function workWithFile(error: string) {
     if (error) throw new Error(error);
 
     const manifestInfo = manifestParser(directory);
-    const resourcesInfo = resourcesParser(directory);
+    const resourcesInfo: Resource = resourcesParser(directory);
 
     const convertedArtboards: any[] = [];
 
@@ -33,7 +32,7 @@ export default function xd2svg(inputFile: string, outputFile: string) {
 
       const artboard = JSON.parse(json);
 
-      const contentOfArtboard = artBoardConverter(artboard, resourcesInfo.artboards[artboardItem.name], manifestInfo.resources).join('');
+      const contentOfArtboard: string = artBoardConverter(artboard, resourcesInfo.artboards[artboardItem.name], manifestInfo.resources).join('');
 
       convertedArtboards.push(contentOfArtboard);
 
