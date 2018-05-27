@@ -1,8 +1,6 @@
-'use strict';
-
 const fs = require('fs');
 
-module.exports = function manifestParser(directory) {
+export default function manifestParser(directory) {
   const json = fs.readFileSync(`${directory.name}/manifest`, 'utf-8');
 
   const manifest = JSON.parse(json);
@@ -11,7 +9,7 @@ module.exports = function manifestParser(directory) {
     id: manifest.id,
     version: manifest['uxdesign#version'],
     artboards: [],
-    resources: [],
+    resources: null,
   };
 
   manifest.children.forEach((child) => {

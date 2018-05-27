@@ -1,9 +1,7 @@
-.idea/
-/bin/
-/lib/
-node_modules/
-yarn.lock
 package-lock.json
 yarn-error.log
 *.svg
 *.xd
+.idea/
+dist/
+node_modules/

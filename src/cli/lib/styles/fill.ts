@@ -1,9 +1,11 @@
-'use strict';
+import colorTransformer from '../utils/colorTransformer';
 
 const document = new (require('jsdom').JSDOM)().window.document;
-const colorTransformer = require('../utils/colorTransformer');
 
-module.exports = fill;
+export default {
+  name: 'fill',
+  parse: fill
+};
 
 /**
  * Generate fill style property from object

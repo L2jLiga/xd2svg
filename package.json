@@ -17,44 +17,41 @@
       "email": "l2jliga@mail.ru"
     }
   ],
-  "main": "bin/xd2svg.js",
+  "main": "dist/xd2svg-cli.js",
   "homepage": "https://github.com/L2jLiga/xd2svg",
   "repository": "git@github.com:L2jLiga/xd2svg.git",
   "bugs": "https://github.com/L2jLiga/xd2svg/issues",
   "author": "L2jLiga <L2jLiga@mail.ru>",
   "license": "MIT",
   "files": [
-    "bin/**/*.js",
-    "lib/**/*.js"
+    "dist"
   ],
   "engines": {
-    "node": ">=6.10"
+    "node": ">=8.9.4",
+    "yarn": ">=1.2.0"
   },
   "bin": {
-    "xd2svg-cli": "bin/xd2svg-cli.js"
+    "xd2svg-cli": "dist/xd2svg-cli.js"
   },
   "scripts": {
-    "build": "gulp build",
-    "watch": "gulp watch",
-    "lint": "eslint ./src/**/*.js --fix"
+    "build": "npm run build:cli && npm run build:ui",
+    "build:cli": "webpack --config webpack.config.js",
+    "build:ui": "echo \"UI isn't ready yet\"",
+    "prepublish": "npm run build"
   },
   "dependencies": {
-    "extract-zip": "^1.6.6",
-    "jsdom": "^11.3.0",
-    "svgo": "^1.0.3",
-    "tmp": "^0.0.33"
+    "extract-zip": "1.6.7",
+    "jsdom": "11.11.0",
+    "svgo": "1.0.5",
+    "tmp": "0.0.33"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^4.11.0",
-    "eslint-config-google": "^0.9.1",
-    "eslint-config-nodejs": "^2.0.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.0",
-    "gulp-eslint": "^4.0.0",
-    "gulp-newer": "^1.3.0",
-    "gulp-sourcemaps": "^2.6.1",
-    "gulp-uglifyes": "^0.1.2"
+    "@types/node": "8.9.5",
+    "ts-loader": "4.3.0",
+    "ts-node": "6.0.5",
+    "tslint": "5.10.0",
+    "typescript": "2.8.3",
+    "webpack": "4.9.1",
+    "webpack-cli": "2.1.4"
   }
 }

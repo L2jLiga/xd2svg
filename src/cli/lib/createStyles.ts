@@ -1,34 +1,6 @@
-'use strict';
+import parsers from './styles';
 
-const parsers = {
-  fill: {
-    name: 'fill',
-    parse: require('./styles/fill'),
-  },
-  stroke: {
-    name: 'stroke',
-    parse: require('./styles/stroke'),
-  },
-  filters: {
-    name: 'filter',
-    parse: require('./styles/filters'),
-  },
-  opacity: {
-    name: 'opacity',
-    parse: (opacity) => opacity,
-  },
-  textAttributes: {
-    name: '',
-    parse: require('./styles/textAttributes'),
-  },
-  font: {
-    name: '',
-    parse: require('./styles/font'),
-  },
-};
 const supportedStyles = Object.keys(parsers);
-
-module.exports = createStyles;
 
 /**
  * Create value for style attr from object
@@ -38,7 +10,7 @@ module.exports = createStyles;
  * @param {Object} resources - Object representing images for patterns
  * @return {String} String representing styles
  */
-function createStyles(stylesObject, parentElement, uuid, resources) {
+export default function createStyles(stylesObject, parentElement, uuid, resources) {
   let styleAttr = '';
 
   supportedStyles.forEach((styleName) => {
@@ -51,6 +23,8 @@ function createStyles(stylesObject, parentElement, uuid, resources) {
 
     styleAttr += `;${ruleName + ruleValue};`;
   });
+
+
 
   return styleAttr;
 }

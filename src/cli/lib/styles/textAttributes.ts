@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = textAttributes;
+export default {
+  parse: textAttributes
+};
 
 /**
  * Generate filter text attributes properties from object

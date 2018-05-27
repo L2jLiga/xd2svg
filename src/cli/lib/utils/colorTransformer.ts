@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = colorTransformer;
+export default colorTransformer;
 
 /**
  * Convert color from color object to string
