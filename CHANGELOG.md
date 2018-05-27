@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [Released]
+
+## 0.3.1
+### Fixes
++ Fixed ability to run xd2svg directly
+
 ## 0.3.0
 ### Fixes
 + Fixed message about calling async function w/o callback
@@ -14,8 +20,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changes
 + Moved to TypeScript
 + Moved to Webpack
-
-## [Released]
 
 ## 0.2.1 &ndash 2017-11-20
 ### Fixes
