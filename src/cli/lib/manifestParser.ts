@@ -1,8 +1,8 @@
-import { DirSyncObject } from "../models/dir-sync-object";
+import { SynchrounousResult } from "tmp";
 
 const fs = require('fs');
 
-export default function manifestParser(directory: DirSyncObject) {
+export default function manifestParser(directory: SynchrounousResult) {
   const json: string = fs.readFileSync(`${directory.name}/manifest`, 'utf-8');
 
   const manifest = JSON.parse(json);

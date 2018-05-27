@@ -47,7 +47,11 @@
     "tmp": "0.0.33"
   },
   "devDependencies": {
+    "@types/extract-zip": "1.6.2",
+    "@types/jsdom": "11.0.4",
     "@types/node": "8.9.5",
+    "@types/svgo": "1.0.1",
+    "@types/tmp": "0.0.33",
     "ts-loader": "4.3.0",
     "ts-node": "6.0.5",
     "tslint": "5.10.0",

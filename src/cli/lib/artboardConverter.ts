@@ -1,13 +1,14 @@
-import {ArtboardInfo} from "../models/artboard-info";
+import { ArtboardInfo } from "../models/artboard-info";
 import createStyles from './createStyles';
 
-const context = new (require('jsdom').JSDOM)();
+const jsdom = require('jsdom');
+const context = new jsdom.JSDOM();
 
-export default function contextWrapper(artboard, artboardInfo: ArtboardInfo, resources) {
-  return artboardConverter(context.document, artboard, artboardInfo, resources);
+export default function artboardConverter(artboard, artboardInfo: ArtboardInfo, resources) {
+  return artboardConverterUnwrapped(context.window.document, artboard, artboardInfo, resources);
 };
 
-function artboardConverter(document: Document, artboard, artboardInfo: ArtboardInfo, resources): string[] {
+function artboardConverterUnwrapped(document: Document, artboard, artboardInfo: ArtboardInfo, resources): string[] {
   const svgImages = [];
   const patterns = [];
 

@@ -1,23 +1,21 @@
-import {DirSyncObject} from "./models/dir-sync-object";
-import unzip from 'extract-zip';
-import tmp from 'tmp';
-
 import svgo from './lib/svgo'
 import artBoardConverter from './lib/artboardConverter';
 import manifestParser from './lib/manifestParser';
 import resourcesParser from './lib/resourcesParser'
-import {Resource} from "./models/resource";
+import { Resource } from "./models/resource";
+import { dirSync, SynchrounousResult } from "tmp";
 
 const fs = require('fs');
+const extract = require("extract-zip");
 
-export default function xd2svg(inputFile: string, outputFile: string) {
-  const directory: DirSyncObject = tmp.dirSync({
+export function xd2svg(inputFile: string, outputFile: string) {
+  const directory: SynchrounousResult = dirSync({
     unsafeCleanup: true,
   });
 
-  const dimensions: {width: number, height: number} = {width: 0, height: 0};
+  const dimensions: { width: number, height: number } = {width: 0, height: 0};
 
-  unzip(inputFile, {dir: directory.name}, workWithFile);
+  extract(inputFile, {dir: directory.name}, workWithFile);
 
   function workWithFile(error: string) {
     if (error) throw new Error(error);

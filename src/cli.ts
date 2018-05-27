@@ -1,4 +1,4 @@
-import xd2svg from './cli/xd2svg';
+import { xd2svg } from './cli/xd2svg';
 
 const inputFileName: string = process.argv[2];
 let outputFileName: string = process.argv[3];
@@ -21,5 +21,5 @@ if (inputFileName) {
   console.log(inputFileName, outputFileName);
 
 } else {
-	console.log('Usage: xd2svg-cli InputFile.xd [OutputFile.html]')
+  console.log('Usage: xd2svg-cli InputFile.xd [OutputFile.html]')
 }

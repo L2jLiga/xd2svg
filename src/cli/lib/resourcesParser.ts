@@ -1,13 +1,13 @@
 import colorTransformer from "./utils/colorTransformer";
-import { DirSyncObject } from "../models/dir-sync-object";
 import { Resource } from "../models/resource";
 import { ArtboardInfo } from "../models/artboard-info";
+import { SynchrounousResult } from "tmp";
 
 const fs = require('fs');
 const jsdom = require('jsdom');
 const document: Document = (new jsdom.JSDOM()).window.document;
 
-export default function resourceParser(directory: DirSyncObject): Resource {
+export default function resourceParser(directory: SynchrounousResult): Resource {
   const json = fs.readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
 
   const resources = JSON.parse(json);
