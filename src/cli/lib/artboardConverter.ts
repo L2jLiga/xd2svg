@@ -1,105 +1,118 @@
 import { ArtboardInfo } from "../models/artboard-info";
 import createStyles from './createStyles';
+import { Artboard, Line, Paragraph, Shape, Text } from "../models/artboard";
 
 const jsdom = require('jsdom');
 const context = new jsdom.JSDOM();
 
-export default function artboardConverter(artboard, artboardInfo: ArtboardInfo, resources) {
+export default function artboardConverter(artboard: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
   return artboardConverterUnwrapped(context.window.document, artboard, artboardInfo, resources);
 };
 
-function artboardConverterUnwrapped(document: Document, artboard, artboardInfo: ArtboardInfo, resources): string[] {
-  const svgImages = [];
-  const patterns = [];
+function artboardConverterUnwrapped(document: Document, artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
+  const svgImages: string[] = [];
 
-  artboard.children.forEach(convertArtboardToSVG);
+  artboardsRoot.children
+    .forEach((imageRootObject: Artboard): void => {
+        const svg: Element = createNativeSvgElement('svg');
+        const title: Element = createNativeSvgElement('title');
+        const backGround: Element = createNativeSvgElement('rect');
 
-  svgImages.unshift(`${patterns.join('\r\n')}`);
+        title.innerHTML = artboardInfo.name;
+
+        backGround.setAttribute('x', '0');
+        backGround.setAttribute('y', '0');
+        backGround.setAttribute('transform', `translate(${artboardInfo.x} ${artboardInfo.y})`);
+        backGround.setAttribute('width', `${artboardInfo.width}`);
+        backGround.setAttribute('height', `${artboardInfo.height}`);
+        backGround.setAttribute('style', createStyles(imageRootObject.style, svg, imageRootObject.id, resources));
+
+        svg.setAttribute('id', imageRootObject.id);
+        svg.setAttribute('viewBox', `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);
+        svg.setAttribute('enable-background', `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);
+        artboardInfo.viewportWidth ? svg.setAttribute('width', `${artboardInfo.viewportWidth}`) : null;
+        artboardInfo.viewportHeight ? svg.setAttribute('height', `${artboardInfo.viewportHeight}`) : null;
+        svg.appendChild(title);
+        svg.appendChild(backGround);
+
+        svgImages.push(createElem(imageRootObject.artboard, svg, resources).outerHTML);
+      }
+    );
 
   return svgImages;
+}
 
-  /**
-   * Create shape element
-   * TODO: Concat with `createText` function
-   * @param {Object} pathObject - Object representing shape element
-   * @return {Element} Shape element
-   */
-  function createShape(pathObject) {
-    const object = document.createElementNS('http://www.w3.org/2000/svg', pathObject.type);
+function createShape(srcObj: Shape): Element {
+  const object = createNativeSvgElement(srcObj.type);
 
-    if (pathObject.type === 'path') {
-      object.setAttribute('d', pathObject.path);
-    } else if (pathObject.type === 'rect') {
-      object.setAttribute('x', pathObject.x);
-      object.setAttribute('y', pathObject.y);
-      object.setAttribute('width', pathObject.width);
-      object.setAttribute('height', pathObject.height);
-    } else if (pathObject.type === 'circle') {
-      object.setAttribute('cx', pathObject.cx);
-      object.setAttribute('cy', pathObject.cy);
-      object.setAttribute('r', pathObject.r);
-    }
-
-    return object;
+  if (srcObj.type === 'path') {
+    object.setAttribute('d', srcObj.path);
+  } else if (srcObj.type === 'rect') {
+    object.setAttribute('x', srcObj.x);
+    object.setAttribute('y', srcObj.y);
+    object.setAttribute('width', srcObj.width);
+    object.setAttribute('height', srcObj.height);
+  } else if (srcObj.type === 'circle') {
+    object.setAttribute('cx', srcObj.cx);
+    object.setAttribute('cy', srcObj.cy);
+    object.setAttribute('r', srcObj.r);
   }
 
-  /**
-   * Create text element
-   * @param {Object} textObject - Object representing text element
-   * @return {Element} Text element
-   */
-  function createText(textObject) {
-    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    const rawText = textObject.rawText;
+  return object;
+}
 
-    textObject.paragraphs.forEach((paragraph) => {
-      paragraph.lines.forEach((line) => {
-        line.forEach((linePart) => {
-          const line = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+function createText(srcObj: Text): Element {
+  const svgTextElement: Element = createNativeSvgElement('text');
+  const rawText = srcObj.rawText;
 
-          line.innerHTML = rawText.substring(linePart.from, linePart.to);
+  srcObj.paragraphs.forEach((paragraph: Paragraph) => {
+    paragraph.lines.forEach((line: Line[]) => {
+      line.forEach((linePart: Line) => {
+        const element: Element = createNativeSvgElement('tspan');
 
-          if (linePart.x !== undefined) line.setAttribute('x', linePart.x || 0);
+        element.innerHTML = rawText.substring(linePart.from, linePart.to);
 
-          if (linePart.y !== undefined) line.setAttribute('y', linePart.y || 0);
+        if (linePart.x !== undefined)
+          element.setAttribute('x', `${linePart.x || 0}`);
 
-          text.appendChild(line);
-        });
+        if (linePart.y !== undefined)
+          element.setAttribute('y', `${linePart.y || 0}`);
+
+        svgTextElement.appendChild(element);
       });
     });
+  });
 
-    return text;
-  }
+  return svgTextElement;
+}
 
-  /**
-   * Transform element
-   * @param {Element} node - Element which should be transformed
-   * @param {Object} transformationObject - Object with transform values
-   * @return {void}
-   */
-  function generateTransformations(node, transformationObject) {
-    // TODO: write generator for obj
-    node.setAttribute('transform', 'translate(' + transformationObject.tx + ' ' + transformationObject.ty + ')');
-  }
+/* TODO: Parse another transformations */
+function createTransforms(src): string {
+  return `translate(${src.tx}, ${src.ty})`;
+}
 
-  /**
-   * Create svg elements
-   * @param {Object[]} svgObjCollection - Array with objects which contains element info
-   * @param {Element} parentElement - Parent element, which should contain this
-   * @return {Element} parentElement
-   */
-  function createSvgElem(svgObjCollection, parentElement) {
-    svgObjCollection.children.forEach((svgObject) => {
-      let node;
+function createElem(svgObjCollection: Artboard, parentElement: Element, resources: { [path: string]: string }): Element {
+  svgObjCollection.children
+    .forEach((svgObject: Artboard): void => {
+      let node: Element;
 
-      if (svgObject.type === 'shape') {
-        node = createShape(svgObject.shape);
-      } else if (svgObject.type === 'text') {
-        node = createText(svgObject.text);
-      } else if (svgObject.type === 'group') {
-        node = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      switch (svgObject.type) {
+        case 'shape':
+          node = createShape(svgObject.shape);
+          break;
 
-        createSvgElem(svgObject.group, node);
+        case 'text':
+          node = createText(svgObject.text);
+          break;
+
+        case 'group':
+          node = createNativeSvgElement('g');
+          createElem(svgObject.group, node, resources);
+          break;
+
+        default:
+          console.warn(`%cWarning: %cUnsupported type: ${svgObject.type}`, 'color: darkorange;', 'color: orange');
+          return;
       }
 
       if (svgObject.style) {
@@ -107,42 +120,15 @@ function artboardConverterUnwrapped(document: Document, artboard, artboardInfo: 
       }
 
       if (svgObject.transform) {
-        generateTransformations(node, svgObject.transform);
+        node.setAttribute('transform', createTransforms(svgObject.transform));
       }
 
       parentElement.appendChild(node);
     });
 
-    return parentElement;
-  }
+  return parentElement;
+}
 
-  /**
-   * Convert artboard to SVG image and push it into `svgImages` array
-   * @param {Object} imageRootObject - Object representing root element
-   * @return {void}
-   */
-  function convertArtboardToSVG(imageRootObject) {
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
-    const backGround = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-
-    title.innerHTML = artboardInfo.name;
-
-    backGround.setAttribute('x', '0');
-    backGround.setAttribute('y', '0');
-    backGround.setAttribute('transform', `translate(${artboardInfo.x} ${artboardInfo.y})`);
-    backGround.setAttribute('width', `${artboardInfo.width}`);
-    backGround.setAttribute('height', `${artboardInfo.height}`);
-    backGround.setAttribute('style', createStyles(imageRootObject.style, svg, imageRootObject.id, resources));
-
-    svg.setAttribute('id', imageRootObject.id);
-    svg.setAttribute('viewBox', `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);
-    svg.setAttribute('enable-background', `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);
-    artboardInfo.viewportWidth ? svg.setAttribute('width', `${artboardInfo.viewportWidth}`) : null;
-    artboardInfo.viewportHeight ? svg.setAttribute('height', `${artboardInfo.viewportHeight}`) : null;
-    svg.appendChild(title);
-    svg.appendChild(backGround);
-
-    svgImages.push(createSvgElem(imageRootObject.artboard, svg).outerHTML);
-  }
+function createNativeSvgElement(tagName: string): Element {
+  return document.createElementNS('http://www.w3.org/2000/svg', tagName);
 }

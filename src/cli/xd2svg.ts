@@ -38,7 +38,7 @@ export function xd2svg(inputFile: string, outputFile: string) {
       dimensions.height = Math.max(dimensions.height, resourcesInfo.artboards[artboardItem.name].height);
     });
 
-    const totalSvg = `<?xml version="1.0" standalone="no"?>
+    const totalSvg: string = `<?xml version="1.0" standalone="no"?>
     <svg xmlns="http://www.w3.org/2000/svg"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          width="${dimensions.width}"
