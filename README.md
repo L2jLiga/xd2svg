@@ -26,35 +26,35 @@ Utility for converting Adobe eXperience Design files into SVG.
 ## Getting started
 
 ### Prerequisites
-1. Node.js latest (Node.js >= 6.0 in plans)
-2. Package manager (**yarn** or **npm**)
+1. Node.js 8.9.4 or higher
+1. Package manager
+   1. yarn >= 1.2.0
+   1. npm >= 5.3.0
 
 ### Installation
-
 Two ways to install utility:
 1. via npm
 
-   ```npm
+   ```
     npm install xd2svg -g
    ```
 
-2. via yarn
+1. via yarn
 
-   ```npm
+   ```
     yarn global add xd2svg
    ```
 
 ### Using
-
 You can use utility from CLI
 
-   ```npm
+   ```
     xd2svg-cli input.xd [output.svg]
    ```
 
 or require it directly in your scripts
 
-   ```js
+   ```typescript
     const xd2svg = require('xd2svg');
 
     let inputFileName = 'someFile.xd';
@@ -62,45 +62,40 @@ or require it directly in your scripts
 
     xd2svg(inputFileName, outputFileName);
    ```
-## Contributing
 
+## Contributing
 Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
-
 We use [SemVer](http://semver.org/spec/v2.0.0.html) for versioning.
 For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Changelog
-
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 For the versions changelog, see the [CHANGELOG.md](CHANGELOG.md)
 
 ## Authors
-
 * **Andrey Chalkin** - *Initial work* - [L2jLiga](https://github.com/L2jLiga)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
-
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Defenition list
+* **What is Adobe XD?**
 
-<dl>
-  <dt>What is Adobe XD?</dt>
-  <dd>It's software from Adobe Creative Cloud which used by designers for creating prototypes.</dd>
+   It's software from Adobe Creative Cloud which used by designers for creating prototypes.
 
-  <dt>Can I know more about Adobe XD?</dt>
-  <dd>Yes, see this <a href="http://www.adobe.com/ru/products/xd.html">link</a></dd>
-  
-  <dt>What's present *.xd files?</dt>
-  <dd>It's simple archives with meta-data and JSON</dd>
-</dl>
+* **Can I know more about Adobe XD?**
+
+   Yes, see this [link](http://www.adobe.com/ru/products/xd.html).
+
+* **What is present \*.xd files?**
+
+   It's simple archives with meta-data and JSON.
 
 ## Structure of XD files
-
 Zip data (MIME type "application/vnd.adobe.sparkler.project+dcxucf")
 
 - [__DIR__] artwork
