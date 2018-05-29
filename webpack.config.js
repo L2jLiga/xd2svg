@@ -3,7 +3,10 @@ const fs = require('fs');
 
 module.exports = {
   target: 'node',
-  entry: './src/cli.ts',
+  entry: {
+    'xd2svg-cli': './src/cli.ts',
+    'assets/inpage': './src/browser.ts',
+  },
   mode: 'production',
   node: {
     console: false,
@@ -35,7 +38,6 @@ module.exports = {
     extensions: [ '.ts', '.js' ]
   },
   output: {
-    filename: 'xd2svg-cli.js',
     path: path.resolve(__dirname, 'dist')
   }
 };

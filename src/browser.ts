@@ -1,1 +1,1 @@
-import 'assets/inpage';
+import './assets/inpage';

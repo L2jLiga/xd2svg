@@ -1,20 +1,9 @@
-'use strict';
-
-/**
- * Get element by ID
- * @param {number} id
- * @return {HTMLElement | null}
- */
-function get(id) {
+function get(id: number | string): HTMLElement {
   return document.getElementById('tGs3czb_' + id);
 }
 
-/**
- * Get gridly rules element
- * @return {HTMLElement}
- */
-function gridlyRules() {
-  let rulesElement = get('gridlyRules');
+function gridlyRules(): HTMLElement {
+  let rulesElement: HTMLElement = get('gridlyRules');
 
   if (rulesElement) {
     return rulesElement;
@@ -27,26 +16,15 @@ function gridlyRules() {
   return rulesElement;
 }
 
-/**
- * Return fixed position
- * @param {number} x
- * @return {Function}
- */
-function fixedPos(x) {
-  return function() {
+function fixedPos(x: number): () => number {
+  return function (): number {
     return x;
   };
 }
 
-/**
- * Get element position
- * @param {Element} element
- * @param {string} label
- * @return {Function}
- */
-function elementPos(element, label) {
-  return function() {
-    const elementRect = element.getBoundingClientRect();
+function elementPos(element: Element, label: string): () => number {
+  return function (): number {
+    const elementRect: ClientRect | DOMRect = element.getBoundingClientRect();
     const computedStylesForElement = computeStyles(element);
 
     switch (label) {
@@ -78,25 +56,20 @@ function elementPos(element, label) {
         return getBaselineY(element);
     }
 
-    /**
-     * Get style value
-     * @param {string} style
-     * @return {number}
-     */
-    function getStyleValue(style) {
+    function getStyleValue(style: string): number {
       return parseInt(computedStylesForElement[style]);
     }
   };
 }
 
-const cachedStyles = {e: null};
+interface ICachedStyles {
+  e: Element;
+  s?: CSSStyleDeclaration;
+}
 
-/**
- * Compute styles for element
- * @param {Element} element
- * @return {CSSStyleDeclaration | *}
- */
-function computeStyles(element) {
+const cachedStyles: ICachedStyles = {e: null};
+
+function computeStyles(element: Element): CSSStyleDeclaration {
   if (element !== cachedStyles.e) {
     cachedStyles.e = element;
     cachedStyles.s = window.getComputedStyle(element);
@@ -105,19 +78,14 @@ function computeStyles(element) {
   return cachedStyles.s;
 }
 
-/**
- * Get baseline Y for target element
- * @param {Element} target
- * @return {number|null}
- */
-function getBaselineY(target) {
+function getBaselineY(target: Element): number {
   // Don't do this inside TABLE or other dangerous places! Only where
   // there is already some text.
   if (!target.hasChildNodes() || /test/i.test(target.tagName)) {
     return null;
   }
-  const children = target.childNodes;
-  let child = null;
+  const children: NodeListOf<Node & ChildNode> = target.childNodes;
+  let child: Node = null;
   for (let i = 0; i < children.length; ++i) {
     if (children[i].nodeType === Node.TEXT_NODE) {
       child = children[i];
@@ -128,7 +96,7 @@ function getBaselineY(target) {
     return null;
   }
 
-  const txt = document.createElement('span');
+  const txt: HTMLSpanElement = document.createElement('span');
 
   txt.style.setProperty('display', 'inline-block', 'important');
   txt.style.setProperty('position', 'static', 'important');
@@ -139,33 +107,26 @@ function getBaselineY(target) {
 
   target.insertBefore(txt, child);
 
-  const y = txt.getBoundingClientRect().top + 1;
+  const y: number = txt.getBoundingClientRect().top + 1;
 
   target.removeChild(txt);
 
   return y;
 }
 
-/**
- * Get nearest element to current cursor positiion
- * @param {Element} element
- * @param {[]} candidates
- * @param {number} value
- * @return {*[]}
- */
-function nearest(element, candidates, value) {
-  let dist = state.snap ? 10 : 1;
-  let label = '';
-  let best = fixedPos(value);
+function nearest(element: Element, candidates: any[], value: number): any[] {
+  let dist: number = state.snap ? 10 : 1;
+  let label: string = '';
+  let best: () => number = fixedPos(value);
 
   for (const candidate in candidates) {
     if (!candidates[candidate]) {
       continue;
     }
 
-    const name = candidates[candidate];
-    const pos = elementPos(element, name);
-    const p = pos();
+    const name: string = candidates[candidate];
+    const pos: () => number = elementPos(element, name);
+    const p: number = pos();
 
     if (p != null) {
       const d = Math.abs(value - p);
@@ -187,7 +148,7 @@ function nearest(element, candidates, value) {
  * @param {string} id
  * @return {Element}
  */
-function create(tag, classNames, id) {
+function create(tag: string, classNames: string, id?: string): HTMLElement {
   const element = document.createElement(tag);
   const classes = classNames ? classNames.split(' ') : [];
 
@@ -206,18 +167,28 @@ function create(tag, classNames, id) {
   return element;
 }
 
-/**
- * Create new rule
- * @param {boolean} isVertical
- * @param {string} temp
- * @return {{}}
- */
-function newRule(isVertical, temp) {
-  const rule = create('div', 'rule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
-  const loupeRule = create('div', 'louperule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
-  const label = create('div', 'label');
-  const poslabel = create('div', 'poslabel');
-  const difflabel = create('div', 'difflabel');
+interface IRule {
+  setPosition: (pos, label?) => void,
+  refresh: () => void,
+  copyPosition: (rule) => void,
+  remove: () => void,
+  isVertical: boolean
+  loupeRule: Element,
+  rule: Element,
+  pos?: () => number,
+  poslabel: Element,
+  difflabel: Element,
+  id: string | number,
+  text?: string
+}
+
+function newRule(isVertical: boolean, temp: string = ''): IRule {
+  const rule: Element = create('div', 'rule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
+  const loupeRule: Element = create('div', 'louperule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
+  const label: Element = create('div', 'label');
+  const poslabel: Element = create('div', 'poslabel');
+  const difflabel: Element = create('div', 'difflabel');
+
   label.appendChild(poslabel);
   label.appendChild(difflabel);
   poslabel.textContent = '';
@@ -263,25 +234,26 @@ function newRule(isVertical, temp) {
   return r;
 }
 
-/**
- * Make loupe
- * @return {{div: Element, image: Element, rules: Element}}
- */
-function makeLoupe() {
-  const loupeDiv = create('div', 'loupe', 'loupe');
-  const loupeImage = create('div', 'loupeimg');
-  const loupeRules = create('div', 'louperules');
-  loupeDiv.appendChild(loupeImage);
-  loupeDiv.appendChild(loupeRules);
-  gridlyRules().appendChild(loupeDiv);
-  return {div: loupeDiv, image: loupeImage, rules: loupeRules};
+interface ILoupe {
+  div: HTMLElement,
+  image: HTMLElement,
+  rules: HTMLElement
 }
 
-/**
- * Highlight element
- * @param {Element} e
- */
-function highlightElement(e) {
+function makeLoupe(): ILoupe {
+  const div: HTMLElement = create('div', 'loupe', 'loupe');
+  const image: HTMLElement = create('div', 'loupeimg');
+  const rules: HTMLElement = create('div', 'louperules');
+
+  div.appendChild(image);
+  div.appendChild(rules);
+
+  gridlyRules().appendChild(div);
+
+  return {div, image, rules};
+}
+
+function highlightElement(e: HTMLElement): void {
   const eb = elementBox;
   const cb = elementContentBox;
   const styles = computeStyles(e);
@@ -319,7 +291,17 @@ const loupeState = {
   zoom: 8.0,
 };
 
-const state = {
+interface IState {
+  snap: boolean;
+  baseline: boolean;
+  origin: Array<() => number>;
+  colspec: string;
+  rowspec: string;
+  pointerEvents: boolean;
+  help: boolean;
+}
+
+const state: IState = {
   snap: true,
   baseline: false,
   origin: [fixedPos(0), fixedPos(0)],
@@ -329,52 +311,40 @@ const state = {
   help: true,
 };
 
-/**
- * Ask columns
- */
-function askColumns() {
+function askColumns(): void {
   const answer = window.prompt(
     'Input column spec as a series of widths, optionally colored: example: "16:transparent 28:#888"', state.colspec);
   if (answer) {
     state.colspec = answer;
     setColumns(columnsBox, answer, false);
   } else {
-    setColumns(columnsBox, false, false);
+    setColumns(columnsBox, '', false);
   }
 }
 
-/**
- * Ask rows
- */
-function askRows() {
+function askRows(): void {
   const answer = window.prompt(
     'Input row spec as a series of heights, optionally colored: example: "100:red 32:blue"', state.rowspec);
   if (answer) {
     state.rowspec = answer;
     setColumns(rowsBox, answer, true);
   } else {
-    setColumns(rowsBox, false, true);
+    setColumns(rowsBox, '', true);
   }
 }
 
-/**
- * Set columns
- * @param {Element} box
- * @param {string} spec
- * @param {boolean} horizontal
- */
-function setColumns(box, spec, horizontal) {
+function setColumns(box: HTMLElement, spec: string, horizontal: boolean): void {
   while (box.childNodes.length) {
     box.removeChild(box.firstChild);
   }
   if (!spec) {
     return;
   }
-  const widths = spec.split(' ');
+  const widths: string[] | number[] = spec.split(' ');
   const colors = [];
   for (let i = 0; i < widths.length; i++) {
     const s = widths[i].split(':');
-    widths[i] = parseInt(s[0]);
+    widths[i] = parseInt(s[0]) as any;
     if (s.length > 1) {
       colors[i] = s[1];
     } else {
@@ -394,7 +364,7 @@ function setColumns(box, spec, horizontal) {
       col.style.width = widths[i] + 'px';
     }
     box.appendChild(col);
-    total += widths[i];
+    total += widths[i] as any;
     count++;
   }
   refreshRules();

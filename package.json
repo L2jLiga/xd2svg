@@ -30,9 +30,7 @@
     "url": "https://github.com/L2jLiga/xd2svg.git"
   },
   "scripts": {
-    "build": "npm run build:cli && npm run build:ui",
-    "build:cli": "webpack --config webpack.config.js",
-    "build:ui": "echo \"UI isn't ready yet\"",
+    "build": "webpack --config webpack.config.js",
     "prepublish": "npm run build"
   },
   "dependencies": {
