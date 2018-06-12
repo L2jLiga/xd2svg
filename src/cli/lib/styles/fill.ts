@@ -1,7 +1,6 @@
 import colorTransformer, { Color } from '../utils/colorTransformer';
+import { document } from '../utils/global-namespace';
 import { Parser } from './index';
-
-const document: Document = new (require('jsdom').JSDOM)().window.document;
 
 const fillParser: Parser = {
   name: 'fill',

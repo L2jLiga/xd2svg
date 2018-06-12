@@ -1,11 +1,7 @@
 import { Artboard, Line, Paragraph, Shape, Text } from '../models/artboard';
 import { ArtboardInfo } from '../models/artboard-info';
 import createStyles from './createStyles';
-
-const jsdom = require('jsdom');
-const context = new jsdom.JSDOM();
-const window: Window = context.window;
-const document: Document = window.document;
+import { document } from './utils/global-namespace';
 
 export default function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
   const svgImages: string[] = [];

@@ -2,10 +2,9 @@ import { SynchrounousResult } from 'tmp';
 import { ArtboardInfo } from '../models/artboard-info';
 import { Resource } from '../models/resource';
 import colorTransformer from './utils/colorTransformer';
+import { document } from './utils/global-namespace';
 
 const fs = require('fs');
-const jsdom = require('jsdom');
-const document: Document = (new jsdom.JSDOM()).window.document;
 
 export default function resourceParser(directory: SynchrounousResult): Resource {
   const json = fs.readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
