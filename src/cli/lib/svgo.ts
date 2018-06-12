@@ -1,40 +1,109 @@
 const SVGO = require('svgo');
 
-const svgoConfig = {
-  cleanupAttrs: true,
-  cleanupEnableBackground: true,
-  cleanupIDs: true,
-  cleanupListOfValues: true,
-  cleanupNumericValues: true,
-  collapseGroups: false,
-  convertColors: true,
-  convertShapeToPath: false,
-  convertStyleToAttrs: true,
-  convertTransform: true,
-  mergePaths: false,
-  moveElemsAttrsToGroup: true,
-  moveGroupAttrsToElems: true,
-  removeComments: true,
-  removeDesc: false,
-  removeDimensions: false,
-  removeDoctype: true,
-  removeEditorsNSData: true,
-  removeEmptyAttrs: true,
-  removeEmptyContainers: true,
-  removeEmptyText: true,
-  removeHiddenElems: false,
-  removeMetadata: false,
-  removeNonInheritableGroupAttrs: true,
-  removeRasterImages: false,
-  removeTitle: false,
-  removeUnknownsAndDefaults: true,
-  removeUnusedNS: true,
-  removeUselessDefs: true,
-  removeUselessStrokeAndFill: true,
-  removeViewBox: true,
-  removeXMLNS: false,
-  removeXMLProcInst: false,
-  sortAttrs: true,
-};
+const svgoPlugins = [
+    {
+      cleanupAttrs: true,
+    },
+    {
+      cleanupEnableBackground: true,
+    },
+    {
+      cleanupIDs: false,
+    },
+    {
+      cleanupListOfValues: true,
+    },
+    {
+      cleanupNumericValues: true,
+    },
+    {
+      collapseGroups: false,
+    },
+    {
+      convertColors: true,
+    },
+    {
+      convertShapeToPath: false,
+    },
+    {
+      convertStyleToAttrs: false,
+    },
+    {
+      convertTransform: true,
+    },
+    {
+      mergePaths: false,
+    },
+    {
+      moveElemsAttrsToGroup: true,
+    },
+    {
+      moveGroupAttrsToElems: true,
+    },
+    {
+      removeComments: true,
+    },
+    {
+      removeDesc: false,
+    },
+    {
+      removeDimensions: false,
+    },
+    {
+      removeDoctype: true,
+    },
+    {
+      removeEditorsNSData: true,
+    },
+    {
+      removeEmptyAttrs: true,
+    },
+    {
+      removeEmptyContainers: true,
+    },
+    {
+      removeEmptyText: true,
+    },
+    {
+      removeHiddenElems: false,
+    },
+    {
+      removeMetadata: false,
+    },
+    {
+      removeNonInheritableGroupAttrs: true,
+    },
+    {
+      removeRasterImages: false,
+    },
+    {
+      removeTitle: false,
+    },
+    {
+      removeUnknownsAndDefaults: true,
+    },
+    {
+      removeUnusedNS: true,
+    },
+    {
+      removeUselessDefs: true,
+    },
+    {
+      removeUselessStrokeAndFill: true,
+    },
+    {
+      removeViewBox: true,
+    },
+    {
+      removeXMLNS: false,
+    },
+    {
+      removeXMLProcInst: false,
+    },
+    {
+      sortAttrs: true,
+    },
+  ]
+;
 
-export default new SVGO(svgoConfig);
+export default new SVGO({plugins: svgoPlugins});
