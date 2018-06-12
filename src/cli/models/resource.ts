@@ -1,6 +1,6 @@
-import {ArtboardInfo} from "./artboard-info";
+import { ArtboardInfo } from './artboard-info';
 
 export interface Resource {
-  artboards: {[name: string]: ArtboardInfo};
+  artboards: { [name: string]: ArtboardInfo };
   gradients: string;
 }

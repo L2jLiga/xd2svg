@@ -1,4 +1,4 @@
-import { SynchrounousResult } from "tmp";
+import { SynchrounousResult } from 'tmp';
 
 const fs = require('fs');
 
@@ -8,10 +8,10 @@ export default function manifestParser(directory: SynchrounousResult) {
   const manifest = JSON.parse(json);
 
   const manifestInfo = {
-    id: manifest.id,
-    version: manifest['uxdesign#version'],
     artboards: [],
+    id: manifest.id,
     resources: null,
+    version: manifest['uxdesign#version'],
   };
 
   manifest.children.forEach((child) => {
@@ -23,7 +23,7 @@ export default function manifestParser(directory: SynchrounousResult) {
   manifestInfo.artboards = manifestInfo.artboards.filter((artboard) => Boolean(artboard['uxdesign#bounds']));
 
   return manifestInfo;
-};
+}
 
 function parseResources(dirName: string, resources: any[] = []): { [path: string]: string } {
   const resourcesObject = {};

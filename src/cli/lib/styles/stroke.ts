@@ -1,21 +1,17 @@
-import fill from './fill';
-import { Parser } from "./index";
+import fill, { Fill } from './fill';
+import { Parser } from './index';
 
 const strokeParser: Parser = {
   name: 'stroke',
-  parse: stroke
+  parse: stroke,
 };
 
-/**
- * Generate stroke style property from object
- * @param {Object} stroke - Object representing stroke properties
- * @param {Element} parentElement - Element which contain target element
- * @param {String} uuid - Unique identifier for element
- * @param {Object} resources - Object representing images for patterns
- * @return {String} String representing stroke style properties
- */
-function stroke(stroke, parentElement, uuid, resources) {
-  return fill.parse(stroke, parentElement, uuid, resources) + `;stroke-width:${stroke.width}px`;
+export interface Stroke extends Fill {
+  width: number;
+}
+
+function stroke(src: Stroke, parentElement, uuid, resources) {
+  return fill.parse(src, parentElement, uuid, resources) + `;stroke-width:${src.width}px`;
 }
 
 export default strokeParser;

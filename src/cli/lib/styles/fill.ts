@@ -1,54 +1,61 @@
-import colorTransformer from '../utils/colorTransformer';
-import { Parser } from "./index";
+import colorTransformer, { Color } from '../utils/colorTransformer';
+import { Parser } from './index';
 
 const document: Document = new (require('jsdom').JSDOM)().window.document;
 
 const fillParser: Parser = {
   name: 'fill',
-  parse: fill
+  parse: fill,
 };
 
-/**
- * Generate fill style property from object
- * @param {Object} fill - Object representing fill properties
- * @param {Element} parentElement - Element which contain target element
- * @param {String} uuid - Unique identifier for element
- * @param {Object} resources - Object representing images for patterns
- * @return {String} String representing fill style properties
- */
-function fill(fill, parentElement: Element, uuid: string, resources): string {
-  switch (fill.type) {
+export interface Fill {
+  type: string;
+  fill?: {
+    color: Color;
+  };
+  gradient?: {
+    ref: string;
+  };
+  pattern?: Pattern;
+  color?: Color;
+}
+
+export interface Pattern {
+  meta: {
+    ux: {
+      uid: string;
+    };
+  };
+  width: number;
+  height: number;
+}
+
+function fill(src: Fill, parentElement: Element, uuid: string, resources): string {
+  switch (src.type) {
     case 'color':
-      return colorTransformer(fill.fill.color);
+      return colorTransformer(src.fill.color);
     case 'gradient':
-      return `url(#${fill.gradient.ref})`;
+      return `url(#${src.gradient.ref})`;
     case 'pattern':
-      parentElement.appendChild(createPattern(uuid, resources, fill.pattern));
+      parentElement.appendChild(createPattern(uuid, resources, src.pattern));
 
       return `url(#${uuid})`;
     case 'none':
       return 'none';
     default:
-      return colorTransformer(fill.color);
+      return colorTransformer(src.color);
   }
 }
 
-/**
- * Create pattern for image fill
- * @param {String} uuid - Unique identificator of pattern
- * @param {Object} resources - Object representing images for pattern
- * @param {Object} patternObject - Object representing pattern
- * @return {Element} Created pattern
- */
-function createPattern(uuid: string, resources, patternObject): Element {
+function createPattern(uuid: string, resources: any, patternObject: Pattern): Element {
   const pattern: Element = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
   const image: Element = document.createElementNS('http://www.w3.org/2000/svg', 'image');
 
   pattern.setAttribute('id', uuid);
 
   image.setAttribute('xlink:href', resources[patternObject.meta.ux.uid]);
-  image.setAttribute('width', patternObject.width);
-  image.setAttribute('height', patternObject.height);
+  image.setAttribute('width', `${patternObject.width}`);
+  image.setAttribute('height', `${patternObject.height}`);
 
   pattern.appendChild(image);
 

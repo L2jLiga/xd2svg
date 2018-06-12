@@ -17,13 +17,13 @@ function gridlyRules(): HTMLElement {
 }
 
 function fixedPos(x: number): () => number {
-  return function (): number {
+  return (): number => {
     return x;
   };
 }
 
 function elementPos(element: Element, label: string): () => number {
-  return function (): number {
+  return (): number => {
     const elementRect: ClientRect | DOMRect = element.getBoundingClientRect();
     const computedStylesForElement = computeStyles(element);
 
@@ -62,12 +62,12 @@ function elementPos(element: Element, label: string): () => number {
   };
 }
 
-interface ICachedStyles {
+interface CachedStyles {
   e: Element;
   s?: CSSStyleDeclaration;
 }
 
-const cachedStyles: ICachedStyles = {e: null};
+const cachedStyles: CachedStyles = {e: null};
 
 function computeStyles(element: Element): CSSStyleDeclaration {
   if (element !== cachedStyles.e) {
@@ -167,35 +167,35 @@ function create(tag: string, classNames: string, id?: string): HTMLElement {
   return element;
 }
 
-interface IRule {
-  setPosition: (pos, label?) => void,
-  refresh: () => void,
-  copyPosition: (rule) => void,
-  remove: () => void,
-  isVertical: boolean
-  loupeRule: Element,
-  rule: Element,
-  pos?: () => number,
-  poslabel: Element,
-  difflabel: Element,
-  id: string | number,
-  text?: string
+interface Rule {
+  setPosition: (pos, label?) => void;
+  refresh: () => void;
+  copyPosition: (rule) => void;
+  remove: () => void;
+  isVertical: boolean;
+  loupeRule: Element;
+  rule: Element;
+  pos?: () => number;
+  poslabel: Element;
+  difflabel: Element;
+  id: string | number;
+  text?: string;
 }
 
-function newRule(isVertical: boolean, temp: string = ''): IRule {
-  const rule: Element = create('div', 'rule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
-  const loupeRule: Element = create('div', 'louperule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
-  const label: Element = create('div', 'label');
-  const poslabel: Element = create('div', 'poslabel');
-  const difflabel: Element = create('div', 'difflabel');
+function newRule(isVertical: boolean, temp: string = ''): Rule {
+  const ruleElement: Element = create('div', 'rule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
+  const loupeRuleElement: Element = create('div', 'louperule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
+  const labelElement: Element = create('div', 'label');
+  const poslabelElement: Element = create('div', 'poslabel');
+  const difflabelElement: Element = create('div', 'difflabel');
 
-  label.appendChild(poslabel);
-  label.appendChild(difflabel);
-  poslabel.textContent = '';
-  difflabel.textContent = '';
-  rule.appendChild(label);
-  gridlyRules().appendChild(rule);
-  loupe.rules.appendChild(loupeRule);
+  labelElement.appendChild(poslabelElement);
+  labelElement.appendChild(difflabelElement);
+  poslabelElement.textContent = '';
+  difflabelElement.textContent = '';
+  ruleElement.appendChild(labelElement);
+  gridlyRules().appendChild(ruleElement);
+  loupe.rules.appendChild(loupeRuleElement);
   const r = {
     setPosition(pos, label) {
       this.pos = pos;
@@ -223,34 +223,34 @@ function newRule(isVertical: boolean, temp: string = ''): IRule {
       gridlyRules().removeChild(this.rule);
       loupe.rules.removeChild(this.loupeRule);
     },
-    isVertical,
-    loupeRule,
-    rule,
-    poslabel,
-    difflabel,
+    difflabel: difflabelElement,
     id: null,
+    isVertical,
+    loupeRule: loupeRuleElement,
+    poslabel: poslabelElement,
+    rule: ruleElement,
   };
   r.setPosition(fixedPos(-100), '');
   return r;
 }
 
-interface ILoupe {
-  div: HTMLElement,
-  image: HTMLElement,
-  rules: HTMLElement
+interface Loupe {
+  div: HTMLElement;
+  image: HTMLElement;
+  rules: HTMLElement;
 }
 
-function makeLoupe(): ILoupe {
-  const div: HTMLElement = create('div', 'loupe', 'loupe');
-  const image: HTMLElement = create('div', 'loupeimg');
-  const rules: HTMLElement = create('div', 'louperules');
+function makeLoupe(): Loupe {
+  const divElement: HTMLElement = create('div', 'loupe', 'loupe');
+  const imageElement: HTMLElement = create('div', 'loupeimg');
+  const rulesElement: HTMLElement = create('div', 'louperules');
 
-  div.appendChild(image);
-  div.appendChild(rules);
+  divElement.appendChild(imageElement);
+  divElement.appendChild(rulesElement);
 
-  gridlyRules().appendChild(div);
+  gridlyRules().appendChild(divElement);
 
-  return {div, image, rules};
+  return {div: divElement, image: imageElement, rules: rulesElement};
 }
 
 function highlightElement(e: HTMLElement): void {
@@ -291,7 +291,7 @@ const loupeState = {
   zoom: 8.0,
 };
 
-interface IState {
+interface State {
   snap: boolean;
   baseline: boolean;
   origin: Array<() => number>;
@@ -301,14 +301,14 @@ interface IState {
   help: boolean;
 }
 
-const state: IState = {
-  snap: true,
+const state: State = {
   baseline: false,
-  origin: [fixedPos(0), fixedPos(0)],
   colspec: '16:grey 28:transparent 16:pink 28:transparent',
-  rowspec: '70 70 3000:transparent',
-  pointerEvents: false,
   help: true,
+  origin: [fixedPos(0), fixedPos(0)],
+  pointerEvents: false,
+  rowspec: '70 70 3000:transparent',
+  snap: true,
 };
 
 function askColumns(): void {
@@ -510,16 +510,16 @@ function refreshRules() {
  * Compare rules
  * @param {{}} rule1
  * @param {{}} rule2
- * @param {{}[]} rules
+ * @param {{}[]} rulesList
  */
-function diffLabels(rule1, rule2, rules) {
+function diffLabels(rule1, rule2, rulesList) {
   const keys = [rule1.p, rule2.p];
-  for (const key in rules) {
-    if (!rules[key]) {
+  for (const key in rulesList) {
+    if (!rulesList[key]) {
       continue;
     }
 
-    keys[keys.length] = rules[key].p;
+    keys[keys.length] = rulesList[key].p;
   }
   keys.sort((x, y) => x - y);
   let prev = -1;
@@ -538,8 +538,8 @@ function diffLabels(rule1, rule2, rules) {
       if (rule2.p === pos) {
         rule2.difflabel.textContent = diff;
       }
-      if (rules[pos]) {
-        rules[pos].difflabel.textContent = diff;
+      if (rulesList[pos]) {
+        rulesList[pos].difflabel.textContent = diff;
       }
     }
     if (i < keys.length - 1 && keys[i + 1] !== pos) {

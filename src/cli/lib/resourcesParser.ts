@@ -1,7 +1,7 @@
-import colorTransformer from "./utils/colorTransformer";
-import { Resource } from "../models/resource";
-import { ArtboardInfo } from "../models/artboard-info";
-import { SynchrounousResult } from "tmp";
+import { SynchrounousResult } from 'tmp';
+import { ArtboardInfo } from '../models/artboard-info';
+import { Resource } from '../models/resource';
+import colorTransformer from './utils/colorTransformer';
 
 const fs = require('fs');
 const jsdom = require('jsdom');
@@ -17,20 +17,20 @@ export default function resourceParser(directory: SynchrounousResult): Resource 
 
     gradients: buildGradients(resources.resources.gradients),
   };
-};
+}
 
 function buildArtboardsInfo(artboards: { [id: string]: any }): { [name: string]: ArtboardInfo } {
   const artboardsInfoList: { [name: string]: ArtboardInfo } = {};
 
   Object.keys(artboards).forEach((artboardId: string) => {
     artboardsInfoList[artboards[artboardId].name] = {
+      height: artboards[artboardId].height,
       name: artboards[artboardId].name,
+      viewportHeight: artboards[artboardId].viewportHeight,
+      viewportWidth: artboards[artboardId].viewportWidth,
+      width: artboards[artboardId].width,
       x: artboards[artboardId].x,
       y: artboards[artboardId].y,
-      width: artboards[artboardId].width,
-      height: artboards[artboardId].height,
-      viewportWidth: artboards[artboardId].viewportWidth,
-      viewportHeight: artboards[artboardId].viewportHeight,
     };
   });
 

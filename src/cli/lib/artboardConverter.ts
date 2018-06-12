@@ -1,6 +1,6 @@
-import { ArtboardInfo } from "../models/artboard-info";
+import { Artboard, Line, Paragraph, Shape, Text } from '../models/artboard';
+import { ArtboardInfo } from '../models/artboard-info';
 import createStyles from './createStyles';
-import { Artboard, Line, Paragraph, Shape, Text } from "../models/artboard";
 
 const jsdom = require('jsdom');
 const context = new jsdom.JSDOM();
@@ -28,13 +28,13 @@ export default function artboardConverter(artboardsRoot: Artboard, artboardInfo:
         svg.setAttribute('id', imageRootObject.id);
         svg.setAttribute('viewBox', `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);
         svg.setAttribute('enable-background', `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);
-        artboardInfo.viewportWidth ? svg.setAttribute('width', `${artboardInfo.viewportWidth}`) : null;
-        artboardInfo.viewportHeight ? svg.setAttribute('height', `${artboardInfo.viewportHeight}`) : null;
+        if (artboardInfo.viewportWidth) svg.setAttribute('width', `${artboardInfo.viewportWidth}`);
+        if (artboardInfo.viewportHeight) svg.setAttribute('height', `${artboardInfo.viewportHeight}`);
         svg.appendChild(title);
         svg.appendChild(backGround);
 
         svgImages.push(createElem(imageRootObject.artboard, svg, resources).outerHTML);
-      }
+      },
     );
 
   return svgImages;
@@ -70,11 +70,13 @@ function createText(srcObj: Text): Element {
 
         element.innerHTML = rawText.substring(linePart.from, linePart.to);
 
-        if (linePart.x !== undefined)
+        if (linePart.x !== undefined) {
           element.setAttribute('x', `${linePart.x || 0}`);
+        }
 
-        if (linePart.y !== undefined)
+        if (linePart.y !== undefined) {
           element.setAttribute('y', `${linePart.y || 0}`);
+        }
 
         svgTextElement.appendChild(element);
       });

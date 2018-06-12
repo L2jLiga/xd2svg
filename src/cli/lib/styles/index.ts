@@ -5,13 +5,13 @@ import opacity from './opacity';
 import stroke from './stroke';
 import textAttributes from './textAttributes';
 
-const parsers: {[parser: string]: Parser} = {
+const parsers: { [parser: string]: Parser } = {
   fill,
   filters,
   font,
   opacity,
   stroke,
-  textAttributes
+  textAttributes,
 };
 
 export interface Parser {

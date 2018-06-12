@@ -1,5 +1,6 @@
-import { Parser } from "./index";
+import { Parser } from './index';
 
+// tslint:disable:object-literal-sort-keys
 const fontWeightVariants = {
   Light: 300,
   Regular: 400,
@@ -8,19 +9,21 @@ const fontWeightVariants = {
   Bold: 700,
   Black: 900,
 };
+// tslint:enable:object-literal-sort-keys
 
 const fontParser: Parser = {parse: font};
 
-/**
- * Generate font style property from object
- * @param {Object} font - Object representing font properties
- * @return {String} String representing font style properties
- */
-function font(font) {
-  const fontStyle = fontWeightVariants[font.style];
+export interface Font {
+  style: string;
+  family: string;
+  size: string;
+}
 
-  return `;font-family:${font.family}
-  ;font-size:${font.size}px
+function font(src: Font) {
+  const fontStyle = fontWeightVariants[src.style];
+
+  return `;font-family:${src.family}
+  ;font-size:${src.size}px
   ;font-weight:${fontStyle}`;
 }
 

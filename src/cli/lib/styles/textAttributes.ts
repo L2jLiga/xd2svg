@@ -1,20 +1,20 @@
-import { Parser } from "./index";
+import { Parser } from './index';
 
 const textAttributesParser: Parser = {
-  parse: textAttributes
+  parse: textAttributes,
 };
 
-/**
- * Generate filter text attributes properties from object
- * @param {Object} textAttributes - Object representing text attributes
- * @return {String} Attributes coverted to css inline-style string
- */
-function textAttributes(textAttributes): string {
+interface TextAttributes {
+  lineHeight: number;
+  paragraphAlign: string;
+}
+
+function textAttributes(src: TextAttributes): string {
   let textAttrsStyles: string = '';
 
-  if (textAttributes.lineHeight) textAttrsStyles += `;line-height: ${textAttributes.lineHeight}px`;
+  if (src.lineHeight) textAttrsStyles += `;line-height: ${src.lineHeight}px`;
 
-  if (textAttributes.paragraphAlign) textAttrsStyles += `;text-align: ${textAttributes.paragraphAlign}`;
+  if (src.paragraphAlign) textAttrsStyles += `;text-align: ${src.paragraphAlign}`;
 
   return textAttrsStyles;
 }

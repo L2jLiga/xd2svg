@@ -31,7 +31,8 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "prepublish": "npm run build"
+    "prepublish": "npm run lint && npm run build",
+    "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'"
   },
   "dependencies": {
     "extract-zip": "1.6.7",

@@ -21,5 +21,5 @@ if (inputFileName) {
   console.log(inputFileName, outputFileName);
 
 } else {
-  console.log('Usage: xd2svg-cli InputFile.xd [OutputFile.html]')
+  console.log('Usage: xd2svg-cli InputFile.xd [OutputFile.html]');
 }

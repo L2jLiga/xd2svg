@@ -34,7 +34,7 @@ export interface Text {
 }
 
 export interface Paragraph {
-  lines: Array<Line[]>;
+  lines: Line[][];
 }
 
 export interface Line {
