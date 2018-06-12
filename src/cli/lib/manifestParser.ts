@@ -25,7 +25,12 @@ export default function manifestParser(directory: SynchrounousResult) {
   return manifestInfo;
 }
 
-function parseResources(dirName: string, resources: any[] = []): { [path: string]: string } {
+interface RawResource {
+  path: string;
+  type: string;
+}
+
+function parseResources(dirName: string, resources: RawResource[] = []): { [path: string]: string } {
   const resourcesObject = {};
 
   resources.forEach((res) => {
