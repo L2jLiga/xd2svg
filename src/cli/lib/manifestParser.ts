@@ -36,9 +36,9 @@ function parseResources(dirName: string, resources: RawResource[] = []): { [path
   resources.forEach((res) => {
     const resourceSourcePath = dirName + '/resources/' + res.path;
 
-    const resourceSource = fs.readFileSync(resourceSourcePath);
+    const resourceSource: Buffer = fs.readFileSync(resourceSourcePath);
 
-    const base64 = new Buffer(resourceSource).toString('base64');
+    const base64 = resourceSource.toString('base64');
 
     resourcesObject[res.path] = `data:${res.type};base64,${base64}`;
   });
