@@ -16,13 +16,19 @@ function filters(src: any): string {
 
     try {
       filterParams.forEach((filterParam) => {
-        filtersStyle += ` ${filterName}( `;
-        Object.keys(filterParam).forEach((key) => {
-          const filterValue = filterParam[key];
+        if (filterName === 'drop-shadow') {
+          filtersStyle += ` drop-shadow(${filterParam.dx}px ${filterParam.dy}px ${filterParam.r}px ${createColor(filterParam.color)}) `;
+        } else {
+          console.log(filterName, JSON.stringify(filterParam));
 
-          filtersStyle += ' ' + ((filterValue.mode) ? createColor(filterValue) : filterValue) + ' ';
-        });
-        filtersStyle += ` ) `;
+          filtersStyle += ` ${filterName}( `;
+          Object.keys(filterParam).forEach((key) => {
+            const filterValue = filterParam[key];
+
+            filtersStyle += ' ' + ((filterValue.mode) ? createColor(filterValue) : filterValue) + ' ';
+          });
+          filtersStyle += ` ) `;
+        }
       });
     } catch (error) {
       console.log(`Unsupported filter: ${filterName}`);
