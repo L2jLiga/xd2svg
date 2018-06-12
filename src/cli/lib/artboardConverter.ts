@@ -4,12 +4,10 @@ import { Artboard, Line, Paragraph, Shape, Text } from "../models/artboard";
 
 const jsdom = require('jsdom');
 const context = new jsdom.JSDOM();
+const window: Window = context.window;
+const document: Document = window.document;
 
-export default function artboardConverter(artboard: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
-  return artboardConverterUnwrapped(context.window.document, artboard, artboardInfo, resources);
-};
-
-function artboardConverterUnwrapped(document: Document, artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
+export default function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
   const svgImages: string[] = [];
 
   artboardsRoot.children
