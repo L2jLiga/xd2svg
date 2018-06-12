@@ -31,7 +31,12 @@ function filters(src: any): string {
         }
       });
     } catch (error) {
-      console.log(`Unsupported filter: ${filterName}`);
+      if (filterName === 'blur') {
+        if (filterParams.blurAmount) filtersStyle += ` blur(${filterParams.blurAmount}px) `;
+        if (filterParams.brightnessAmount) filtersStyle += ` brightness(${filterParams.brightnessAmount}%) `;
+      } else {
+        console.log(`Unsupported filter: ${filterName}`);
+      }
     }
   });
 
