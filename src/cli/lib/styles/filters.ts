@@ -1,46 +1,68 @@
 import camelToDash from '../utils/camelToDash';
-import createColor from '../utils/colorTransformer';
-import { Parser } from './index';
+import colorTransformer from '../utils/colorTransformer';
+import { document } from '../utils/global-namespace';
 
-const filterParser: Parser = {
-  name: 'filter',
-  parse: filters,
-};
-
-function filters(src: any): string {
-  let filtersStyle = '';
+export function filters(
+  src: any,
+  parentElement: Element,
+  targetElement: Element,
+): void {
+  const filterList: string[] = [];
 
   src.forEach((filter) => {
     const filterName = filter.type.includes('#blur') ? 'blur' : camelToDash(filter.type);
     const filterParams = filter.params[filter.type + 's'] || filter.params || {};
 
-    try {
-      filterParams.forEach((filterParam) => {
-        if (filterName === 'drop-shadow') {
-          filtersStyle += ` drop-shadow(${filterParam.dx}px ${filterParam.dy}px ${filterParam.r}px ${createColor(filterParam.color)}) `;
-        } else {
-          console.log(filterName, JSON.stringify(filterParam));
+    switch (filterName) {
+      case 'blur': {
+        const filterId: string = `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
 
-          filtersStyle += ` ${filterName}( `;
-          Object.keys(filterParam).forEach((key) => {
-            const filterValue = filterParam[key];
+        const svgFilterElement = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
 
-            filtersStyle += ' ' + ((filterValue.mode) ? createColor(filterValue) : filterValue) + ' ';
-          });
-          filtersStyle += ` ) `;
-        }
-      });
-    } catch (error) {
-      if (filterName === 'blur') {
-        if (filterParams.blurAmount) filtersStyle += ` blur(${filterParams.blurAmount}px) `;
-        if (filterParams.brightnessAmount) filtersStyle += ` brightness(${filterParams.brightnessAmount}%) `;
-      } else {
-        console.log(`Unsupported filter: ${filterName}`);
+        const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+
+        blur.setAttribute('in', 'SourceGraphic');
+        blur.setAttribute('stdDeviation', filterParams.blurAmount);
+
+        svgFilterElement.setAttribute('id', filterId);
+        svgFilterElement.appendChild(blur);
+
+        parentElement.appendChild(svgFilterElement);
+
+        filterList.push(`url(#${filterId})`);
+
+        break;
       }
+
+      case 'drop-shadow': {
+        for (const {dx, dy, r, color} of filterParams) {
+          const filterId: string = `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
+
+          const svgFilterElement = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+
+          svgFilterElement.setAttribute('id', filterId);
+
+          const dropShadow = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow');
+          dropShadow.setAttribute('dx', dx);
+          dropShadow.setAttribute('dy', dy);
+          dropShadow.setAttribute('stdDeviation', r);
+          dropShadow.setAttribute('flood-color', colorTransformer(color));
+
+          svgFilterElement.appendChild(dropShadow);
+
+          parentElement.appendChild(svgFilterElement);
+
+          filterList.push(`url(#${filterId})`);
+        }
+
+        break;
+      }
+
+      default:
+        console.log(`Currently unsupported filter: ${filterName}`);
     }
   });
 
-  return filtersStyle;
-}
+  targetElement.setAttribute('style', targetElement.getAttribute('style') + `; filter: ${filterList.join(' ')}; `);
 
-export default filterParser;
+}

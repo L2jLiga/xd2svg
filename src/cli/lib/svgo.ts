@@ -80,7 +80,7 @@ const svgoPlugins = [
       removeTitle: false,
     },
     {
-      removeUnknownsAndDefaults: true,
+      removeUnknownsAndDefaults: false,
     },
     {
       removeUnusedNS: true,
