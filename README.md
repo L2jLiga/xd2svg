@@ -26,10 +26,8 @@ Utility for converting Adobe eXperience Design files into SVG.
 ## Getting started
 
 ### Prerequisites
-1. Node.js 8.9.4 or higher
-1. Package manager
-   1. yarn >= 1.2.0
-   1. npm >= 5.3.0
+1. Node.js 8.6.0 or higher
+1. Package manager: npm, yarn, cnpm...
 
 ### Installation
 Two ways to install utility:
@@ -67,11 +65,11 @@ or require it directly in your scripts
 Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
-We use [SemVer](http://semver.org/spec/v2.0.0.html) for versioning.
+We use [SemVer](https://semver.org/spec/v2.0.0.html) for versioning.
 For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Changelog
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 For the versions changelog, see the [CHANGELOG.md](CHANGELOG.md)
 
 ## Authors
@@ -89,7 +87,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 * **Can I know more about Adobe XD?**
 
-   Yes, see this [link](http://www.adobe.com/ru/products/xd.html).
+   Yes, see this [link](https://www.adobe.com/ru/products/xd.html).
 
 * **What is present \*.xd files?**
 
