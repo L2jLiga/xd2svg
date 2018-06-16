@@ -1,5 +1,5 @@
-import camelToDash from '../utils/camelToDash';
-import colorTransformer from '../utils/colorTransformer';
+import camelToDash from '../utils/camel-to-dash';
+import colorTransformer from '../utils/color-transformer';
 import { document } from '../utils/global-namespace';
 
 export function filters(

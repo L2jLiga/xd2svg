@@ -1,6 +1,6 @@
 import { Artboard, Line, Paragraph, Shape, Text } from '../models/artboard';
 import { ArtboardInfo } from '../models/artboard-info';
-import createStyles from './createStyles';
+import createStyles from './create-styles';
 import { filters } from './styles/filters';
 import { document } from './utils/global-namespace';
 

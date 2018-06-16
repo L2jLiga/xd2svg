@@ -2,7 +2,7 @@ import fill from './fill';
 import font from './font';
 import opacity from './opacity';
 import stroke from './stroke';
-import textAttributes from './textAttributes';
+import textAttributes from './text-attributes';
 
 const parsers: { [parser: string]: Parser } = {
   fill,

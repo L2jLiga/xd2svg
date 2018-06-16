@@ -1,7 +1,7 @@
 import { dirSync, SynchrounousResult } from 'tmp';
-import artBoardConverter from './lib/artboardConverter';
-import manifestParser from './lib/manifestParser';
-import resourcesParser from './lib/resourcesParser';
+import artBoardConverter from './lib/artboard-converter';
+import manifestParser from './lib/manifest-parser';
+import resourcesParser from './lib/resources-parser';
 import svgo from './lib/svgo';
 import { Resource } from './models/resource';
 

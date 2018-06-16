@@ -1,4 +1,4 @@
-import colorTransformer, { Color } from '../utils/colorTransformer';
+import colorTransformer, { Color } from '../utils/color-transformer';
 import { document } from '../utils/global-namespace';
 import { Parser } from './index';
 

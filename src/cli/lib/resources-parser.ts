@@ -1,7 +1,7 @@
 import { SynchrounousResult } from 'tmp';
 import { ArtboardInfo } from '../models/artboard-info';
 import { Resource } from '../models/resource';
-import colorTransformer from './utils/colorTransformer';
+import colorTransformer from './utils/color-transformer';
 import { document } from './utils/global-namespace';
 
 const fs = require('fs');
