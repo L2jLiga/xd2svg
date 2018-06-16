@@ -6,11 +6,16 @@
       "es2018",
       "dom"
     ],
-    "types" : ["node"],
+    "types": [
+      "node"
+    ],
     "target": "es2016",
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "allowJs": true
+    "allowJs": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   }
 }

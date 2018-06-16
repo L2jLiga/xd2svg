@@ -7,31 +7,31 @@ export default function artboardConverter(artboardsRoot: Artboard, artboardInfo:
   const svgImages: string[] = [];
 
   artboardsRoot.children
-    .forEach((imageRootObject: Artboard): void => {
-        const svg: Element = createNativeSvgElement('svg');
-        const title: Element = createNativeSvgElement('title');
-        const backGround: Element = createNativeSvgElement('rect');
+    .map((imageRootObject: Artboard): void => {
+      const svg: Element = createNativeSvgElement('svg', {
+        'enable-background': `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
+        'id': imageRootObject.id,
+        'viewBox': `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
+      });
+      if (artboardInfo.viewportWidth) svg.setAttribute('width', `${artboardInfo.viewportWidth}`);
+      if (artboardInfo.viewportHeight) svg.setAttribute('height', `${artboardInfo.viewportHeight}`);
 
-        title.innerHTML = artboardInfo.name;
+      const title: Element = createNativeSvgElement('title');
+      title.innerHTML = artboardInfo.name;
+      svg.appendChild(title);
 
-        backGround.setAttribute('x', '0');
-        backGround.setAttribute('y', '0');
-        backGround.setAttribute('transform', `translate(${artboardInfo.x} ${artboardInfo.y})`);
-        backGround.setAttribute('width', `${artboardInfo.width}`);
-        backGround.setAttribute('height', `${artboardInfo.height}`);
-        backGround.setAttribute('style', createStyles(imageRootObject.style, svg, imageRootObject.id, resources));
+      const backGround: Element = createNativeSvgElement('rect', {
+        height: artboardInfo.height,
+        style: createStyles(imageRootObject.style, svg, imageRootObject.id, resources),
+        transform: `translate(${artboardInfo.x} ${artboardInfo.y})`,
+        width: artboardInfo.width,
+        x: 0,
+        y: 0,
+      });
+      svg.appendChild(backGround);
 
-        svg.setAttribute('id', imageRootObject.id);
-        svg.setAttribute('viewBox', `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);
-        svg.setAttribute('enable-background', `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`);
-        if (artboardInfo.viewportWidth) svg.setAttribute('width', `${artboardInfo.viewportWidth}`);
-        if (artboardInfo.viewportHeight) svg.setAttribute('height', `${artboardInfo.viewportHeight}`);
-        svg.appendChild(title);
-        svg.appendChild(backGround);
-
-        svgImages.push(createElem(imageRootObject.artboard, svg, resources).outerHTML);
-      },
-    );
+      svgImages.push(createElem(imageRootObject.artboard, svg, resources).outerHTML);
+    });
 
   return svgImages;
 }
@@ -39,30 +39,39 @@ export default function artboardConverter(artboardsRoot: Artboard, artboardInfo:
 function createShape(srcObj: Shape): Element {
   const object = createNativeSvgElement(srcObj.type);
 
-  if (srcObj.type === 'path') {
-    object.setAttribute('d', srcObj.path);
-  } else if (srcObj.type === 'rect') {
-    object.setAttribute('x', srcObj.x);
-    object.setAttribute('y', srcObj.y);
-    object.setAttribute('width', srcObj.width);
-    object.setAttribute('height', srcObj.height);
-  } else if (srcObj.type === 'circle') {
-    object.setAttribute('cx', srcObj.cx);
-    object.setAttribute('cy', srcObj.cy);
-    object.setAttribute('r', srcObj.r);
+  switch (srcObj.type) {
+    case 'path':
+      object.setAttribute('d', srcObj.path);
+      break;
+
+    case 'rect':
+      object.setAttribute('x', srcObj.x);
+      object.setAttribute('y', srcObj.y);
+      object.setAttribute('width', srcObj.width);
+      object.setAttribute('height', srcObj.height);
+      break;
+
+    case 'circle':
+      object.setAttribute('cx', srcObj.cx);
+      object.setAttribute('cy', srcObj.cy);
+      object.setAttribute('r', srcObj.r);
+      break;
+
+    default:
+      console.warn('Currently unsupported element type "%s":\n\n%O', srcObj.type, srcObj);
   }
 
   return object;
 }
 
-function createText(srcObj: Text): Element {
-  const svgTextElement: Element = createNativeSvgElement('text');
+function createText(srcObj: Text): SVGElement {
+  const svgTextElement: SVGElement = createNativeSvgElement('text');
   const rawText = srcObj.rawText;
 
-  srcObj.paragraphs.forEach((paragraph: Paragraph) => {
-    paragraph.lines.forEach((line: Line[]) => {
-      line.forEach((linePart: Line) => {
-        const element: Element = createNativeSvgElement('tspan');
+  srcObj.paragraphs.map((paragraph: Paragraph) => {
+    paragraph.lines.map((line: Line[]) => {
+      line.map((linePart: Line) => {
+        const element: SVGElement = createNativeSvgElement('tspan');
 
         element.innerHTML = rawText.substring(linePart.from, linePart.to);
 
@@ -89,7 +98,7 @@ function createTransforms(src): string {
 
 export function createElem<T extends Element>(svgObjCollection: Artboard, parentElement: T, resources: { [path: string]: string }): T {
   svgObjCollection.children
-    .forEach((svgObject: Artboard): void => {
+    .map((svgObject: Artboard): void => {
       let node: Element;
 
       switch (svgObject.type) {
@@ -125,6 +134,12 @@ export function createElem<T extends Element>(svgObjCollection: Artboard, parent
   return parentElement;
 }
 
-function createNativeSvgElement(tagName: string): Element {
-  return document.createElementNS('http://www.w3.org/2000/svg', tagName);
+function createNativeSvgElement(tagName: string, attrs: {} = {}): SVGElement {
+  const svgElement = document.createElementNS('http://www.w3.org/2000/svg', tagName);
+
+  Object.keys(attrs).map((attr: string) => {
+    svgElement.setAttribute(attr, attrs[attr]);
+  });
+
+  return svgElement;
 }
