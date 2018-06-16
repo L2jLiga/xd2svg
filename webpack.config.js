@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const webpack = require('webpack');
 
 module.exports = {
   target: 'node',
@@ -16,28 +17,31 @@ module.exports = {
     __filename: false,
     __dirname: false,
   },
-  externals: fs.readdirSync("node_modules")
+  externals: fs.readdirSync('node_modules')
     .reduce(function(acc, mod) {
-      if (mod === ".bin") {
-        return acc
+      if (mod === '.bin') {
+        return acc;
       }
 
-      acc[mod] = "commonjs " + mod;
-      return acc
+      acc[mod] = 'commonjs ' + mod;
+      return acc;
     }, {}),
   module: {
     rules: [
       {
         test: /\.ts$/,
         use: 'ts-loader',
-        exclude: /node_modules/
-      }
-    ]
+        exclude: /node_modules/,
+      },
+    ],
   },
+  plugins: [
+    new webpack.BannerPlugin(fs.readFileSync('./LICENSE', 'utf8')),
+  ],
   resolve: {
-    extensions: [ '.ts', '.js' ]
+    extensions: ['.ts', '.js'],
   },
   output: {
-    path: path.resolve(__dirname, 'dist')
-  }
+    path: path.resolve(__dirname, 'dist'),
+  },
 };
