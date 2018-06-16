@@ -5,6 +5,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- `.editorconfig`
+- Message when unsupported style
+- Message when unsupported shape
+- Clip-path support
+
+### Changed
+- Renamed all files to dash case
+- Updated devDependencies
+- Minimal Node.js version 8.6.0 (was 8.9.4)
+- tsconfig target now `es2016` (was `es2015`)
+- Cleanup dist before publish
+
+### Removed
+- Dead code
 
 ## [0.4.0] - 2018-06-13
 ### Added
