@@ -7,6 +7,7 @@ import stroke from './stroke';
 import textAttributes from './text-attributes';
 
 const parsers: { [parser: string]: Parser } = {
+  clipPath,
   fill,
   filters,
   font,
