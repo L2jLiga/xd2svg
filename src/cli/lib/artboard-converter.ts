@@ -87,7 +87,7 @@ function createTransforms(src): string {
   return `translate(${src.tx}, ${src.ty})`;
 }
 
-function createElem(svgObjCollection: Artboard, parentElement: Element, resources: { [path: string]: string }): Element {
+export function createElem<T extends Element>(svgObjCollection: Artboard, parentElement: T, resources: { [path: string]: string }): T {
   svgObjCollection.children
     .forEach((svgObject: Artboard): void => {
       let node: Element;
