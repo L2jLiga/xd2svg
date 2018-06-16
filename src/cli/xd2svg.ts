@@ -1,3 +1,4 @@
+import { readFileSync, writeFile } from 'fs';
 import { dirSync, SynchrounousResult } from 'tmp';
 import artBoardConverter from './lib/artboard-converter';
 import manifestParser from './lib/manifest-parser';
@@ -5,7 +6,6 @@ import resourcesParser from './lib/resources-parser';
 import svgo from './lib/svgo';
 import { Resource } from './models/resource';
 
-const fs = require('fs');
 const extract = require('extract-zip');
 
 export function xd2svg(inputFile: string, outputFile: string) {
@@ -29,7 +29,7 @@ function proceedFile(directory: SynchrounousResult) {
   const convertedArtboards: any[] = [];
 
   manifestInfo.artboards.forEach((artboardItem: any) => {
-    const json = fs.readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
+    const json = readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
     const artboard = JSON.parse(json);
 
@@ -71,7 +71,7 @@ function optimizeSvg(svgImage: string, outputFile: string) {
       return Promise.resolve(result);
     })
 
-    .then((result: any) => fs.writeFile(outputFile, result.data, (error) => {
+    .then((result: any) => writeFile(outputFile, result.data, (error) => {
       if (error) throw error;
     }), (error: any) => {
       throw new Error(error);

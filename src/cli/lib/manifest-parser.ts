@@ -1,9 +1,8 @@
+import { readFileSync } from 'fs';
 import { SynchrounousResult } from 'tmp';
 
-const fs = require('fs');
-
 export default function manifestParser(directory: SynchrounousResult) {
-  const json: string = fs.readFileSync(`${directory.name}/manifest`, 'utf-8');
+  const json: string = readFileSync(`${directory.name}/manifest`, 'utf-8');
 
   const manifest = JSON.parse(json);
 
@@ -36,7 +35,7 @@ function parseResources(dirName: string, resources: RawResource[] = []): { [path
   resources.forEach((res) => {
     const resourceSourcePath = dirName + '/resources/' + res.path;
 
-    const resourceSource: Buffer = fs.readFileSync(resourceSourcePath);
+    const resourceSource: Buffer = readFileSync(resourceSourcePath);
 
     const base64 = resourceSource.toString('base64');
 

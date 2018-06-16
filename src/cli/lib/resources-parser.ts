@@ -1,13 +1,12 @@
+import { readFileSync } from 'fs';
 import { SynchrounousResult } from 'tmp';
 import { ArtboardInfo } from '../models/artboard-info';
 import { Resource } from '../models/resource';
 import colorTransformer from './utils/color-transformer';
 import { document } from './utils/global-namespace';
 
-const fs = require('fs');
-
 export default function resourceParser(directory: SynchrounousResult): Resource {
-  const json = fs.readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
+  const json = readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
 
   const resources = JSON.parse(json);
 
