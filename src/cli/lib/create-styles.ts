@@ -1,19 +1,22 @@
-import parsers, { Parser } from './styles';
+import parsers from './styles';
 
 const supportedStyles: string[] = Object.keys(parsers);
 
 export default function createStyles(stylesSrc, parentElement: Element, uuid: string, resources: { [path: string]: string }): string {
   let styleAttr: string = '';
 
-  supportedStyles.forEach((styleName: string) => {
-    if (!stylesSrc[styleName]) return;
+  Object.getOwnPropertyNames(stylesSrc).forEach((styleName) => {
+    const parser = parsers[styleName];
+    const styleValue = stylesSrc[styleName];
 
-    const parser: Parser = parsers[styleName];
+    if (parser) {
+      const ruleName: string = parser.name ? `${parser.name}: ` : '';
+      const ruleValue: string = parser.parse(styleValue, parentElement, uuid, resources);
 
-    const ruleName: string = parser.name ? `${parser.name}: ` : '';
-    const ruleValue: string = parser.parse(stylesSrc[styleName], parentElement, uuid, resources);
-
-    styleAttr += `;${ruleName} ${ruleValue};`;
+      styleAttr += `;${ruleName} ${ruleValue};`;
+    } else {
+      console.warn('Unsupported style %s:\n\n%O', styleName, styleValue);
+    }
   });
 
   return styleAttr;
