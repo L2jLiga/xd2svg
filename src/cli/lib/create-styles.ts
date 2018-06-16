@@ -1,11 +1,9 @@
 import parsers from './styles';
 
-const supportedStyles: string[] = Object.keys(parsers);
-
-export default function createStyles(stylesSrc, parentElement: Element, uuid: string, resources: { [path: string]: string }): string {
+export function createStyles(stylesSrc, parentElement: Element, uuid: string, resources: { [path: string]: string }): string {
   let styleAttr: string = '';
 
-  Object.getOwnPropertyNames(stylesSrc).forEach((styleName) => {
+  Object.getOwnPropertyNames(stylesSrc).map((styleName) => {
     const parser = parsers[styleName];
     const styleValue = stylesSrc[styleName];
 

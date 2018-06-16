@@ -1,8 +1,6 @@
 import { Parser } from './index';
 
-const opacityParser: Parser = {
+export const opacity: Parser = {
   name: 'opacity',
-  parse: (opacity) => opacity,
+  parse: (src) => src,
 };
-
-export default opacityParser;

@@ -1,17 +1,15 @@
-import fill, { Fill } from './fill';
+import { Fill, fillParser } from './fill';
 import { Parser } from './index';
 
-const strokeParser: Parser = {
+export const stroke: Parser = {
   name: 'stroke',
-  parse: stroke,
+  parse: strokeParser,
 };
 
 export interface Stroke extends Fill {
   width: number;
 }
 
-function stroke(src: Stroke, parentElement, uuid, resources) {
-  return fill.parse(src, parentElement, uuid, resources) + `;stroke-width:${src.width}px`;
+function strokeParser(src: Stroke, parentElement, uuid, resources) {
+  return fillParser(src, parentElement, uuid, resources) + `;stroke-width:${src.width}px`;
 }
-
-export default strokeParser;

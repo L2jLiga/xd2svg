@@ -106,4 +106,4 @@ const svgoPlugins = [
   ]
 ;
 
-export default new SVGO({plugins: svgoPlugins});
+export const svgo = new SVGO({plugins: svgoPlugins});

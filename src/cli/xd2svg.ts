@@ -1,9 +1,9 @@
 import { readFileSync, writeFile } from 'fs';
 import { dirSync, SynchrounousResult } from 'tmp';
-import artBoardConverter from './lib/artboard-converter';
-import manifestParser from './lib/manifest-parser';
-import resourcesParser from './lib/resources-parser';
-import svgo from './lib/svgo';
+import { artboardConverter } from './lib/artboard-converter';
+import { manifestParser } from './lib/manifest-parser';
+import { resourcesParser } from './lib/resources-parser';
+import { svgo } from './lib/svgo';
 import { Resource } from './models/resource';
 
 const extract = require('extract-zip');
@@ -33,7 +33,7 @@ function proceedFile(directory: SynchrounousResult) {
 
     const artboard = JSON.parse(json);
 
-    const contentOfArtboard: string = artBoardConverter(artboard, resourcesInfo.artboards[artboardItem.name], manifestInfo.resources).join('');
+    const contentOfArtboard: string = artboardConverter(artboard, resourcesInfo.artboards[artboardItem.name], manifestInfo.resources).join('');
 
     convertedArtboards.push(contentOfArtboard);
 

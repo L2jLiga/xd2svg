@@ -1,9 +1,9 @@
 import { Artboard, Line, Paragraph, Shape, Text } from '../models/artboard';
 import { ArtboardInfo } from '../models/artboard-info';
-import createStyles from './create-styles';
+import { createStyles } from './create-styles';
 import { document } from './utils/global-namespace';
 
-export default function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
+export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
   const svgImages: string[] = [];
 
   artboardsRoot.children

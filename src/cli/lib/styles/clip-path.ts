@@ -1,16 +1,14 @@
 import { Parser } from './index';
 
-const clipPathParser: Parser = {
+export const clipPath: Parser = {
   name: 'clip-path',
-  parse: clipPath,
+  parse: clipPathParser,
 };
 
 interface ClipPath {
   ref: string;
 }
 
-function clipPath(src: ClipPath, parentElement: Element, uuid: string, resources): string {
+function clipPathParser(src: ClipPath): string {
   return `url(#${src.ref})`;
 }
-
-export default clipPathParser;

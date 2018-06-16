@@ -1,10 +1,10 @@
-import colorTransformer, { Color } from '../utils/color-transformer';
+import { Color, colorTransformer } from '../utils/color-transformer';
 import { document } from '../utils/global-namespace';
 import { Parser } from './index';
 
-const fillParser: Parser = {
+export const fill: Parser = {
   name: 'fill',
-  parse: fill,
+  parse: fillParser,
 };
 
 export interface Fill {
@@ -29,7 +29,7 @@ export interface Pattern {
   height: number;
 }
 
-function fill(src: Fill, parentElement: Element, uuid: string, resources): string {
+export function fillParser(src: Fill, parentElement: Element, uuid: string, resources): string {
   switch (src.type) {
     case 'color':
       return colorTransformer(src.fill.color);
@@ -46,9 +46,9 @@ function fill(src: Fill, parentElement: Element, uuid: string, resources): strin
   }
 }
 
-function createPattern(uuid: string, resources: any, patternObject: Pattern): Element {
-  const pattern: Element = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
-  const image: Element = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+function createPattern(uuid: string, resources: any, patternObject: Pattern): SVGElement {
+  const pattern: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+  const image: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'image');
 
   pattern.setAttribute('id', uuid);
 
@@ -60,5 +60,3 @@ function createPattern(uuid: string, resources: any, patternObject: Pattern): El
 
   return pattern;
 }
-
-export default fillParser;

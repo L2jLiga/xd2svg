@@ -1,7 +1,7 @@
 import { Parser } from './index';
 
-const textAttributesParser: Parser = {
-  parse: textAttributes,
+export const textAttributes: Parser = {
+  parse: textAttributesParser,
 };
 
 interface TextAttributes {
@@ -9,7 +9,7 @@ interface TextAttributes {
   paragraphAlign: string;
 }
 
-function textAttributes(src: TextAttributes): string {
+function textAttributesParser(src: TextAttributes): string {
   let textAttrsStyles: string = '';
 
   if (src.lineHeight) textAttrsStyles += `;line-height: ${src.lineHeight}px`;
@@ -18,5 +18,3 @@ function textAttributes(src: TextAttributes): string {
 
   return textAttrsStyles;
 }
-
-export default textAttributesParser;

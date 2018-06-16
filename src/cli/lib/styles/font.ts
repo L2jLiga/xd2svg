@@ -11,7 +11,7 @@ const fontWeightVariants = {
 };
 // tslint:enable:object-literal-sort-keys
 
-const fontParser: Parser = {parse: font};
+export const font: Parser = {parse: fontParser};
 
 export interface Font {
   style: string;
@@ -19,12 +19,10 @@ export interface Font {
   size: string;
 }
 
-function font(src: Font) {
+function fontParser(src: Font) {
   const fontStyle = fontWeightVariants[src.style];
 
   return `;font-family:${src.family}
   ;font-size:${src.size}px
   ;font-weight:${fontStyle}`;
 }
-
-export default fontParser;

@@ -11,7 +11,7 @@ export interface Color {
   };
 }
 
-export default function colorTransformer(fillColor: Color = {}): string {
+export function colorTransformer(fillColor: Color = {}): string {
   /* TODO: Add support for another modes */
   switch (fillColor.mode) {
     case 'RGB':
