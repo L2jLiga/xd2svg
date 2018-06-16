@@ -1,7 +1,18 @@
+# Prefer yarn over npm
 package-lock.json
-yarn-error.log
+
+# All logs and tmps files
+*.log
+*.tmp
+
+# Files relative to XD mockups
 *.svg
 *.xd
+*.html
+
+# JetBrains IDE
 .idea/
+
+# Dist
 dist/
 node_modules/
