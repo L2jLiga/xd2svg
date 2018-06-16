@@ -2,7 +2,10 @@
   "compilerOptions": {
     "module": "es2015",
     "moduleResolution": "node",
-    "lib": ["es2015", "dom"],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
     "types" : ["node"],
     "target": "es2016",
     "removeComments": true,
