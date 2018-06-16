@@ -1,7 +1,6 @@
 import { Artboard, Line, Paragraph, Shape, Text } from '../models/artboard';
 import { ArtboardInfo } from '../models/artboard-info';
 import createStyles from './create-styles';
-import { filters } from './styles/filters';
 import { document } from './utils/global-namespace';
 
 export default function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
@@ -114,10 +113,6 @@ function createElem(svgObjCollection: Artboard, parentElement: Element, resource
 
       if (svgObject.style) {
         node.setAttribute('style', createStyles(svgObject.style, parentElement, svgObject.id, resources));
-
-        if (svgObject.style.filters) {
-          filters(svgObject.style.filters, parentElement, node);
-        }
       }
 
       if (svgObject.transform) {

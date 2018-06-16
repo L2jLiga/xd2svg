@@ -1,12 +1,14 @@
 import camelToDash from '../utils/camel-to-dash';
 import colorTransformer from '../utils/color-transformer';
 import { document } from '../utils/global-namespace';
+import { Parser } from './index';
 
-export function filters(
-  src: any,
-  parentElement: Element,
-  targetElement: Element,
-): void {
+const filterParser: Parser = {
+  name: 'filter',
+  parse: filters,
+};
+
+export function filters(src: any, parentElement: Element): string {
   const filterList: string[] = [];
 
   src.forEach((filter) => {
@@ -63,6 +65,7 @@ export function filters(
     }
   });
 
-  targetElement.setAttribute('style', targetElement.getAttribute('style') + `; filter: ${filterList.join(' ')}; `);
-
+  return `${filterList.join(' ')}`;
 }
+
+export default filterParser;
