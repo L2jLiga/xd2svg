@@ -49,6 +49,7 @@ function proceedFile(directory: SynchrounousResult) {
          id="${manifestInfo.id}"
          version="1.1">
       ${resourcesInfo.gradients}
+      ${resourcesInfo.clipPaths}
       ${convertedArtboards.join('\r\n')}
     </svg>`;
 

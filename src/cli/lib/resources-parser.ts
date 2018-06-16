@@ -2,6 +2,7 @@ import { readFileSync } from 'fs';
 import { SynchrounousResult } from 'tmp';
 import { ArtboardInfo } from '../models/artboard-info';
 import { Resource } from '../models/resource';
+import { createElem } from './artboard-converter';
 import colorTransformer from './utils/color-transformer';
 import { document } from './utils/global-namespace';
 
@@ -14,6 +15,8 @@ export default function resourceParser(directory: SynchrounousResult): Resource 
     artboards: buildArtboardsInfo(resources.artboards),
 
     gradients: buildGradients(resources.resources.gradients),
+
+    clipPaths: buildClipPaths(resources.resources.clipPaths),
   };
 }
 
@@ -69,4 +72,19 @@ function buildElement(gradient: { [key: string]: any }, gradientId: string): Ele
   });
 
   return currentGradient;
+}
+
+function buildClipPaths(clipPaths: any): string {
+  const clipPathsArr: string[] = [];
+
+  Object.keys(clipPaths).forEach((clipPathId: string) => {
+    const clipPath = clipPaths[clipPathId];
+    const clipPathElement = createElem(clipPath, document.createElementNS('http://www.w3.org/2000/svg', 'clip-path'), null);
+
+    clipPathElement.setAttribute('id', clipPathId);
+
+    clipPathsArr.push(clipPathElement.outerHTML);
+  });
+
+  return clipPathsArr.join('');
 }
