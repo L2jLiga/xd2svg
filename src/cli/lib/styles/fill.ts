@@ -37,18 +37,21 @@ function createPattern(uuid: string, resources: any, patternObject: Pattern): SV
   const image: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'image');
 
   pattern.setAttribute('id', uuid);
-  pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-  pattern.setAttribute('width', '100%');
-  pattern.setAttribute('height', '100%');
+  pattern.setAttribute('x', '0');
+  pattern.setAttribute('y', '0');
+  pattern.setAttribute('width', '1');
+  pattern.setAttribute('height', '1');
 
   image.setAttribute('xlink:href', resources[patternObject.meta.ux.uid]);
-  image.setAttribute('x', '0');
-  image.setAttribute('y', '0');
-  image.setAttribute('width', `${patternObject.width}`);
-  image.setAttribute('height', `${patternObject.height}`);
 
-  if (patternObject.meta.ux.scaleBehavior) {
-    image.setAttribute('preserveAspectRatio', 'xMinYMin slice');
+  if (patternObject.meta.ux.scaleBehavior === 'cover') {
+    pattern.setAttribute('patternContentUnits', 'objectBoundingBox');
+    image.setAttribute('preserveAspectRatio', 'none');
+    image.setAttribute('width', '1');
+    image.setAttribute('height', '1');
+  } else {
+    image.setAttribute('width', `${patternObject.width}`);
+    image.setAttribute('height', `${patternObject.height}`);
   }
 
   pattern.appendChild(image);
