@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Improve font styles parser
+
 ### Fixed
 - `clip-path` property doesn't applied
 - Pattern applied incorrect when `scaleBehavior` is `cover`

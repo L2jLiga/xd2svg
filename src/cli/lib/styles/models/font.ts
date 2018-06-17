@@ -7,6 +7,7 @@
  */
 
 export interface Font {
+  postscriptName: string;
   style: string;
   family: string;
   size: string;
