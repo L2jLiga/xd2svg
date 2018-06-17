@@ -65,6 +65,13 @@ function createShape(srcObj: Shape): Element {
       object.setAttribute('r', srcObj.r);
       break;
 
+    case 'ellipse':
+      object.setAttribute('cx', srcObj.cx);
+      object.setAttribute('cy', srcObj.cy);
+      object.setAttribute('rx', srcObj.rx);
+      object.setAttribute('ry', srcObj.ry);
+      break;
+
     default:
       console.warn('Currently unsupported shape type "%s":\n\n%O', srcObj.type, srcObj);
   }

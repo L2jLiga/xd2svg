@@ -34,6 +34,10 @@ export interface Shape {
   cx: string;
   cy: string;
   r: string;
+
+  /* Additional for ellipse */
+  rx: string;
+  ry: string;
 }
 
 export interface Text {
