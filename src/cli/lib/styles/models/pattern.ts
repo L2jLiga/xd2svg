@@ -10,6 +10,7 @@ export interface Pattern {
   meta: {
     ux: {
       uid: string;
+      scaleBehavior: string;
     };
   };
   width: number;
