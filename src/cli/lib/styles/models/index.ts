@@ -6,13 +6,11 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { ClipPath, Parser } from './models';
-
-export const clipPath: Parser = {
-  name: 'clip-path',
-  parse: clipPathParser,
-};
-
-function clipPathParser(src: ClipPath): string {
-  return `url(#${src.ref})`;
-}
+export * from './clip-path';
+export * from './parser';
+export * from './fill';
+export * from './pattern';
+export * from './color';
+export * from './font';
+export * from './stroke';
+export * from './text-attributes';
