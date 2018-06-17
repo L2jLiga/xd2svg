@@ -6,36 +6,14 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Color, colorTransformer } from '../utils/color-transformer';
+import { colorTransformer } from '../utils/color-transformer';
 import { document } from '../utils/global-namespace';
-import { Parser } from './index';
+import { Fill, Parser, Pattern } from './models';
 
 export const fill: Parser = {
   name: 'fill',
   parse: fillParser,
 };
-
-export interface Fill {
-  type: string;
-  fill?: {
-    color: Color;
-  };
-  gradient?: {
-    ref: string;
-  };
-  pattern?: Pattern;
-  color?: Color;
-}
-
-export interface Pattern {
-  meta: {
-    ux: {
-      uid: string;
-    };
-  };
-  width: number;
-  height: number;
-}
 
 export function fillParser(src: Fill, parentElement: Element, uuid: string, resources): string {
   switch (src.type) {

@@ -9,7 +9,7 @@
 import { camelToDash } from '../utils/camel-to-dash';
 import { colorTransformer } from '../utils/color-transformer';
 import { document } from '../utils/global-namespace';
-import { Parser } from './index';
+import { Parser } from './models';
 
 export const filters: Parser = {
   name: 'filter',

@@ -6,16 +6,11 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Parser } from './index';
+import { Parser, TextAttributes } from './models';
 
 export const textAttributes: Parser = {
   parse: textAttributesParser,
 };
-
-interface TextAttributes {
-  lineHeight: number;
-  paragraphAlign: string;
-}
 
 function textAttributesParser(src: TextAttributes): string {
   let textAttrsStyles: string = '';

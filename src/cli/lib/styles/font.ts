@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Parser } from './index';
+import { Font, Parser } from './models';
 
 // tslint:disable:object-literal-sort-keys
 const fontWeightVariants = {
@@ -20,12 +20,6 @@ const fontWeightVariants = {
 // tslint:enable:object-literal-sort-keys
 
 export const font: Parser = {parse: fontParser};
-
-export interface Font {
-  style: string;
-  family: string;
-  size: string;
-}
 
 function fontParser(src: Font) {
   const fontStyle = fontWeightVariants[src.style];
