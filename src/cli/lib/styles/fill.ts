@@ -44,7 +44,7 @@ function createPattern(uuid: string, resources: any, patternObject: Pattern): SV
 
   image.setAttribute('xlink:href', resources[patternObject.meta.ux.uid]);
 
-  if (patternObject.meta.ux.scaleBehavior === 'cover') {
+  if (patternObject.meta.ux.scaleBehavior === 'cover' || patternObject.meta.ux.scaleBehavior === 'fill') {
     pattern.setAttribute('patternContentUnits', 'objectBoundingBox');
     image.setAttribute('preserveAspectRatio', 'none');
     image.setAttribute('width', '1');

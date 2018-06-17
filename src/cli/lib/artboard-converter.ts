@@ -66,7 +66,7 @@ function createShape(srcObj: Shape): Element {
       break;
 
     default:
-      console.warn('Currently unsupported element type "%s":\n\n%O', srcObj.type, srcObj);
+      console.warn('Currently unsupported shape type "%s":\n\n%O', srcObj.type, srcObj);
   }
 
   return object;
