@@ -6,52 +6,31 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-export interface Artboard {
+import { Shape } from './shape';
+import { Text } from './text';
+
+export interface CommonArtboard {
   id: string;
-  children: Artboard[];
   type: string;
+  children: Artboard[];
   artboard?: Artboard;
-  shape?: Shape;
-  text?: Text;
-  group?: Artboard;
   style: { [style: string]: any };
   transform: { [transform: string]: any };
 }
 
-export interface Shape {
-  type: string;
-
-  /* Path */
-  path?: string;
-
-  /* Rectangle */
-  x: string;
-  y: string;
-  width: string;
-  height: string;
-
-  /* Circle */
-  cx: string;
-  cy: string;
-  r: string;
-
-  /* Additional for ellipse */
-  rx: string;
-  ry: string;
+export interface ShapeArtboard extends CommonArtboard {
+  type: 'shape';
+  shape: Shape;
 }
 
-export interface Text {
-  rawText: string;
-  paragraphs: Paragraph[];
+export interface TextArtboard extends CommonArtboard {
+  type: 'text';
+  text: Text;
 }
 
-export interface Paragraph {
-  lines: Line[][];
+export interface GroupArtboard extends CommonArtboard {
+  type: 'group';
+  group: Artboard;
 }
 
-export interface Line {
-  from: number;
-  to: number;
-  x: number;
-  y: number;
-}
+export type Artboard = ShapeArtboard | TextArtboard | GroupArtboard;

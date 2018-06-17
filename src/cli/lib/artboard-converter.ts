@@ -6,8 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Artboard, Line, Paragraph, Shape, Text } from '../models/artboard';
-import { ArtboardInfo } from '../models/artboard-info';
+import { Artboard, ArtboardInfo, Line, Paragraph, Shape, Text } from '../models';
 import { createStyles } from './create-styles';
 import { document } from './utils/global-namespace';
 
@@ -73,7 +72,7 @@ function createShape(srcObj: Shape): Element {
       break;
 
     default:
-      console.warn('Currently unsupported shape type "%s":\n\n%O', srcObj.type, srcObj);
+      console.warn('Currently unsupported shape type:\n\n%O', srcObj);
   }
 
   return object;
@@ -131,7 +130,7 @@ export function createElem<T extends Element>(svgObjCollection: Artboard, parent
           break;
 
         default:
-          console.warn(`%cWarning: %cUnsupported type: ${svgObject.type}`, 'color: darkorange;', 'color: orange');
+          console.warn(`%cWarning: %cUnsupported type: %O`, 'color: darkorange;', 'color: orange', svgObject);
           return;
       }
 
