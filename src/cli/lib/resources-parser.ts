@@ -87,7 +87,7 @@ function buildClipPaths(clipPaths: any): string {
 
   Object.keys(clipPaths).forEach((clipPathId: string) => {
     const clipPath = clipPaths[clipPathId];
-    const clipPathElement = createElem(clipPath, document.createElementNS('http://www.w3.org/2000/svg', 'clip-path'), null);
+    const clipPathElement = createElem(clipPath, document.createElementNS('http://www.w3.org/2000/svg', 'clipPath'), null);
 
     clipPathElement.setAttribute('id', clipPathId);
 
