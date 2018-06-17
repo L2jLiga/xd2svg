@@ -13,7 +13,6 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "allowJs": true,
     "typeRoots": [
       "node_modules/@types"
     ]
