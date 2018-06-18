@@ -27,10 +27,8 @@ Utility for converting Adobe eXperience Design files into SVG.
 ## Getting started
 
 ### Prerequisites
-1. Node.js 8.9.4 or higher
-1. Package manager
-   1. yarn >= 1.2.0
-   1. npm >= 5.3.0
+1. Node.js 8.6.0 or higher
+1. Package manager: npm, yarn or what you prefer
 
 ### Installation
 Two ways to install utility:
