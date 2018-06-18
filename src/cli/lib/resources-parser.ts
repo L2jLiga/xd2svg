@@ -8,8 +8,7 @@
 
 import { readFileSync } from 'fs';
 import { SynchrounousResult } from 'tmp';
-import { ArtboardInfo } from '../models/artboard-info';
-import { Resource } from '../models/resource';
+import { ArtboardInfo, Resource } from '../models';
 import { createElem } from './artboard-converter';
 import { colorTransformer } from './utils/color-transformer';
 import { document } from './utils/global-namespace';

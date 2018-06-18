@@ -12,7 +12,7 @@ import { artboardConverter } from './lib/artboard-converter';
 import { manifestParser } from './lib/manifest-parser';
 import { resourcesParser } from './lib/resources-parser';
 import { svgo } from './lib/svgo';
-import { Resource } from './models/resource';
+import { Resource } from './models';
 
 const extract = require('extract-zip');
 
