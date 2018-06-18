@@ -71,9 +71,10 @@ function optimizeSvg(svgImage: string, outputFile: string) {
 
     .then((result: any) => {
       result.data = `<!DOCTYPE html>
-                       <style>${readFileSync(`${__dirname}/assets/inpage.css`)}</style>
-                       ${result.data}
-                       <script>${readFileSync(`${__dirname}/assets/inpage.js`)}</script>`;
+                     <meta charset="utf-8" />
+                     <style>${readFileSync(`${__dirname}/assets/inpage.css`, 'utf-8')}</style>
+                     ${result.data}
+                     <script>${readFileSync(`${__dirname}/assets/inpage.js`, 'utf-8')}</script>`;
 
       return Promise.resolve(result);
     })

@@ -30,42 +30,45 @@ function fixedPos(x: number): () => number {
   };
 }
 
-function elementPos(element: Element, label: string): () => number {
-  return (): number => {
-    const elementRect: ClientRect | DOMRect = element.getBoundingClientRect();
-    const computedStylesForElement = computeStyles(element);
+function elementPos(element: HTMLElement, label: string) {
+  return () => {
+    const sx: number = window.scrollX;
+    const sy: number = window.scrollY;
+    const elementBoundingRect = element.getBoundingClientRect();
 
     switch (label) {
       case 'left':
-        return elementRect.left;
+        return elementBoundingRect.left + sx;
       case 'right':
-        return elementRect.left + elementRect.width;
+        return elementBoundingRect.left + elementBoundingRect.width + sx;
       case 'top':
-        return elementRect.top;
+        return elementBoundingRect.top + sy;
       case 'bottom':
-        return elementRect.top + elementRect.height;
-      case 'inside-border-left':
-        return elementRect.left + getStyleValue('border-left-width');
-      case 'inside-border-right':
-        return elementRect.left + elementRect.width - getStyleValue('border-right-width');
-      case 'content-left':
-        return elementRect.left + getStyleValue('border-left-width') + getStyleValue('padding-left');
-      case 'content-right':
-        return elementRect.left + elementRect.width - getStyleValue('border-right-width') - getStyleValue('padding-right');
-      case 'inside-border-top':
-        return elementRect.top + getStyleValue('border-top-width');
-      case 'inside-border-bottom':
-        return elementRect.top + elementRect.height - getStyleValue('border-bottom-width');
-      case 'content-top':
-        return elementRect.top + getStyleValue('border-top-width') + getStyleValue('padding-top');
-      case 'content-bottom':
-        return elementRect.top + elementRect.height - getStyleValue('border-bottom-width') - getStyleValue('padding-bottom');
-      case 'baseline':
-        return getBaselineY(element);
+        return elementBoundingRect.top + elementBoundingRect.height + sy;
     }
 
-    function getStyleValue(style: string): number {
-      return parseInt(computedStylesForElement[style]);
+    const computedStylesForElement = computeStyles(element);
+    const toInt = (k) => parseInt(computedStylesForElement[k]);
+
+    switch (label) {
+      case 'inside-border-left':
+        return elementBoundingRect.left + toInt('border-left-width') + sx;
+      case 'inside-border-right':
+        return elementBoundingRect.left + elementBoundingRect.width - toInt('border-right-width') + sx;
+      case 'content-left':
+        return elementBoundingRect.left + toInt('border-left-width') + toInt('padding-left') + sx;
+      case 'content-right':
+        return elementBoundingRect.left + elementBoundingRect.width - toInt('border-right-width') - toInt('padding-right') + sx;
+      case 'inside-border-top':
+        return elementBoundingRect.top + toInt('border-top-width') + sy;
+      case 'inside-border-bottom':
+        return elementBoundingRect.top + elementBoundingRect.height - toInt('border-bottom-width') + sy;
+      case 'content-top':
+        return elementBoundingRect.top + toInt('border-top-width') + toInt('padding-top') + sy;
+      case 'content-bottom':
+        return elementBoundingRect.top + elementBoundingRect.height - toInt('border-bottom-width') - toInt('padding-bottom') + sy;
+      case 'baseline':
+        return getBaselineY(element) + sy;
     }
   };
 }
@@ -89,7 +92,7 @@ function computeStyles(element: Element): CSSStyleDeclaration {
 function getBaselineY(target: Element): number {
   // Don't do this inside TABLE or other dangerous places! Only where
   // there is already some text.
-  if (!target.hasChildNodes() || /test/i.test(target.tagName)) {
+  if (!target.hasChildNodes() || /TABLE/i.test(target.tagName)) {
     return null;
   }
   const children: NodeListOf<Node & ChildNode> = target.childNodes;
@@ -100,7 +103,7 @@ function getBaselineY(target: Element): number {
       break;
     }
   }
-  if (child === null) {
+  if (child == null) {
     return null;
   }
 
@@ -112,58 +115,52 @@ function getBaselineY(target: Element): number {
   txt.style.setProperty('width', '1px', 'important');
   txt.style.setProperty('padding', '0', 'important');
   txt.style.setProperty('margin', '0', 'important');
-
   target.insertBefore(txt, child);
 
   const y: number = txt.getBoundingClientRect().top + 1;
 
   target.removeChild(txt);
-
   return y;
 }
 
-function nearest(element: Element, candidates: any[], value: number): any[] {
-  let dist: number = state.snap ? 10 : 1;
+function nearest(snap: boolean, element: HTMLElement, candidates: any[], value: number): any[] {
+  let dist: number = snap ? 10 : 1;
   let label: string = '';
   let best: () => number = fixedPos(value);
 
-  for (const candidate in candidates) {
-    if (!candidates[candidate]) {
-      continue;
-    }
+  if (element) {
+    for (const candidate in candidates) {
+      if (!candidates[candidate]) {
+        continue;
+      }
 
-    const name: string = candidates[candidate];
-    const pos: () => number = elementPos(element, name);
-    const p: number = pos();
+      const name: string = candidates[candidate];
+      const pos: () => number = elementPos(element, name);
+      const p: number = pos();
 
-    if (p != null) {
-      const d = Math.abs(value - p);
+      if (p != null) {
+        const d = Math.abs(value - p);
 
-      if (d < dist) {
-        dist = d;
-        label = name;
-        best = pos;
+        if (d < dist) {
+          dist = d;
+          label = name;
+          best = pos;
+        }
       }
     }
   }
+
   return [label, best];
 }
 
-/**
- * Create tag with specific classNames
- * @param {string} tag
- * @param {string[]} classNames
- * @param {string} id
- * @return {Element}
- */
-function create(tag: string, classNames: string, id?: string): HTMLElement {
+function create(tag: string, classNames: string = '', id?: string): HTMLElement {
   const element = document.createElement(tag);
-  const classes = classNames ? classNames.split(' ') : [];
 
-  for (const className in classes) {
-    if (classes[className]) {
-      classes[className] = 'tGs3czb_' + classes[className];
-    }
+  const classes = classNames ? classNames.split(' ') : [];
+  for (const i in classes) {
+    if (!classes[i]) continue;
+
+    classes[i] = 'tGs3czb_' + classes[i];
   }
 
   element.className = 'tGs3czb ' + classes.join(' ');
@@ -188,14 +185,15 @@ interface Rule {
   difflabel: Element;
   id: string | number;
   text?: string;
+  p?: any;
 }
 
-function newRule(isVertical: boolean, temp: string = ''): Rule {
-  const ruleElement: Element = create('div', 'rule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
-  const loupeRuleElement: Element = create('div', 'louperule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
-  const labelElement: Element = create('div', 'label');
-  const poslabelElement: Element = create('div', 'poslabel');
-  const difflabelElement: Element = create('div', 'difflabel');
+function newRule(isVertical: boolean, temp?: string): Rule {
+  const ruleElement: HTMLElement = create('div', 'rule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
+  const loupeRuleElement: HTMLElement = create('div', 'louperule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
+  const labelElement: HTMLElement = create('div', 'label');
+  const poslabelElement: HTMLElement = create('div', 'poslabel');
+  const difflabelElement: HTMLElement = create('div', 'difflabel');
 
   labelElement.appendChild(poslabelElement);
   labelElement.appendChild(difflabelElement);
@@ -214,11 +212,11 @@ function newRule(isVertical: boolean, temp: string = ''): Rule {
       const p = this.pos();
       this.p = p;
       if (this.isVertical) {
-        this.rule.style.left = p + 'px';
-        this.loupeRule.style.left = loupeState.zoom * p + 'px';
+        this.rule.style.left = p - window.scrollX + 'px';
+        this.loupeRule.style.left = loupeState.zoom * (p - window.scrollX) + 'px';
       } else {
-        this.rule.style.top = p + 'px';
-        this.loupeRule.style.top = loupeState.zoom * p + 'px';
+        this.rule.style.top = p - window.scrollY + 'px';
+        this.loupeRule.style.top = loupeState.zoom * (p - window.scrollY) + 'px';
       }
       const o = state.origin[this.isVertical ? 1 : 0]();
       this.poslabel.textContent = this.text + ' ' + (p - o);
@@ -243,25 +241,27 @@ function newRule(isVertical: boolean, temp: string = ''): Rule {
 }
 
 interface Loupe {
-  div: HTMLElement;
-  image: HTMLElement;
-  rules: HTMLElement;
+  div: HTMLDivElement;
+  image: HTMLImageElement;
+  rules: HTMLDivElement;
+  height?: number;
+  width?: number;
 }
 
 function makeLoupe(): Loupe {
-  const divElement: HTMLElement = create('div', 'loupe', 'loupe');
-  const imageElement: HTMLElement = create('div', 'loupeimg');
-  const rulesElement: HTMLElement = create('div', 'louperules');
+  const loupeDiv = create('div', 'loupe', 'loupe') as HTMLDivElement;
+  const loupeImage = create('img', 'loupeimg') as HTMLImageElement;
+  const loupeRules = create('div', 'louperules') as HTMLDivElement;
 
-  divElement.appendChild(imageElement);
-  divElement.appendChild(rulesElement);
+  loupeDiv.appendChild(loupeImage);
+  loupeDiv.appendChild(loupeRules);
 
-  gridlyRules().appendChild(divElement);
+  gridlyRules().appendChild(loupeDiv);
 
-  return {div: divElement, image: imageElement, rules: rulesElement};
+  return {div: loupeDiv, image: loupeImage, rules: loupeRules};
 }
 
-function highlightElement(e: HTMLElement): void {
+function highlightElement(e) {
   const eb = elementBox;
   const cb = elementContentBox;
   const styles = computeStyles(e);
@@ -277,21 +277,23 @@ function highlightElement(e: HTMLElement): void {
   const right = elementPos(e, 'right')();
   const bottom = elementPos(e, 'bottom')();
   const left = elementPos(e, 'left')();
-  eb.style.top = top + 'px';
-  eb.style.left = left + 'px';
+  eb.style.top = top - window.scrollY + 'px';
+  eb.style.left = left - window.scrollX + 'px';
   eb.style.width = right - left - blw - brw + 'px';
   eb.style.height = bottom - top - btw - bbw + 'px';
   eb.style['border-top-width'] = btw + 'px';
   eb.style['border-right-width'] = brw + 'px';
   eb.style['border-bottom-width'] = bbw + 'px';
   eb.style['border-left-width'] = blw + 'px';
-  cb.style.top = top + btw + pt + 'px';
-  cb.style.left = left + blw + pl + 'px';
+  cb.style.top = top - window.scrollY + btw + pt + 'px';
+  cb.style.left = left - window.scrollX + blw + pl + 'px';
   cb.style.width = right - left - pl - pr - blw - brw + 'px';
   cb.style.height = bottom - top - pt - pb - btw - bbw + 'px';
 }
 
 const loupeState = {
+  flipX: false,
+  flipY: false,
   on: false,
   url: null,
   x: 0,
@@ -301,7 +303,6 @@ const loupeState = {
 
 interface State {
   snap: boolean;
-  baseline: boolean;
   origin: Array<() => number>;
   colspec: string;
   rowspec: string;
@@ -310,7 +311,6 @@ interface State {
 }
 
 const state: State = {
-  baseline: false,
   colspec: '16:grey 28:transparent 16:pink 28:transparent',
   help: true,
   origin: [fixedPos(0), fixedPos(0)],
@@ -319,9 +319,11 @@ const state: State = {
   snap: true,
 };
 
-function askColumns(): void {
+function askColumns() {
   const answer = window.prompt(
-    'Input column spec as a series of widths, optionally colored: example: "16:transparent 28:#888"', state.colspec);
+    'Input column spec as a series of widths, optionally colored: '
+    + ' example: "16:transparent 28:#888"',
+    state.colspec);
   if (answer) {
     state.colspec = answer;
     setColumns(columnsBox, answer, false);
@@ -330,9 +332,11 @@ function askColumns(): void {
   }
 }
 
-function askRows(): void {
+function askRows() {
   const answer = window.prompt(
-    'Input row spec as a series of heights, optionally colored: example: "100:red 32:blue"', state.rowspec);
+    'Input row spec as a series of heights, optionally colored: '
+    + ' example: "100:red 32:blue"',
+    state.rowspec);
   if (answer) {
     state.rowspec = answer;
     setColumns(rowsBox, answer, true);
@@ -361,7 +365,7 @@ function setColumns(box: HTMLElement, spec: string, horizontal: boolean): void {
   }
   let total = 0;
   let count = 0;
-  const limit = 3000;
+  const limit = 3000;  // Max browser width to go up to.
   while (total < limit && count < 100) {
     const i = count % widths.length;
     const col = create('div', horizontal ? 'gridrow' : 'gridcol');
@@ -384,65 +388,64 @@ function setColumns(box: HTMLElement, spec: string, horizontal: boolean): void {
   }
 }
 
-/**
- * Toogle baseline
- */
-function toggleBaseline() {
-  state.baseline = !state.baseline;
-}
-
-/**
- * Toggle snap
- */
 function toggleSnap() {
   state.snap = !state.snap;
 }
 
-/**
- * Toggle loupe
- */
 function toggleLoupe() {
   if (loupeState.on) {
     loupe.div.style.display = 'none';
     loupeState.on = false;
     return;
   }
-
   // Hide all rules (but not grid) while grabbing image for loupe.
-  gridlyRules().style.display = 'block';
-  loupeState.on = true;
+  gridlyRules().style.display = 'none';
+
+  window.requestAnimationFrame(() => {
+    gridlyRules().style.display = 'block';
+    loupe.div.style.display = 'block';
+    loupeState.on = true;
+  });
 }
 
-/**
- * Update loupe
- * @param {number} x
- * @param {number} y
- */
-function updateLoupe(x, y) {
+function updateLoupe(x: number, y: number): void {
   loupeState.x = x;
   loupeState.y = y;
-  if (loupeState.on) {
-    loupeShow();
+  const k: number = 280;
+
+  if (x < k) {
+    loupeState.flipX = false;
+  } else if (x > window.innerWidth - k) {
+    loupeState.flipX = true;
   }
+  if (y < k) {
+    loupeState.flipY = false;
+  } else if (y > window.innerHeight - k) {
+    loupeState.flipY = true;
+  }
+  if (!loupeState.on) {
+    return;
+  }
+  loupeShow();
 }
 
-/**
- * Loupe show
- */
-function loupeShow() {
+function loupeShow(): void {
   const zoom = loupeState.zoom;
+  loupe.rules.style.height = zoom * loupe.height + 'px';
+  loupe.rules.style.width = zoom * loupe.width + 'px';
   loupe.rules.style.left = (200 - zoom * loupeState.x) + 'px';
   loupe.rules.style.top = (200 - zoom * loupeState.y) + 'px';
-  loupe.image.style['background-image'] =
-    'url(' + loupeState.url + ')';
-  loupe.image.style['background-position'] =
-    (200 / zoom - loupeState.x) + 'px ' + (200 / zoom - loupeState.y) + 'px';
-  loupe.div.style.top = loupeState.y + 'px';
-  loupe.div.style.left = loupeState.x + 'px';
+  loupe.image.src = loupeState.url;
+  loupe.image.style.height = zoom * loupe.height + 'px';
+  loupe.image.style.width = zoom * loupe.width + 'px';
+  loupe.image.style.left = (200 - zoom * loupeState.x) + 'px';
+  loupe.image.style.top = (200 - zoom * loupeState.y) + 'px';
+  loupe.div.style.top = loupeState.y - (loupeState.flipY ? 400 : 0) + 'px';
+  loupe.div.style.left = loupeState.x - (loupeState.flipX ? 400 : 0) + 'px';
 }
 
-const mouseListener = {
-  handleEvent(e) {
+let mouseListener = {
+  handleEvent: (e) => {
     if (!tapeActive) {
       return;
     }
@@ -450,41 +453,38 @@ const mouseListener = {
       e.stopPropagation();
       e.preventDefault();
     }
-    const t = e.target;
-    const nearestX = nearest(
-      t,
-      ['left', 'right', 'inside-border-left', 'inside-border-right', 'content-left', 'content-right'],
-      e.clientX);
-    const nearestY = nearest(
-      t,
-      ['top', 'bottom', 'inside-border-top', 'inside-border-bottom', 'content-top', 'content-bottom', 'baseline'],
-      e.clientY);
-    tempVrule.setPosition(nearestX[1], t.tagName + ' ' + nearestX[0]);
-    tempHrule.setPosition(nearestY[1], t.tagName + ' ' + nearestY[0]);
-
-    if (state.baseline) {
-      const baseline = getBaselineY(t);
-      if (baseline != null) {
-        baselineGrid.style.display = 'block';
-        baselineGrid.style['-webkit-background-size'] =
-          '0 ' + computeStyles(t)['line-height'];
-        baselineGrid.style['background-position'] = '0 ' + baseline + 'px';
-      } else {
-        baselineGrid.style.display = 'none';
-      }
-    } else {
-      baselineGrid.style.display = 'none';
-    }
-    highlightElement(t);
-    refreshRules();
-    updateLoupe(e.clientX, e.clientY);
-    infoBox.textContent = '<' + t.tagName + '>';
+    moveTo(state.snap, e.clientX, e.clientY, e.target);
   },
 };
 
-/**
- * Refresh rules
- */
+function moveTo(snap, x, y, t) {
+  const nearestX = nearest(
+    snap,
+    t,
+    ['left', 'right', 'inside-border-left', 'inside-border-right',
+      'content-left', 'content-right'],
+    x + window.scrollX);
+  const nearestY = nearest(
+    snap,
+    t,
+    ['top', 'bottom', 'inside-border-top', 'inside-border-bottom',
+      'content-top', 'content-bottom', 'baseline'],
+    y + window.scrollY);
+  tempVrule.setPosition(nearestX[1], t.tagName + ' ' + nearestX[0]);
+  tempHrule.setPosition(nearestY[1], t.tagName + ' ' + nearestY[0]);
+
+  highlightElement(t);
+  refreshRules();
+  const fromBottom = (window.innerHeight - y);
+  if (fromBottom < 400 && x < 400) {
+    helpBox.style.display = 'none';
+  } else if (fromBottom > 450 || x > 450) {
+    helpBox.style.display = state.help ? 'block' : 'none';
+  }
+  updateLoupe(x, y);
+  infoBox.textContent = '<' + t.tagName + '>';
+}
+
 function refreshRules() {
   rules.h = {};
   rules.v = {};
@@ -493,9 +493,7 @@ function refreshRules() {
   tempHrule.refresh();
   tempVrule.refresh();
   for (const id in rules.all) {
-    if (!rules.all[id]) {
-      continue;
-    }
+    if (!rules.all[id]) continue;
 
     const r = rules.all[id];
     r.refresh();
@@ -514,16 +512,10 @@ function refreshRules() {
   rowsBox.style.top = oy + 'px';
 }
 
-/**
- * Compare rules
- * @param {{}} rule1
- * @param {{}} rule2
- * @param {{}[]} rulesList
- */
 function diffLabels(rule1, rule2, rulesList) {
   const keys = [rule1.p, rule2.p];
   for (const key in rulesList) {
-    if (!rulesList[key]) {
+    if (!rulesList.hasOwnProperty(key)) {
       continue;
     }
 
@@ -531,7 +523,6 @@ function diffLabels(rule1, rule2, rulesList) {
   }
   keys.sort((x, y) => x - y);
   let prev = -1;
-
   for (let i = 0; i < keys.length; i++) {
     const pos = keys[i];
     if (pos < 0) {
@@ -556,9 +547,6 @@ function diffLabels(rule1, rule2, rulesList) {
   }
 }
 
-/**
- * Set origin
- */
 function setOrigin() {
   state.origin[0] = tempHrule.pos;
   state.origin[1] = tempVrule.pos;
@@ -567,9 +555,6 @@ function setOrigin() {
   refreshRules();
 }
 
-/**
- * Clear rules
- */
 function clearRules() {
   for (const p in rules.h) {
     if (!rules.h[p]) {
@@ -596,76 +581,105 @@ function clearRules() {
   refreshRules();
 }
 
-/**
- * Toggle pointer
- */
 function togglePointer() {
   state.pointerEvents = !state.pointerEvents;
 }
 
-/**
- * Toggle help
- */
 function toggleHelp() {
   state.help = !state.help;
   helpBox.style.display = state.help ? 'block' : 'none';
 }
 
-const keyListener = {
-  handleEvent(event) {
-    if (event.keyCode === 27) {
-      toggleActive();
-      event.stopPropagation();
-      event.preventDefault();
+function nudgeBy(x, y) {
+  return (e) => {
+    const speed = (e.altKey ? 16 : e.shiftKey ? 4 : 1);
+    x = tempVrule.pos() + x * speed;
+    y = tempHrule.pos() + y * speed;
+    moveTo(false, x, y, document.elementFromPoint(x, y));
+  };
+}
 
+function zoomIn() {
+  if (!loupeState.on) {
+    return;
+  }
+  loupeState.zoom = Math.min(16, loupeState.zoom + 1);
+  loupeShow();
+}
+
+function zoomOut() {
+  if (!loupeState.on) {
+    return;
+  }
+  loupeState.zoom = Math.max(2, loupeState.zoom - 1);
+  loupeShow();
+}
+
+let keyListener = {
+  handleEvent: (e: KeyboardEvent) => {
+    if (e.ctrlKey || e.metaKey) {
+      return;
+    }
+    if (e.keyCode === 27) {
+      toggleActive();
+      e.stopPropagation();
+      e.preventDefault();
       return;
     }
     if (!tapeActive) {
       return;
     }
-
     const keys = {
-      192: toggleLoupe,
-      76: toggleLoupe,
-      66: toggleBaseline,
-      83: toggleSnap,
-      86: dropVertical,
-      72: dropHorizontal,
-      79: setOrigin,
-      88: clearRules,
-      67: askColumns,
-      82: askRows,
-      80: togglePointer,
-      32: toggleHelp,
-      191: toggleHelp,
+      192: toggleLoupe,     // backquote
+      76: toggleLoupe,     // L
+      83: toggleSnap,      // S
+      86: dropVertical,    // V
+      72: dropHorizontal,  // H
+      66: dropBoth,        // B
+      79: setOrigin,       // O
+      88: clearRules,      // X
+      90: undoLast,        // Z
+      67: askColumns,      // C
+      82: askRows,         // R
+      80: togglePointer,   // P
+      32: toggleHelp,      // space
+      191: toggleHelp,      // ?
+      37: nudgeBy(-1, 0),  // left arrow
+      38: nudgeBy(0, -1),  // up arrow
+      39: nudgeBy(1, 0),   // right arrow
+      40: nudgeBy(0, 1),   // down arrow
+      187: zoomIn,          // plus
+      189: zoomOut,         // minus
     };
-    if (keys[event.keyCode]) {
-      keys[event.keyCode]();
-      event.stopPropagation();
-      event.preventDefault();
+    if (keys[e.keyCode]) {
+      keys[e.keyCode](e);
     } else {
-      console.log('keydown ' + event.keyCode);
+      console.log('keydown ' + e.keyCode);
     }
+    e.stopPropagation();
+    e.preventDefault();
   },
 };
-
-// TODO: Refactor it with requestAnimationFrame
 
 let refreshTimeoutId = -1;
-const refreshListener = {
-  handleEvent(e) {
-    if (refreshTimeoutId === -1) {
-      refreshTimeoutId = window.setTimeout(() => {
-        refreshTimeoutId = -1;
-        refreshRules();
-      }, 100);
+let refreshListener = {
+  handleEvent: () => {
+    if (refreshTimeoutId !== -1) {
+      window.clearTimeout(refreshTimeoutId);
     }
+
+    // Looks bad to display loupe while scrolling.
+    loupe.div.style.display = 'none';
+    refreshTimeoutId = window.setTimeout(() => {
+      refreshTimeoutId = -1;
+      if (tapeActive) {
+        showAll();
+      }
+    }, 200);
+    refreshRules();
   },
 };
 
-/**
- * Listen
- */
 function listen() {
   document.documentElement.addEventListener('mouseover', mouseListener, true);
   document.documentElement.addEventListener('mousemove', mouseListener, true);
@@ -675,29 +689,32 @@ function listen() {
   window.addEventListener('resize', refreshListener, true);
 }
 
-/**
- * Toggle active
- */
-function toggleActive() {
-  tapeActive = !tapeActive;
-  if (tapeActive) {
-    gridlyRules().style.display = 'block';
-    columnsBox.style.display = 'block';
-    rowsBox.style.display = 'block';
-    if (loupeState.on) {
-      loupeState.on = false;
-      toggleLoupe();
-    }
-  } else {
-    gridlyRules().style.display = 'none';
-    columnsBox.style.display = 'none';
-    rowsBox.style.display = 'none';
+function showAll() {
+  gridlyRules().style.display = 'block';
+  columnsBox.style.display = 'block';
+  rowsBox.style.display = 'block';
+  if (loupeState.on) {
+    loupeState.on = false;
+    toggleLoupe();
   }
 }
 
-/**
- * Drop horizontal
- */
+function hideAll() {
+  gridlyRules().style.display = 'none';
+  columnsBox.style.display = 'none';
+  rowsBox.style.display = 'none';
+  loupe.div.style.display = 'none';
+}
+
+function toggleActive() {
+  tapeActive = !tapeActive;
+  if (tapeActive) {
+    showAll();
+  } else {
+    hideAll();
+  }
+}
+
 function dropHorizontal() {
   const p = tempHrule.pos();
   if (rules.h[p]) {
@@ -714,9 +731,6 @@ function dropHorizontal() {
   }
 }
 
-/**
- * Drop vertical
- */
 function dropVertical() {
   const p = tempVrule.pos();
   if (rules.v[p]) {
@@ -733,22 +747,58 @@ function dropVertical() {
   }
 }
 
+function dropBoth() {
+  const x = tempVrule.pos();
+  const y = tempHrule.pos();
+  if (rules.v[x] && rules.h[y]) {
+    // Remove both;
+    dropVertical();
+    dropHorizontal();
+    return;
+  }
+  // Otherwise add whichever are missing.
+  if (!rules.v[x]) {
+    dropVertical();
+  }
+  if (!rules.v[y]) {
+    dropHorizontal();
+  }
+}
+
+function undoLast() {
+  let m: number = -1;
+  let r: Rule;
+  for (const id in rules.all) {
+    if (id && (id as any - m > 0)) {
+      r = rules.all[id];
+      m = id as any;
+    }
+  }
+  if (r) {
+    delete rules.all[r.id];
+    if (r.isVertical) {
+      delete rules.v[r.p];
+    } else {
+      delete rules.h[r.p];
+    }
+    r.remove();
+  }
+}
+
 gridlyRules();
 
 const infoBox = create('div', 'infobox');
 gridlyRules().appendChild(infoBox);
 
-const rules = {nextId: 0, all: {}, h: {}, v: {}};
+const rules = {nextId: 0, all: {} as { [id: number]: Rule }, h: {}, v: {}};
 
 const loupe = makeLoupe();
 const tempHrule = newRule(false, 'temp');
 const tempVrule = newRule(true, 'temp');
 const originHrule = newRule(false, 'origin');
 const originVrule = newRule(true, 'origin');
-const baselineGrid = create('div', 'baseline_grid');
 const elementBox = create('div', 'box');
 const elementContentBox = create('div', 'content_box');
-gridlyRules().appendChild(baselineGrid);
 gridlyRules().appendChild(elementBox);
 gridlyRules().appendChild(elementContentBox);
 
@@ -760,21 +810,23 @@ document.body.appendChild(rowsBox);
 const helpBox = create('div', 'help');
 gridlyRules().appendChild(helpBox);
 helpBox.textContent =
-  '       TAPE CONTROLS\n' +
-  '\n' +
-  '      ESC — toggle on/off\n' +
-  '  SPC / ? — toggle help\n' +
-  '        H — place horizontal rule\n' +
-  '        V – place vertical rule\n' +
-  '        X – remove all rules\n' +
-  '        O — set origin\n' +
-  '        S — toggle snap-to\n' +
-  '        B — show/hide baseline grid\n' +
-  '        C – set column grid\n' +
-  '        R – set row grid\n' +
-  '        P – enable/disable pointer events\n' +
-  '    L / ` — show/hide loupe \n' +
+  'Control:\n' +
+  '[ESC]on / off       [SPACE] show / hide this help' +
+  '\n\nRules:\n' +
+  '{[H]place / remove horizontal\n[V]place / remove vertical\n[B]place / remove both}' +
+  '     {[Z]remove last placed rule\n[X]remove all rules\n[O]set origin}' +
+  '\n\nFine adjustment:\n[↑][→][↓][←]move by 1px, [+ SHIFT]4px, [+ ALT]16px' +
+  '\n\nToggles:\n' +
+  '{[S]snap on / off\n[P]pointer events on / off\n[L](or backquote) loupe on / off}' +
+  '{[+]increase magnification\n[-]decrease magnification}' +
+  '\n\nGrids:\n[C]set column grid, [R]set row grid' +
   '';
+helpBox.innerHTML = helpBox.innerHTML
+  .replace(/\[([^\]]*)]/g, '<span class=tGs3czb_key>$1</span>')
+  .replace(/{/g, '<div class=tGs3czb_vgroup>')
+  .replace(/}/g, '</div>')
+  .replace(/\n\n/g, '<br>');
 
 let tapeActive = true;
+
 listen();
