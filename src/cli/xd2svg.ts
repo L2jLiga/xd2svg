@@ -71,11 +71,9 @@ function optimizeSvg(svgImage: string, outputFile: string) {
 
     .then((result: any) => {
       result.data = `<!DOCTYPE html>
-                       <!-- Disabled until UI been implemented
-                         <link rel="stylesheet" href="additional/inpage.css" />
-                         <script src="additional/inpage.js" defer></script>
-                       -->
-                       ${result.data}`;
+                       <style>${readFileSync(`${__dirname}/assets/inpage.css`)}</style>
+                       ${result.data}
+                       <script>${readFileSync(`${__dirname}/assets/inpage.js`)}</script>`;
 
       return Promise.resolve(result);
     })
