@@ -6,12 +6,8 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-function get(id: number | string): HTMLElement {
-  return document.getElementById('tGs3czb_' + id);
-}
-
-function gridlyRules(): HTMLElement {
-  let rulesElement: HTMLElement = get('gridlyRules');
+function gridlyRules(): HTMLDivElement {
+  let rulesElement = document.getElementById('tGs3czb_gridlyRules') as HTMLDivElement;
 
   if (rulesElement) {
     return rulesElement;
@@ -123,7 +119,7 @@ function getBaselineY(target: Element): number {
   return y;
 }
 
-function nearest(snap: boolean, element: HTMLElement, candidates: any[], value: number): any[] {
+function nearest(snap: boolean, element: HTMLElement, candidates: string[], value: number): any[] {
   let dist: number = snap ? 10 : 1;
   let label: string = '';
   let best: () => number = fixedPos(value);
@@ -153,7 +149,7 @@ function nearest(snap: boolean, element: HTMLElement, candidates: any[], value: 
   return [label, best];
 }
 
-function create(tag: string, classNames: string = '', id?: string): HTMLElement {
+function create<K extends keyof HTMLElementTagNameMap>(tag: K, classNames: string = '', id?: string): HTMLElementTagNameMap[K] {
   const element = document.createElement(tag);
 
   const classes = classNames ? classNames.split(' ') : [];
@@ -173,7 +169,7 @@ function create(tag: string, classNames: string = '', id?: string): HTMLElement 
 }
 
 interface Rule {
-  setPosition: (pos, label?) => void;
+  setPosition: (pos: () => number, label?: string) => void;
   refresh: () => void;
   copyPosition: (rule) => void;
   remove: () => void;
@@ -189,11 +185,11 @@ interface Rule {
 }
 
 function newRule(isVertical: boolean, temp?: string): Rule {
-  const ruleElement: HTMLElement = create('div', 'rule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
-  const loupeRuleElement: HTMLElement = create('div', 'louperule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
-  const labelElement: HTMLElement = create('div', 'label');
-  const poslabelElement: HTMLElement = create('div', 'poslabel');
-  const difflabelElement: HTMLElement = create('div', 'difflabel');
+  const ruleElement = create('div', 'rule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
+  const loupeRuleElement = create('div', 'louperule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
+  const labelElement = create('div', 'label');
+  const poslabelElement = create('div', 'poslabel');
+  const difflabelElement = create('div', 'difflabel');
 
   labelElement.appendChild(poslabelElement);
   labelElement.appendChild(difflabelElement);
@@ -202,8 +198,9 @@ function newRule(isVertical: boolean, temp?: string): Rule {
   ruleElement.appendChild(labelElement);
   gridlyRules().appendChild(ruleElement);
   loupe.rules.appendChild(loupeRuleElement);
-  const r = {
-    setPosition(pos, label) {
+
+  const r: Rule = {
+    setPosition(pos: () => number, label?: string) {
       this.pos = pos;
       this.text = label;
       this.refresh();
@@ -236,7 +233,9 @@ function newRule(isVertical: boolean, temp?: string): Rule {
     poslabel: poslabelElement,
     rule: ruleElement,
   };
+
   r.setPosition(fixedPos(-100), '');
+
   return r;
 }
 
@@ -261,7 +260,7 @@ function makeLoupe(): Loupe {
   return {div: loupeDiv, image: loupeImage, rules: loupeRules};
 }
 
-function highlightElement(e) {
+function highlightElement(e: HTMLElement) {
   const eb = elementBox;
   const cb = elementContentBox;
   const styles = computeStyles(e);
@@ -444,8 +443,8 @@ function loupeShow(): void {
   loupe.div.style.left = loupeState.x - (loupeState.flipX ? 400 : 0) + 'px';
 }
 
-let mouseListener = {
-  handleEvent: (e) => {
+const mouseListener = {
+  handleEvent(e: MouseEvent) {
     if (!tapeActive) {
       return;
     }
@@ -457,7 +456,7 @@ let mouseListener = {
   },
 };
 
-function moveTo(snap, x, y, t) {
+function moveTo(snap: boolean, x: number, y: number, t: any): void {
   const nearestX = nearest(
     snap,
     t,
@@ -512,7 +511,7 @@ function refreshRules() {
   rowsBox.style.top = oy + 'px';
 }
 
-function diffLabels(rule1, rule2, rulesList) {
+function diffLabels(rule1: Rule, rule2: Rule, rulesList: {[key: number]: Rule}) {
   const keys = [rule1.p, rule2.p];
   for (const key in rulesList) {
     if (!rulesList.hasOwnProperty(key)) {
@@ -547,7 +546,7 @@ function diffLabels(rule1, rule2, rulesList) {
   }
 }
 
-function setOrigin() {
+function setOrigin(): void {
   state.origin[0] = tempHrule.pos;
   state.origin[1] = tempVrule.pos;
   originVrule.copyPosition(tempVrule);
@@ -555,7 +554,7 @@ function setOrigin() {
   refreshRules();
 }
 
-function clearRules() {
+function clearRules(): void {
   for (const p in rules.h) {
     if (!rules.h[p]) {
       continue;
@@ -581,17 +580,17 @@ function clearRules() {
   refreshRules();
 }
 
-function togglePointer() {
+function togglePointer(): void {
   state.pointerEvents = !state.pointerEvents;
 }
 
-function toggleHelp() {
+function toggleHelp(): void {
   state.help = !state.help;
   helpBox.style.display = state.help ? 'block' : 'none';
 }
 
-function nudgeBy(x, y) {
-  return (e) => {
+function nudgeBy(x: number, y: number) {
+  return (e: KeyboardEvent) => {
     const speed = (e.altKey ? 16 : e.shiftKey ? 4 : 1);
     x = tempVrule.pos() + x * speed;
     y = tempHrule.pos() + y * speed;
@@ -599,7 +598,7 @@ function nudgeBy(x, y) {
   };
 }
 
-function zoomIn() {
+function zoomIn(): void {
   if (!loupeState.on) {
     return;
   }
@@ -607,7 +606,7 @@ function zoomIn() {
   loupeShow();
 }
 
-function zoomOut() {
+function zoomOut(): void {
   if (!loupeState.on) {
     return;
   }
@@ -616,7 +615,7 @@ function zoomOut() {
 }
 
 let keyListener = {
-  handleEvent: (e: KeyboardEvent) => {
+  handleEvent(e: KeyboardEvent) {
     if (e.ctrlKey || e.metaKey) {
       return;
     }
@@ -663,7 +662,7 @@ let keyListener = {
 
 let refreshTimeoutId = -1;
 let refreshListener = {
-  handleEvent: () => {
+  handleEvent() {
     if (refreshTimeoutId !== -1) {
       window.clearTimeout(refreshTimeoutId);
     }
@@ -790,7 +789,14 @@ gridlyRules();
 const infoBox = create('div', 'infobox');
 gridlyRules().appendChild(infoBox);
 
-const rules = {nextId: 0, all: {} as { [id: number]: Rule }, h: {}, v: {}};
+// tslint:disable
+const rules = {
+  nextId: 0,
+  all: {} as { [id: number]: Rule },
+  h: {} as { [id: number]: Rule },
+  v: {} as { [id: number]: Rule },
+};
+// tslint:enable
 
 const loupe = makeLoupe();
 const tempHrule = newRule(false, 'temp');
