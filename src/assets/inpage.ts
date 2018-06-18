@@ -6,6 +6,8 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
+import { CachedStyles, Loupe, Rule, State } from './models';
+
 function gridlyRules(): HTMLDivElement {
   let rulesElement = document.getElementById('tGs3czb_gridlyRules') as HTMLDivElement;
 
@@ -67,11 +69,6 @@ function elementPos(element: HTMLElement, label: string) {
         return getBaselineY(element) + sy;
     }
   };
-}
-
-interface CachedStyles {
-  e: Element;
-  s?: CSSStyleDeclaration;
 }
 
 const cachedStyles: CachedStyles = {e: null};
@@ -168,22 +165,6 @@ function create<K extends keyof HTMLElementTagNameMap>(tag: K, classNames: strin
   return element;
 }
 
-interface Rule {
-  setPosition: (pos: () => number, label?: string) => void;
-  refresh: () => void;
-  copyPosition: (rule) => void;
-  remove: () => void;
-  isVertical: boolean;
-  loupeRule: Element;
-  rule: Element;
-  pos?: () => number;
-  poslabel: Element;
-  difflabel: Element;
-  id: string | number;
-  text?: string;
-  p?: any;
-}
-
 function newRule(isVertical: boolean, temp?: string): Rule {
   const ruleElement = create('div', 'rule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
   const loupeRuleElement = create('div', 'louperule ' + (isVertical ? 'v' : 'h') + (temp ? ' ' + temp : ''));
@@ -239,14 +220,6 @@ function newRule(isVertical: boolean, temp?: string): Rule {
   return r;
 }
 
-interface Loupe {
-  div: HTMLDivElement;
-  image: HTMLImageElement;
-  rules: HTMLDivElement;
-  height?: number;
-  width?: number;
-}
-
 function makeLoupe(): Loupe {
   const loupeDiv = create('div', 'loupe', 'loupe') as HTMLDivElement;
   const loupeImage = create('img', 'loupeimg') as HTMLImageElement;
@@ -299,15 +272,6 @@ const loupeState = {
   y: 0,
   zoom: 8.0,
 };
-
-interface State {
-  snap: boolean;
-  origin: Array<() => number>;
-  colspec: string;
-  rowspec: string;
-  pointerEvents: boolean;
-  help: boolean;
-}
 
 const state: State = {
   colspec: '16:grey 28:transparent 16:pink 28:transparent',
@@ -443,7 +407,7 @@ function loupeShow(): void {
   loupe.div.style.left = loupeState.x - (loupeState.flipX ? 400 : 0) + 'px';
 }
 
-const mouseListener = {
+const mouseListener: EventListenerObject = {
   handleEvent(e: MouseEvent) {
     if (!tapeActive) {
       return;
@@ -614,7 +578,7 @@ function zoomOut(): void {
   loupeShow();
 }
 
-let keyListener = {
+const keyListener: EventListenerObject = {
   handleEvent(e: KeyboardEvent) {
     if (e.ctrlKey || e.metaKey) {
       return;
@@ -661,7 +625,7 @@ let keyListener = {
 };
 
 let refreshTimeoutId = -1;
-let refreshListener = {
+const refreshListener: EventListenerObject = {
   handleEvent() {
     if (refreshTimeoutId !== -1) {
       window.clearTimeout(refreshTimeoutId);
