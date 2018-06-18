@@ -8,6 +8,7 @@
 
 export * from './artboard';
 export * from './artboard-info';
+export * from './cli-options';
 export * from './resource';
 export * from './shape';
 export * from './text';

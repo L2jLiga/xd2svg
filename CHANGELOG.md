@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `clip-path` property doesn't applied
 - Pattern applied incorrect when `scaleBehavior` is `cover`
 
+### Breaking changes
+- CLI was updated
+   ```
+   xd2svg-cli InputFile.xd [options]
+   
+     options:
+       --output - specify output path (default FileName directory or FileName.svg)
+       --format - specify output format: svg, html (default: svg)
+       --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
+   ```
+
 ## [0.4.2]
 ### Added
 - License information

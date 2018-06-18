@@ -50,18 +50,12 @@ Two ways to install utility:
 You can use utility from CLI
 
    ```
-    xd2svg-cli input.xd [output.svg]
-   ```
-
-or require it directly in your scripts
-
-   ```typescript
-    const xd2svg = require('xd2svg');
-
-    let inputFileName = 'someFile.xd';
-    let outputFileName = 'someFile.svg';
-
-    xd2svg(inputFileName, outputFileName);
+   xd2svg-cli InputFile.xd [options]
+   
+     options:
+       --output - specify output path (default FileName directory or FileName.svg)
+       --format - specify output format: svg, html (default: svg)
+       --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
    ```
 
 ## Contributing
@@ -81,7 +75,7 @@ For the versions changelog, see the [CHANGELOG.md](CHANGELOG.md)
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Defenition list
 * **What is Adobe XD?**

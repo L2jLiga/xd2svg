@@ -6,29 +6,43 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { readFileSync, writeFile } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFile } from 'fs';
 import { dirSync, SynchrounousResult } from 'tmp';
 import { artboardConverter } from './lib/artboard-converter';
 import { manifestParser } from './lib/manifest-parser';
 import { resourcesParser } from './lib/resources-parser';
 import { svgo } from './lib/svgo';
-import { Resource } from './models';
+import { CliOptions, Resource } from './models';
 
 const extract = require('extract-zip');
 
-export function xd2svg(inputFile: string, outputFile: string) {
+export function xd2svg(inputFile: string, options: CliOptions) {
   const directory: SynchrounousResult = dirSync({unsafeCleanup: true});
 
   extract(inputFile, {dir: directory.name}, (error: string) => {
     if (error) throw new Error(error);
 
-    const svg: string = proceedFile(directory);
+    const isHtml: boolean = options.format === 'html';
 
-    optimizeSvg(svg, outputFile);
+    const svg: string | string[] = proceedFile(directory, options.single);
+
+    if (typeof svg === 'string') {
+      optimizeSvg(svg, options.output, isHtml);
+    } else {
+      let i = 0;
+
+      if (!existsSync(options.output)) {
+        mkdirSync(options.output);
+      }
+
+      svg.map((curSvg) => {
+        optimizeSvg(curSvg, `${options.output}/${i++}.${options.format}`, isHtml);
+      });
+    }
   });
 }
 
-function proceedFile(directory: SynchrounousResult) {
+function proceedFile(directory: SynchrounousResult, single: boolean) {
   const dimensions: { width: number, height: number } = {width: 0, height: 0};
 
   const manifestInfo = manifestParser(directory);
@@ -43,13 +57,23 @@ function proceedFile(directory: SynchrounousResult) {
 
     const contentOfArtboard: string = artboardConverter(artboard, resourcesInfo.artboards[artboardItem.name], manifestInfo.resources).join('');
 
-    convertedArtboards.push(contentOfArtboard);
+    convertedArtboards.push(single ? contentOfArtboard : `<?xml version="1.0" standalone="no" encoding="UTF-8"?>
+    <svg xmlns="http://www.w3.org/2000/svg"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         width="${resourcesInfo.artboards[artboardItem.name].width}"
+         height="${resourcesInfo.artboards[artboardItem.name].height}"
+         id="${manifestInfo.id}"
+         version="1.1">
+      ${resourcesInfo.gradients}
+      ${resourcesInfo.clipPaths}
+      ${contentOfArtboard}
+    </svg>`);
 
     dimensions.width = Math.max(dimensions.width, resourcesInfo.artboards[artboardItem.name].width);
     dimensions.height = Math.max(dimensions.height, resourcesInfo.artboards[artboardItem.name].height);
   });
 
-  const totalSvg: string = `<?xml version="1.0" standalone="no"?>
+  const totalSvg: string = `<?xml version="1.0" standalone="no" encoding="UTF-8"?>
     <svg xmlns="http://www.w3.org/2000/svg"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          width="${dimensions.width}"
@@ -63,18 +87,21 @@ function proceedFile(directory: SynchrounousResult) {
 
   directory.removeCallback();
 
-  return totalSvg;
+  return single ? totalSvg : convertedArtboards;
 }
 
-function optimizeSvg(svgImage: string, outputFile: string) {
+function optimizeSvg(svgImage: string, outputFile: string, isHtml: boolean) {
   svgo.optimize(svgImage)
 
     .then((result: any) => {
-      result.data = `<!DOCTYPE html>
-                     <meta charset="utf-8" />
-                     <style>${readFileSync(`${__dirname}/assets/inpage.css`, 'utf-8')}</style>
-                     ${result.data}
-                     <script>${readFileSync(`${__dirname}/assets/inpage.js`, 'utf-8')}</script>`;
+      if (isHtml) {
+        result.data = `<!DOCTYPE html>
+<meta charset="utf-8" />
+<style>${readFileSync(`${__dirname}/assets/inpage.css`, 'utf-8')}</style>
+${result.data}
+<script>${readFileSync(`${__dirname}/assets/inpage.js`, 'utf-8')}</script>
+`;
+      }
 
       return Promise.resolve(result);
     })

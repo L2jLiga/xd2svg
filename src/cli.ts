@@ -6,28 +6,57 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
+import { CliOptions } from './cli/models';
 import { xd2svg } from './cli/xd2svg';
 
 const inputFileName: string = process.argv[2];
-let outputFileName: string = process.argv[3];
 
 if (inputFileName) {
-  if (!outputFileName) {
-    const inputName: string[] = inputFileName.split('.');
+  let customOutput: boolean = false;
 
-    if (inputName.length > 1) {
-      inputName.pop();
-    }
+  const inputName: string[] = inputFileName.split('.');
 
-    inputName.push('html');
-
-    outputFileName = inputName.join('.');
+  if (inputName.length > 1) {
+    inputName.pop();
   }
 
-  xd2svg(inputFileName, outputFileName);
+  const defaultOptions: CliOptions = {
+    format: 'svg',
+    output: inputName.join('.'),
+    single: true,
+  };
 
-  console.log(inputFileName, outputFileName);
+  for (let argIdx = 2; argIdx++; argIdx < process.argv.length) {
+    if (process.argv[argIdx] === undefined) break;
 
+    const arg = process.argv[argIdx].split('=');
+    switch (arg[0]) {
+      case '--format':
+        defaultOptions.format = /^html$/i.test(arg[1]) ? 'html' : 'svg';
+        break;
+
+      case '--output':
+        defaultOptions.output = arg[1];
+        customOutput = true;
+        break;
+
+      case '--single':
+        defaultOptions.single = /^true$/i.test(arg[1]);
+    }
+  }
+
+  if (!customOutput && defaultOptions.single) {
+    defaultOptions.output += `.${defaultOptions.format}`;
+  }
+
+  xd2svg(inputFileName, defaultOptions);
+
+  console.log(`Proceed file %s with options\n%O`, inputFileName, defaultOptions);
 } else {
-  console.log('Usage: xd2svg-cli InputFile.xd [OutputFile.html]');
+  console.log(`Usage: xd2svg-cli InputFile.xd [options]
+  options:
+  --output - specify output path (default FileName directory or FileName.svg)
+  --format - specify output format: svg, html (default: svg)
+  --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
+  `);
 }
