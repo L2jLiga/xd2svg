@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
+import { helpTemplate } from './help-template';
 import { CachedStyles, Loupe, Rule, State } from './models';
 
 function gridlyRules(): HTMLDivElement {
@@ -28,7 +29,7 @@ function fixedPos(x: number): () => number {
   };
 }
 
-function elementPos(element: HTMLElement, label: string) {
+function elementPos(element: Element, label: string) {
   return () => {
     const sx: number = window.scrollX;
     const sy: number = window.scrollY;
@@ -116,7 +117,7 @@ function getBaselineY(target: Element): number {
   return y;
 }
 
-function nearest(snap: boolean, element: HTMLElement, candidates: string[], value: number): any[] {
+function nearest(snap: boolean, element: Element, candidates: string[], value: number): any[] {
   let dist: number = snap ? 10 : 1;
   let label: string = '';
   let best: () => number = fixedPos(value);
@@ -181,12 +182,12 @@ function newRule(isVertical: boolean, temp?: string): Rule {
   loupe.rules.appendChild(loupeRuleElement);
 
   const r: Rule = {
-    setPosition(pos: () => number, label?: string) {
+    setPosition(pos: () => number, label?: string): void {
       this.pos = pos;
       this.text = label;
       this.refresh();
     },
-    refresh() {
+    refresh(): void {
       const p = this.pos();
       this.p = p;
       if (this.isVertical) {
@@ -200,10 +201,10 @@ function newRule(isVertical: boolean, temp?: string): Rule {
       this.poslabel.textContent = this.text + ' ' + (p - o);
       this.difflabel.textContent = '';
     },
-    copyPosition(rule) {
+    copyPosition(rule): void {
       this.setPosition(rule.pos, rule.text);
     },
-    remove() {
+    remove(): void {
       gridlyRules().removeChild(this.rule);
       loupe.rules.removeChild(this.loupeRule);
     },
@@ -233,10 +234,10 @@ function makeLoupe(): Loupe {
   return {div: loupeDiv, image: loupeImage, rules: loupeRules};
 }
 
-function highlightElement(e: HTMLElement) {
+function highlightElement(element: Element): void {
   const eb = elementBox;
   const cb = elementContentBox;
-  const styles = computeStyles(e);
+  const styles = computeStyles(element);
   const btw = parseInt(styles['border-top-width']);
   const brw = parseInt(styles['border-right-width']);
   const bbw = parseInt(styles['border-bottom-width']);
@@ -245,10 +246,10 @@ function highlightElement(e: HTMLElement) {
   const pr = parseInt(styles['padding-right']);
   const pb = parseInt(styles['padding-bottom']);
   const pl = parseInt(styles['padding-left']);
-  const top = elementPos(e, 'top')();
-  const right = elementPos(e, 'right')();
-  const bottom = elementPos(e, 'bottom')();
-  const left = elementPos(e, 'left')();
+  const top = elementPos(element, 'top')();
+  const right = elementPos(element, 'right')();
+  const bottom = elementPos(element, 'bottom')();
+  const left = elementPos(element, 'left')();
   eb.style.top = top - window.scrollY + 'px';
   eb.style.left = left - window.scrollX + 'px';
   eb.style.width = right - left - blw - brw + 'px';
@@ -416,27 +417,27 @@ const mouseListener: EventListenerObject = {
       e.stopPropagation();
       e.preventDefault();
     }
-    moveTo(state.snap, e.clientX, e.clientY, e.target);
+    moveTo(state.snap, e.clientX, e.clientY, e.target as Element);
   },
 };
 
-function moveTo(snap: boolean, x: number, y: number, t: any): void {
+function moveTo(snap: boolean, x: number, y: number, target: Element): void {
   const nearestX = nearest(
     snap,
-    t,
+    target,
     ['left', 'right', 'inside-border-left', 'inside-border-right',
       'content-left', 'content-right'],
     x + window.scrollX);
   const nearestY = nearest(
     snap,
-    t,
+    target,
     ['top', 'bottom', 'inside-border-top', 'inside-border-bottom',
       'content-top', 'content-bottom', 'baseline'],
     y + window.scrollY);
-  tempVrule.setPosition(nearestX[1], t.tagName + ' ' + nearestX[0]);
-  tempHrule.setPosition(nearestY[1], t.tagName + ' ' + nearestY[0]);
+  tempVrule.setPosition(nearestX[1], target.tagName + ' ' + nearestX[0]);
+  tempHrule.setPosition(nearestY[1], target.tagName + ' ' + nearestY[0]);
 
-  highlightElement(t);
+  highlightElement(target);
   refreshRules();
   const fromBottom = (window.innerHeight - y);
   if (fromBottom < 400 && x < 400) {
@@ -445,7 +446,7 @@ function moveTo(snap: boolean, x: number, y: number, t: any): void {
     helpBox.style.display = state.help ? 'block' : 'none';
   }
   updateLoupe(x, y);
-  infoBox.textContent = '<' + t.tagName + '>';
+  infoBox.textContent = '<' + target.tagName + '>';
 }
 
 function refreshRules() {
@@ -779,18 +780,7 @@ document.body.appendChild(rowsBox);
 
 const helpBox = create('div', 'help');
 gridlyRules().appendChild(helpBox);
-helpBox.textContent =
-  'Control:\n' +
-  '[ESC]on / off       [SPACE] show / hide this help' +
-  '\n\nRules:\n' +
-  '{[H]place / remove horizontal\n[V]place / remove vertical\n[B]place / remove both}' +
-  '     {[Z]remove last placed rule\n[X]remove all rules\n[O]set origin}' +
-  '\n\nFine adjustment:\n[↑][→][↓][←]move by 1px, [+ SHIFT]4px, [+ ALT]16px' +
-  '\n\nToggles:\n' +
-  '{[S]snap on / off\n[P]pointer events on / off\n[L](or backquote) loupe on / off}' +
-  '{[+]increase magnification\n[-]decrease magnification}' +
-  '\n\nGrids:\n[C]set column grid, [R]set row grid' +
-  '';
+helpBox.textContent = helpTemplate;
 helpBox.innerHTML = helpBox.innerHTML
   .replace(/\[([^\]]*)]/g, '<span class=tGs3czb_key>$1</span>')
   .replace(/{/g, '<div class=tGs3czb_vgroup>')
