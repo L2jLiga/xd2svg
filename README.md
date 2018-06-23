@@ -56,6 +56,20 @@ You can use utility from CLI
        --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
    ```
 
+Or import package in your project
+   ```js
+   const xd2svg = require('xd2svg').xd2svg;
+
+   const inputFileName = 'myFile.xd';
+   const options = {
+     format: 'html',
+     single: false,
+     output: 'folderWithFiles'
+   };
+
+   xd2svg(inputFileName, options);
+   ```
+
 ## Contributing
 Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 

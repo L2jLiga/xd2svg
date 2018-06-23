@@ -7,7 +7,7 @@
  */
 
 import { CliOptions } from './cli/models';
-import { xd2svg } from './cli/xd2svg';
+import { xd2svg } from './xd2svg';
 
 const inputFileName: string = process.argv[2];
 

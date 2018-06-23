@@ -4,29 +4,11 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  target: 'node',
+  target: 'web',
   entry: {
-    'xd2svg-cli': './src/cli.ts',
-    'assets/inpage': './src/browser.ts',
+    'assets/inpage': './src/browser.ts'
   },
   mode: 'production',
-  node: {
-    console: false,
-    global: false,
-    process: false,
-    Buffer: false,
-    __filename: false,
-    __dirname: false,
-  },
-  externals: fs.readdirSync('node_modules')
-    .reduce(function(acc, mod) {
-      if (mod === '.bin') {
-        return acc;
-      }
-
-      acc[mod] = 'commonjs ' + mod;
-      return acc;
-    }, {}),
   module: {
     rules: [
       {

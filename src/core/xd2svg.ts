@@ -8,11 +8,12 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFile } from 'fs';
 import { dirSync, SynchrounousResult } from 'tmp';
+import { CliOptions } from '../cli/models';
 import { artboardConverter } from './lib/artboard-converter';
 import { manifestParser } from './lib/manifest-parser';
 import { resourcesParser } from './lib/resources-parser';
 import { svgo } from './lib/svgo';
-import { CliOptions, Resource } from './models';
+import { Resource } from './models';
 
 const extract = require('extract-zip');
 

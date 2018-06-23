@@ -742,7 +742,7 @@ copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
 
-copy-webpack-plugin@^4.5.1:
+copy-webpack-plugin@4.5.1:
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/copy-webpack-plugin/-/copy-webpack-plugin-4.5.1.tgz#fc4f68f4add837cc5e13d111b20715793225d29c"
   dependencies:
@@ -3081,9 +3081,9 @@ ts-loader@4.4.1:
     micromatch "^3.1.4"
     semver "^5.0.1"
 
-ts-node@6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-6.1.2.tgz#3221ca727a84bc66db1de8b647896621e38e8eaf"
+ts-node@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-7.0.0.tgz#a94a13c75e5e1aa6b82814b84c68deb339ba7bff"
   dependencies:
     arrify "^1.0.0"
     buffer-from "^1.1.0"
