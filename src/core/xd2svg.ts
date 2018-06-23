@@ -45,8 +45,7 @@ export function proceedFile(directory: SynchrounousResult, single: boolean) {
     dimensions.height = Math.max(dimensions.height, resourcesInfo.artboards[artboardItem.name].height);
   });
 
-  const totalSvg: string = `<?xml version="1.0" standalone="no" encoding="UTF-8"?>
-    <svg xmlns="http://www.w3.org/2000/svg"
+  const totalSvg: string = `<svg xmlns="http://www.w3.org/2000/svg"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          width="${dimensions.width}"
          height="${dimensions.height}"
