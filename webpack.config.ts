@@ -1,12 +1,12 @@
-const path = require('path');
-const fs = require('fs');
-const webpack = require('webpack');
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+import { BannerPlugin } from 'webpack';
+
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  target: 'web',
   entry: {
-    'assets/inpage': './src/browser.ts'
+    'assets/inpage': './src/browser.ts',
   },
   mode: 'production',
   module: {
@@ -14,21 +14,23 @@ module.exports = {
       {
         test: /\.ts$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
       },
     ],
   },
+  output: {
+    path: resolve(__dirname, 'dist'),
+  },
   plugins: [
-    new webpack.BannerPlugin(fs.readFileSync('./LICENSE', 'utf8')),
+    new BannerPlugin(
+      readFileSync('./LICENSE', 'utf8'),
+    ),
     new CopyWebpackPlugin([{
       from: './src/assets/inpage.css',
-      to: 'assets'
-    }])
+      to: 'assets',
+    }]),
   ],
   resolve: {
     extensions: ['.ts', '.js'],
   },
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-  },
+  target: 'web',
 };

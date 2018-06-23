@@ -31,7 +31,7 @@
   },
   "scripts": {
     "build": "npm run build:core && npm run build:browser",
-    "build:browser": "webpack --config webpack.config.js",
+    "build:browser": "webpack",
     "build:core": "tsc -p tsconfig.core.json",
     "clean": "rimraf dist",
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",

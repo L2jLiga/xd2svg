@@ -9,7 +9,6 @@
     "removeComments": true,
     "outDir": "dist",
     "baseUrl": "src",
-    "rootDir": "src",
     "sourceRoot": "src",
     "lib": [
       "es2017",
