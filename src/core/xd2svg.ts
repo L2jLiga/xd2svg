@@ -6,44 +6,15 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFile } from 'fs';
-import { dirSync, SynchrounousResult } from 'tmp';
-import { CliOptions } from '../cli/models';
+import { readFileSync } from 'fs';
+import { SynchrounousResult } from 'tmp';
 import { artboardConverter } from './lib/artboard-converter';
 import { manifestParser } from './lib/manifest-parser';
 import { resourcesParser } from './lib/resources-parser';
 import { svgo } from './lib/svgo';
 import { Resource } from './models';
 
-const extract = require('extract-zip');
-
-export function xd2svg(inputFile: string, options: CliOptions) {
-  const directory: SynchrounousResult = dirSync({unsafeCleanup: true});
-
-  extract(inputFile, {dir: directory.name}, (error: string) => {
-    if (error) throw new Error(error);
-
-    const isHtml: boolean = options.format === 'html';
-
-    const svg: string | string[] = proceedFile(directory, options.single);
-
-    if (typeof svg === 'string') {
-      optimizeSvg(svg, options.output, isHtml);
-    } else {
-      let i = 0;
-
-      if (!existsSync(options.output)) {
-        mkdirSync(options.output);
-      }
-
-      svg.map((curSvg) => {
-        optimizeSvg(curSvg, `${options.output}/${i++}.${options.format}`, isHtml);
-      });
-    }
-  });
-}
-
-function proceedFile(directory: SynchrounousResult, single: boolean) {
+export function proceedFile(directory: SynchrounousResult, single: boolean) {
   const dimensions: { width: number, height: number } = {width: 0, height: 0};
 
   const manifestInfo = manifestParser(directory);
@@ -91,27 +62,16 @@ function proceedFile(directory: SynchrounousResult, single: boolean) {
   return single ? totalSvg : convertedArtboards;
 }
 
-function optimizeSvg(svgImage: string, outputFile: string, isHtml: boolean) {
-  svgo.optimize(svgImage)
+export async function optimizeSvg(svgImage: string) {
+  return await svgo.optimize(svgImage)
+    .then((result) => result.data);
+}
 
-    .then((result: any) => {
-      if (isHtml) {
-        result.data = `<!DOCTYPE html>
+export function injectHtml(svg: string): string {
+  return `<!DOCTYPE html>
 <meta charset="utf-8" />
-<style>${readFileSync(`${__dirname}/assets/inpage.css`, 'utf-8')}</style>
-${result.data}
-<script>${readFileSync(`${__dirname}/assets/inpage.js`, 'utf-8')}</script>
+<style>${readFileSync(`${__dirname}/../assets/inpage.css`, 'utf-8')}</style>
+${svg}
+<script>${readFileSync(`${__dirname}/../assets/inpage.js`, 'utf-8')}</script>
 `;
-      }
-
-      return Promise.resolve(result);
-    })
-
-    .then((result: any) => writeFile(outputFile, result.data, (error) => {
-      if (error) throw error;
-    }), (error: any) => {
-      throw new Error(error);
-    })
-
-    .then(() => console.log('XD2SVG finished their work'));
 }

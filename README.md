@@ -56,18 +56,19 @@ You can use utility from CLI
        --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
    ```
 
-Or import package in your project
+Or in your project
    ```js
-   const xd2svg = require('xd2svg').xd2svg;
+   const fs = require('fs');
+   const { xd2svg } = require('xd2svg');
 
    const inputFileName = 'myFile.xd';
    const options = {
      format: 'html',
-     single: false,
-     output: 'folderWithFiles'
+     single: true
    };
 
-   xd2svg(inputFileName, options);
+   xd2svg(inputFileName, options)
+     .then((result) => fs.writeFile('outputFile.html', result));
    ```
 
 ## Contributing

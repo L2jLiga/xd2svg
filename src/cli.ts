@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
+import { existsSync, mkdirSync, writeFile } from 'fs';
 import { CliOptions } from './cli/models';
 import { xd2svg } from './xd2svg';
 
@@ -20,7 +21,7 @@ if (inputFileName) {
     inputName.pop();
   }
 
-  const defaultOptions: CliOptions = {
+  const options: CliOptions = {
     format: 'svg',
     output: inputName.join('.'),
     single: true,
@@ -32,26 +33,43 @@ if (inputFileName) {
     const arg = process.argv[argIdx].split('=');
     switch (arg[0]) {
       case '--format':
-        defaultOptions.format = /^html$/i.test(arg[1]) ? 'html' : 'svg';
+        options.format = /^html$/i.test(arg[1]) ? 'html' : 'svg';
         break;
 
       case '--output':
-        defaultOptions.output = arg[1];
+        options.output = arg[1];
         customOutput = true;
         break;
 
       case '--single':
-        defaultOptions.single = /^true$/i.test(arg[1]);
+        options.single = /^true$/i.test(arg[1]);
     }
   }
 
-  if (!customOutput && defaultOptions.single) {
-    defaultOptions.output += `.${defaultOptions.format}`;
+  if (!customOutput && options.single) {
+    options.output += `.${options.format}`;
   }
 
-  xd2svg(inputFileName, defaultOptions);
+  console.log(`Proceed file %s with options\n%O`, inputFileName, options);
 
-  console.log(`Proceed file %s with options\n%O`, inputFileName, defaultOptions);
+  xd2svg(inputFileName, options)
+    .then((svgImages: string | string[]) => {
+      if (svgImages instanceof Array) {
+        if (!existsSync(options.output)) {
+          mkdirSync(options.output);
+        }
+
+        let i = 0;
+
+        if (!existsSync(options.output)) {
+          mkdirSync(options.output);
+        }
+
+        svgImages.map((curSvg) => writeFile(`${options.output}/${i++}.${options.format}`, curSvg, errorHandler));
+      } else {
+        writeFile(options.output, svgImages, errorHandler);
+      }
+    });
 } else {
   console.log(`Usage: xd2svg-cli InputFile.xd [options]
   options:
@@ -59,4 +77,8 @@ if (inputFileName) {
   --format - specify output format: svg, html (default: svg)
   --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
   `);
+}
+
+function errorHandler(error) {
+  if (error) throw error;
 }

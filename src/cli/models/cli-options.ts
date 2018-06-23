@@ -1,5 +1,5 @@
 export interface CliOptions {
-  format: 'svg' | 'html';
-  output: string;
-  single: boolean;
+  format?: 'svg' | 'html';
+  output?: string;
+  single?: boolean;
 }
