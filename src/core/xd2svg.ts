@@ -43,7 +43,7 @@ export function xd2svg(inputFile: string, options: CliOptions) {
   });
 }
 
-function proceedFile(directory: SynchrounousResult, single: boolean) {
+export function proceedFile(directory: SynchrounousResult, single: boolean) {
   const dimensions: { width: number, height: number } = {width: 0, height: 0};
 
   const manifestInfo = manifestParser(directory);
@@ -91,17 +91,12 @@ function proceedFile(directory: SynchrounousResult, single: boolean) {
   return single ? totalSvg : convertedArtboards;
 }
 
-function optimizeSvg(svgImage: string, outputFile: string, isHtml: boolean) {
+export function optimizeSvg(svgImage: string, outputFile: string, isHtml: boolean) {
   svgo.optimize(svgImage)
 
     .then((result: any) => {
       if (isHtml) {
-        result.data = `<!DOCTYPE html>
-<meta charset="utf-8" />
-<style>${readFileSync(`${__dirname}/assets/inpage.css`, 'utf-8')}</style>
-${result.data}
-<script>${readFileSync(`${__dirname}/assets/inpage.js`, 'utf-8')}</script>
-`;
+        result.data = injectHtml(result.data);
       }
 
       return Promise.resolve(result);
@@ -114,4 +109,13 @@ ${result.data}
     })
 
     .then(() => console.log('XD2SVG finished their work'));
+}
+
+export function injectHtml(svg: string): string {
+  return `<!DOCTYPE html>
+<meta charset="utf-8" />
+<style>${readFileSync(`${__dirname}/assets/inpage.css`, 'utf-8')}</style>
+${svg}
+<script>${readFileSync(`${__dirname}/assets/inpage.js`, 'utf-8')}</script>
+`;
 }
