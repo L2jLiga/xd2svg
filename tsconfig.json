@@ -1,17 +1,24 @@
 {
   "compilerOptions": {
-    "module": "es2015",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
     "moduleResolution": "node",
+    "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "removeComments": true,
+    "outDir": "dist",
+    "baseUrl": "src",
+    "rootDir": "src",
+    "sourceRoot": "src",
     "lib": [
-      "es2018",
+      "es2017",
       "dom"
     ],
     "types": [
       "node"
     ],
     "target": "es2016",
-    "removeComments": true,
-    "preserveConstEnums": true,
     "sourceMap": true,
     "typeRoots": [
       "node_modules/@types"

@@ -21,7 +21,7 @@
     "bin",
     "dist"
   ],
-  "main": "dist/xd2svg-cli.js",
+  "main": "dist/xd2svg.js",
   "bin": {
     "xd2svg-cli": "bin/xd2svg-cli"
   },
@@ -30,7 +30,9 @@
     "url": "https://github.com/L2jLiga/xd2svg.git"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "build": "npm run build:core && npm run build:browser",
+    "build:browser": "webpack --config webpack.config.js",
+    "build:core": "tsc -p tsconfig.core.json",
     "clean": "rimraf dist",
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
     "prepublish": "npm run lint && npm run clean && npm run build"
@@ -47,10 +49,10 @@
     "@types/node": "8.9.5",
     "@types/svgo": "1.0.1",
     "@types/tmp": "0.0.33",
-    "copy-webpack-plugin": "^4.5.1",
+    "copy-webpack-plugin": "4.5.1",
     "rimraf": "2.6.2",
     "ts-loader": "4.4.1",
-    "ts-node": "6.1.2",
+    "ts-node": "7.0.0",
     "tslint": "5.10.0",
     "typescript": "2.9.2",
     "webpack": "4.12.0",
