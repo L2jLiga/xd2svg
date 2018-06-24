@@ -70,8 +70,6 @@ if (inputFileName) {
         }, '.');
       }
 
-      console.log(Object.keys(svgImages));
-
       typeof svgImages === 'string' ?
         writeFile(options.output, svgImages, errorHandler)
         : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${key}.${options.format}`, svgImages[key], errorHandler));
