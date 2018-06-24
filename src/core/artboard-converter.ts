@@ -71,6 +71,13 @@ function createShape(srcObj: Shape): Element {
       object.setAttribute('ry', srcObj.ry);
       break;
 
+    case 'line':
+      object.setAttribute('x1', srcObj.x1);
+      object.setAttribute('y1', srcObj.y1);
+      object.setAttribute('x2', srcObj.x2);
+      object.setAttribute('y2', srcObj.y2);
+      break;
+
     default:
       console.warn('Currently unsupported shape type:\n\n%O', srcObj);
   }

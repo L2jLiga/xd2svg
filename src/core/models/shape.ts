@@ -6,12 +6,12 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-export interface Path {
+interface Path {
   type: 'path';
   path: string;
 }
 
-export interface Rectangle {
+interface Rectangle {
   type: 'rect';
   x: string;
   y: string;
@@ -19,14 +19,14 @@ export interface Rectangle {
   height: string;
 }
 
-export interface Circle {
+interface Circle {
   type: 'circle';
   cx: string;
   cy: string;
   r: string;
 }
 
-export interface Ellipse {
+interface Ellipse {
   type: 'ellipse';
   cx: string;
   cy: string;
@@ -34,4 +34,12 @@ export interface Ellipse {
   ry: string;
 }
 
-export type Shape = Path | Rectangle | Circle | Ellipse;
+interface Line {
+  type: 'line';
+  x1: string;
+  y1: string;
+  x2: string;
+  y2: string;
+}
+
+export type Shape = Path | Rectangle | Circle | Ellipse | Line;

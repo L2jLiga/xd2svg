@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Support for hex color
+- HEX color support
+- Line shape support
 
 ## [0.6.3]
 ### Removed
