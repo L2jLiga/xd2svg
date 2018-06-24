@@ -5,10 +5,17 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
+import { Artboard } from './artboard';
 
 interface Path {
   type: 'path';
   path: string;
+}
+
+interface CompoundPath {
+  type: 'compound';
+  path: string;
+  children: Artboard[];
 }
 
 interface Rectangle {
@@ -42,4 +49,4 @@ interface Line {
   y2: string;
 }
 
-export type Shape = Path | Rectangle | Circle | Ellipse | Line;
+export type Shape = Path | CompoundPath | Rectangle | Circle | Ellipse | Line;

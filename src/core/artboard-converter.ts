@@ -7,7 +7,7 @@
  */
 
 import { createStyles } from './create-styles';
-import { Artboard, ArtboardInfo, Line, Paragraph, Shape, Text } from './models';
+import { Artboard, ArtboardInfo, Line, Paragraph, ResourcesMap, Shape, Text } from './models';
 import { document } from './utils/global-namespace';
 
 export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
@@ -43,10 +43,13 @@ export function artboardConverter(artboardsRoot: Artboard, artboardInfo: Artboar
   return svgImages;
 }
 
-function createShape(srcObj: Shape): Element {
+function createShape(srcObj: Shape, resources: ResourcesMap): Element {
   const object = createNativeSvgElement(srcObj.type);
 
   switch (srcObj.type) {
+    case 'compound':
+      createElem(srcObj, object, resources);
+
     case 'path':
       object.setAttribute('d', srcObj.path);
       break;
@@ -117,14 +120,14 @@ function createTransforms(src): string {
   return `translate(${src.tx}, ${src.ty})`;
 }
 
-export function createElem<T extends Element>(svgObjCollection: Artboard, parentElement: T, resources: { [path: string]: string }): T {
+export function createElem<T extends Element>(svgObjCollection: { children: Artboard[] }, parentElement: T, resources: ResourcesMap): T {
   svgObjCollection.children
     .map((svgObject: Artboard): void => {
       let node: Element;
 
       switch (svgObject.type) {
         case 'shape':
-          node = createShape(svgObject.shape);
+          node = createShape(svgObject.shape, resources);
           break;
 
         case 'text':
