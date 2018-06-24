@@ -7,22 +7,24 @@
  */
 import { Color } from '../styles/models';
 
-export function colorTransformer(fillColor: Color = {}): string {
+export function colorTransformer(color: Color = {}): string {
   /* TODO: Add support for another modes */
-  switch (fillColor.mode) {
+  switch (color.mode) {
     case 'RGB':
-      if (fillColor.alpha) {
-        return 'rgba(' + fillColor.value.r + ',' + fillColor.value.g + ',' + fillColor.value.b + ',' + fillColor.alpha + ')';
+      if (color.alpha) {
+        return 'rgba(' + color.value.r + ',' + color.value.g + ',' + color.value.b + ',' + color.alpha + ')';
       } else {
-        return 'rgb(' + fillColor.value.r + ',' + fillColor.value.g + ',' + fillColor.value.b + ')';
+        return 'rgb(' + color.value.r + ',' + color.value.g + ',' + color.value.b + ')';
       }
     case 'HSL':
-      if (fillColor.alpha) {
-        return 'hsla(' + fillColor.value.h + ',' + fillColor.value.s + ',' + fillColor.value.l + ',' + fillColor.alpha + ')';
+      if (color.alpha) {
+        return 'hsla(' + color.value.h + ',' + color.value.s + ',' + color.value.l + ',' + color.alpha + ')';
       } else {
-        return 'hsl(' + fillColor.value.h + ',' + fillColor.value.s + ',' + fillColor.value.l + ')';
+        return 'hsl(' + color.value.h + ',' + color.value.s + ',' + color.value.l + ')';
       }
     default:
-      return 'white';
+      return color.value ?
+        '#' + color.value.toString(16)
+      : 'white';
   }
 }
