@@ -8,7 +8,7 @@
 
 import { ArtboardInfo } from './index';
 
-export interface Resource {
+export interface Resources {
   artboards: { [name: string]: ArtboardInfo };
   gradients: string;
   clipPaths: string;

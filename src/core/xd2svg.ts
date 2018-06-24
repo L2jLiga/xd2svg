@@ -9,7 +9,7 @@
 import { readFileSync } from 'fs';
 import { artboardConverter } from './artboard-converter';
 import { manifestParser } from './manifest-parser';
-import { Directory, Resource } from './models';
+import { Directory, Resources } from './models';
 import { resourcesParser } from './resources-parser';
 import { svgo } from './svgo';
 
@@ -17,7 +17,7 @@ export function proceedFile(directory: Directory, single: boolean) {
   const dimensions: { width: number, height: number } = {width: 0, height: 0};
 
   const manifestInfo = manifestParser(directory);
-  const resourcesInfo: Resource = resourcesParser(directory);
+  const resourcesInfo: Resources = resourcesParser(directory);
 
   const convertedArtboards: any[] = [];
 
@@ -26,34 +26,27 @@ export function proceedFile(directory: Directory, single: boolean) {
 
     const artboard = JSON.parse(json);
 
-    const contentOfArtboard: string = artboardConverter(artboard, resourcesInfo.artboards[artboardItem.name], manifestInfo.resources).join('');
+    const contentOfArtboard: string[] = artboardConverter(artboard, resourcesInfo.artboards[artboardItem.name], manifestInfo.resources);
 
-    convertedArtboards.push(single ? contentOfArtboard : `<?xml version="1.0" standalone="no" encoding="UTF-8"?>
-    <svg xmlns="http://www.w3.org/2000/svg"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         width="${resourcesInfo.artboards[artboardItem.name].width}"
-         height="${resourcesInfo.artboards[artboardItem.name].height}"
-         id="${manifestInfo.id}"
-         version="1.1">
-      ${resourcesInfo.gradients}
-      ${resourcesInfo.clipPaths}
-      ${contentOfArtboard}
-    </svg>`);
+    convertedArtboards.push(single ? contentOfArtboard.join('\n') : injectSvgResources(contentOfArtboard, {
+      clipPaths: resourcesInfo.clipPaths,
+      gradients: resourcesInfo.gradients,
+      rootHeight: resourcesInfo.artboards[artboardItem.name].height,
+      rootId: undefined,
+      rootWidth: resourcesInfo.artboards[artboardItem.name].width,
+    }));
 
     dimensions.width = Math.max(dimensions.width, resourcesInfo.artboards[artboardItem.name].width);
     dimensions.height = Math.max(dimensions.height, resourcesInfo.artboards[artboardItem.name].height);
   });
 
-  const totalSvg: string = `<svg xmlns="http://www.w3.org/2000/svg"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         width="${dimensions.width}"
-         height="${dimensions.height}"
-         id="${manifestInfo.id}"
-         version="1.1">
-      ${resourcesInfo.gradients}
-      ${resourcesInfo.clipPaths}
-      ${convertedArtboards.join('\r\n')}
-    </svg>`;
+  const totalSvg: string = injectSvgResources(convertedArtboards, {
+    clipPaths: resourcesInfo.clipPaths,
+    gradients: resourcesInfo.gradients,
+    rootHeight: dimensions.height,
+    rootId: manifestInfo.id,
+    rootWidth: dimensions.width,
+  });
 
   directory.removeCallback();
 
@@ -72,4 +65,37 @@ export function injectHtml(svg: string): string {
 ${svg}
 <script>${readFileSync(`${__dirname}/../assets/inpage.js`, 'utf-8')}</script>
 `;
+}
+
+export function injectSvgResources(
+  svg: string[],
+  {
+    rootWidth,
+    rootHeight,
+    rootId,
+    gradients,
+    clipPaths,
+  },
+): string {
+  const commonSvgDefPart = `xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"`;
+
+  switch (svg.length) {
+    case 0:
+      console.warn('There are not any svg');
+
+      return '';
+
+    case 1:
+      return svg[0].replace(/<svg([^>]*)>/, `<svg$1 ${commonSvgDefPart}>${gradients}${clipPaths}`);
+
+    default:
+      return `<svg ${commonSvgDefPart}
+         width="${rootWidth}"
+         height="${rootHeight}"
+         ${rootId ? `id="${rootId}"` : ''}>
+      ${gradients}
+      ${clipPaths}
+      ${svg.join('\r\n')}
+    </svg>`;
+  }
 }

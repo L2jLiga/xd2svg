@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { RawResource } from './resource';
+import { RawResource } from './resources';
 
 export interface ManifestFile {
   id: string;

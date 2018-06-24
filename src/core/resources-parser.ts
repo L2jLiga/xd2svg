@@ -8,11 +8,11 @@
 
 import { readFileSync } from 'fs';
 import { createElem } from './artboard-converter';
-import { ArtboardInfo, Directory, Resource } from './models';
+import { ArtboardInfo, Directory, Resources } from './models';
 import { colorTransformer } from './utils/color-transformer';
 import { document } from './utils/global-namespace';
 
-export function resourcesParser(directory: Directory): Resource {
+export function resourcesParser(directory: Directory): Resources {
   const json = readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
 
   const resources = JSON.parse(json);
