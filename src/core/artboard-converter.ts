@@ -20,8 +20,8 @@ export function artboardConverter(artboardsRoot: Artboard, artboardInfo: Artboar
         'id': imageRootObject.id,
         'viewBox': `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
       });
-      if (artboardInfo.viewportWidth) svg.setAttribute('width', `${artboardInfo.viewportWidth}`);
-      if (artboardInfo.viewportHeight) svg.setAttribute('height', `${artboardInfo.viewportHeight}`);
+      if (artboardInfo.width) svg.setAttribute('width', `${artboardInfo.width}`);
+      if (artboardInfo.height) svg.setAttribute('height', `${artboardInfo.height}`);
 
       const title: Element = createNativeSvgElement('title');
       title.innerHTML = artboardInfo.name;
