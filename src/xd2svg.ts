@@ -1,9 +1,10 @@
+import { Options } from 'extract-zip';
 import { dirSync, SynchrounousResult } from 'tmp';
 import { promisify } from 'util';
 import { CliOptions } from './cli/models';
 import { injectHtml, optimizeSvg, proceedFile } from './core/xd2svg';
 
-const extract = promisify(require('extract-zip'));
+const extract: (zipPath: string, opts: Options) => Promise<void> = promisify(require('extract-zip'));
 
 export async function xd2svg(inputFile: string, options: CliOptions): Promise<string | string[]> {
   let optimizedSvg: Promise<string> | Promise<string[]>;
