@@ -57,7 +57,7 @@ You can use utility from CLI
    ```
 
 Or in your project
-   - You can provide name of file which you want to convert
+   - You can provide path to file which you want to convert
    ```js
    const fs = require('fs');
    const { xd2svg } = require('xd2svg');
