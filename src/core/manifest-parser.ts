@@ -7,36 +7,7 @@
  */
 
 import { readFileSync } from 'fs';
-import { Directory } from './models';
-
-interface ManifestFile {
-  id: string;
-  'uxdesign#hotspotHints': boolean;
-  'uxdesign#highResPushed': boolean;
-  'uxdesign#fullscreen': boolean;
-  'uxdesign#lowResPushed': boolean;
-  children: Array<Artwork | Resource>;
-  'uxdesign#allowComments': boolean;
-  'uxdesign#version': boolean;
-  'uxdesign#userDidSetPrototypeName': boolean;
-  'uxdesign#userDidSetSpecName': boolean;
-  'uxdesign#id': boolean;
-  components: any[];
-  name: string;
-  type: string;
-  'manifest-format-version': number;
-  state: string;
-}
-
-interface Artwork {
-  name: 'artwork';
-  children: any[];
-}
-
-interface Resource {
-  name: 'resources';
-  components: RawResource[];
-}
+import { Directory, ManifestFile, RawResource, ResourcesMap } from './models';
 
 export function manifestParser(directory: Directory) {
   const json: string = readFileSync(`${directory.name}/manifest`, 'utf-8');
@@ -60,15 +31,6 @@ export function manifestParser(directory: Directory) {
   manifestInfo.artboards = manifestInfo.artboards.filter((artboard) => Boolean(artboard['uxdesign#bounds']));
 
   return manifestInfo;
-}
-
-interface RawResource {
-  path: string;
-  type: string;
-}
-
-interface ResourcesMap {
-  [path: string]: string;
 }
 
 function parseResources(dirName: string, resources: RawResource[] = []): ResourcesMap {

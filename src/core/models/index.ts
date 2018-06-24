@@ -9,6 +9,7 @@
 export * from './artboard';
 export * from './artboard-info';
 export * from './directory';
+export * from './manifest-parser';
 export * from './resource';
 export * from './shape';
 export * from './text';

@@ -13,3 +13,12 @@ export interface Resource {
   gradients: string;
   clipPaths: string;
 }
+
+export interface RawResource {
+  path: string;
+  type: string;
+}
+
+export interface ResourcesMap {
+  [path: string]: string;
+}
