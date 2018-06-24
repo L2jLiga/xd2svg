@@ -7,8 +7,8 @@
  */
 
 import { readFileSync } from 'fs';
-import { ArtboardInfo, Directory, Resource } from '../models';
 import { createElem } from './artboard-converter';
+import { ArtboardInfo, Directory, Resource } from './models';
 import { colorTransformer } from './utils/color-transformer';
 import { document } from './utils/global-namespace';
 

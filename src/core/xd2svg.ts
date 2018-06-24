@@ -7,11 +7,11 @@
  */
 
 import { readFileSync } from 'fs';
-import { artboardConverter } from './lib/artboard-converter';
-import { manifestParser } from './lib/manifest-parser';
-import { resourcesParser } from './lib/resources-parser';
-import { svgo } from './lib/svgo';
+import { artboardConverter } from './artboard-converter';
+import { manifestParser } from './manifest-parser';
 import { Directory, Resource } from './models';
+import { resourcesParser } from './resources-parser';
+import { svgo } from './svgo';
 
 export function proceedFile(directory: Directory, single: boolean) {
   const dimensions: { width: number, height: number } = {width: 0, height: 0};

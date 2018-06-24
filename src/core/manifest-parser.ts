@@ -7,17 +7,47 @@
  */
 
 import { readFileSync } from 'fs';
-import { Directory } from '../models';
+import { Directory } from './models';
+
+interface ManifestFile {
+  id: string;
+  'uxdesign#hotspotHints': boolean;
+  'uxdesign#highResPushed': boolean;
+  'uxdesign#fullscreen': boolean;
+  'uxdesign#lowResPushed': boolean;
+  children: Array<Artwork | Resource>;
+  'uxdesign#allowComments': boolean;
+  'uxdesign#version': boolean;
+  'uxdesign#userDidSetPrototypeName': boolean;
+  'uxdesign#userDidSetSpecName': boolean;
+  'uxdesign#id': boolean;
+  components: any[];
+  name: string;
+  type: string;
+  'manifest-format-version': number;
+  state: string;
+}
+
+interface Artwork {
+  name: 'artwork';
+  children: any[];
+}
+
+interface Resource {
+  name: 'resources';
+  components: RawResource[];
+}
 
 export function manifestParser(directory: Directory) {
   const json: string = readFileSync(`${directory.name}/manifest`, 'utf-8');
 
-  const manifest = JSON.parse(json);
+  const manifest: ManifestFile = JSON.parse(json);
 
   const manifestInfo = {
     artboards: [],
     id: manifest.id,
-    resources: null,
+    name: manifest.name,
+    resources: null as ResourcesMap,
     version: manifest['uxdesign#version'],
   };
 
@@ -37,7 +67,11 @@ interface RawResource {
   type: string;
 }
 
-function parseResources(dirName: string, resources: RawResource[] = []): { [path: string]: string } {
+interface ResourcesMap {
+  [path: string]: string;
+}
+
+function parseResources(dirName: string, resources: RawResource[] = []): ResourcesMap {
   const resourcesObject = {};
 
   resources.forEach((res) => {
