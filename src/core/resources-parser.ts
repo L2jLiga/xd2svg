@@ -51,7 +51,7 @@ function buildGradients(gradients): string {
 
   let gradientsCount: number = gradientsId.length - 1;
 
-  for (; gradientsCount > 0; gradientsCount--) {
+  for (; gradientsCount >= 0; gradientsCount--) {
     const gradientId: string = gradientsId[gradientsCount];
 
     const buildedElement: Element = buildElement(gradients[gradientId], gradientId);
