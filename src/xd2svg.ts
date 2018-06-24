@@ -2,23 +2,26 @@ import { Options } from 'extract-zip';
 import { dirSync, SynchrounousResult } from 'tmp';
 import { promisify } from 'util';
 import { CliOptions } from './cli/models';
+import { Directory } from './core/models';
 import { injectHtml, optimizeSvg, proceedFile } from './core/xd2svg';
 
 const extract: (zipPath: string, opts: Options) => Promise<void> = promisify(require('extract-zip'));
 
-export async function xd2svg(inputFile: string, options: CliOptions): Promise<string | string[]> {
-  let optimizedSvg: Promise<string> | Promise<string[]>;
-
-  const directory: SynchrounousResult = await openFile(inputFile);
+export async function xd2svg(input: string | Directory, options: CliOptions): Promise<string | string[]> {
+  const directory: Directory = typeof input === 'string' ?
+    await openFile(input)
+    : input;
   const isHtml: boolean = options.format === 'html';
   const svg: string | string[] = proceedFile(directory, options.single);
 
-  optimizedSvg =
+  const optimizedSvg: string | string[] =
     typeof svg === 'string' ?
-      prepareAndOptimizeSvg(svg, isHtml)
-      : Promise.all(svg.map((curSvg) => prepareAndOptimizeSvg(curSvg, isHtml))) as Promise<string[]>;
+      await prepareAndOptimizeSvg(svg, isHtml)
+      : await Promise.all(svg.map((curSvg) => prepareAndOptimizeSvg(curSvg, isHtml)));
 
-  return await optimizedSvg;
+  if (typeof input !== 'string' && input.removeCallback) input.removeCallback();
+
+  return optimizedSvg;
 }
 
 async function openFile(inputFile): Promise<SynchrounousResult> {

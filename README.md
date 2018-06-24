@@ -57,6 +57,7 @@ You can use utility from CLI
    ```
 
 Or in your project
+   - You can provide name of file which you want to convert
    ```js
    const fs = require('fs');
    const { xd2svg } = require('xd2svg');
@@ -71,6 +72,36 @@ Or in your project
      .then((result) => fs.writeFile('outputFile.html', result));
    ```
 
+   - Also you can provide directory with extracted file
+   ```js
+   const extract = require('extract-zip');
+   const { writeFile } = require('fs');
+   const { dirSync } = require('tmp');
+   const { promisify } = require('util');
+   const { xd2svg } = require('xd2svg');
+
+   prepareSvg('myFile.xd');
+
+   async function prepareSvg(inputFileName) {
+     const directory = dirSync();
+     /***
+      * example of directory
+      *  {
+      *    name: "/path/to/directory/with/extracted/file",
+      *    removeCallback(): console.log('Optional callback which was executed when convertation finished')
+      *  }
+      */
+
+     await promisify(extract)(inputFileName);
+
+     const preparedSvgs = xd2svg(directory, {
+       format: 'svg',
+       single: false
+     });
+
+     preparedSvgs.map((svg, idx) => writeFile(`${idx}.svg`, svg));
+   }
+   ```
 ## Contributing
 Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 

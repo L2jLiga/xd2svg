@@ -7,9 +7,9 @@
  */
 
 import { readFileSync } from 'fs';
-import { SynchrounousResult } from 'tmp';
+import { Directory } from '../models';
 
-export function manifestParser(directory: SynchrounousResult) {
+export function manifestParser(directory: Directory) {
   const json: string = readFileSync(`${directory.name}/manifest`, 'utf-8');
 
   const manifest = JSON.parse(json);

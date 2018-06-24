@@ -7,14 +7,13 @@
  */
 
 import { readFileSync } from 'fs';
-import { SynchrounousResult } from 'tmp';
 import { artboardConverter } from './lib/artboard-converter';
 import { manifestParser } from './lib/manifest-parser';
 import { resourcesParser } from './lib/resources-parser';
 import { svgo } from './lib/svgo';
-import { Resource } from './models';
+import { Directory, Resource } from './models';
 
-export function proceedFile(directory: SynchrounousResult, single: boolean) {
+export function proceedFile(directory: Directory, single: boolean) {
   const dimensions: { width: number, height: number } = {width: 0, height: 0};
 
   const manifestInfo = manifestParser(directory);
