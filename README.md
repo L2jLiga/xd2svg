@@ -99,9 +99,12 @@ Or in your project
        single: false
      });
 
-     preparedSvgs.map((svg, idx) => writeFile(`${idx}.svg`, svg));
+     Object
+       .keys(preparedSvgs)
+       .map((key) => writeFile(`${key}.svg`, preparedSvgs[key]));
    }
    ```
+
 ## Contributing
 Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 

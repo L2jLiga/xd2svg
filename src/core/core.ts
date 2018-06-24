@@ -9,30 +9,37 @@
 import { readFileSync } from 'fs';
 import { artboardConverter } from './artboard-converter';
 import { manifestParser } from './manifest-parser';
-import { Directory, Resources } from './models';
+import { Artboard, ArtboardMap, Directory, Resources } from './models';
 import { resourcesParser } from './resources-parser';
 import { svgo } from './svgo';
 
-export function proceedFile(directory: Directory, single: boolean) {
+export interface InjectableSvgData {
+  rootWidth: number;
+  rootHeight: number;
+  rootId?: string;
+  gradients: string;
+  clipPaths: string;
+}
+
+export function proceedFile(directory: Directory, single: boolean): string | ArtboardMap {
   const dimensions: { width: number, height: number } = {width: 0, height: 0};
 
   const manifestInfo = manifestParser(directory);
   const resourcesInfo: Resources = resourcesParser(directory);
 
-  const convertedArtboards: any[] = [];
+  const convertedArtboards: ArtboardMap = {};
 
   manifestInfo.artboards.forEach((artboardItem: any) => {
     const json = readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
-    const artboard = JSON.parse(json);
+    const artboard: Artboard = JSON.parse(json);
 
     const contentOfArtboard: string[] = artboardConverter(artboard, resourcesInfo.artboards[artboardItem.name], manifestInfo.resources);
 
-    convertedArtboards.push(single ? contentOfArtboard.join('\n') : injectSvgResources(contentOfArtboard, {
+    convertedArtboards[artboardItem.name] = (single ? contentOfArtboard.join('\n') : injectSvgResources(contentOfArtboard, {
       clipPaths: resourcesInfo.clipPaths,
       gradients: resourcesInfo.gradients,
       rootHeight: resourcesInfo.artboards[artboardItem.name].height,
-      rootId: undefined,
       rootWidth: resourcesInfo.artboards[artboardItem.name].width,
     }));
 
@@ -40,7 +47,7 @@ export function proceedFile(directory: Directory, single: boolean) {
     dimensions.height = Math.max(dimensions.height, resourcesInfo.artboards[artboardItem.name].height);
   });
 
-  const totalSvg: string = injectSvgResources(convertedArtboards, {
+  const totalSvg: string = injectSvgResources(Object.values(convertedArtboards), {
     clipPaths: resourcesInfo.clipPaths,
     gradients: resourcesInfo.gradients,
     rootHeight: dimensions.height,
@@ -69,13 +76,7 @@ ${svg}
 
 export function injectSvgResources(
   svg: string[],
-  {
-    rootWidth,
-    rootHeight,
-    rootId,
-    gradients,
-    clipPaths,
-  },
+  data: InjectableSvgData,
 ): string {
   const commonSvgDefPart = `xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"`;
 
@@ -86,15 +87,15 @@ export function injectSvgResources(
       return '';
 
     case 1:
-      return svg[0].replace(/<svg([^>]*)>/, `<svg$1 ${commonSvgDefPart}>${gradients}${clipPaths}`);
+      return svg[0].replace(/<svg([^>]*)>/, `<svg$1 ${commonSvgDefPart}>${data.gradients}${data.clipPaths}`);
 
     default:
       return `<svg ${commonSvgDefPart}
-         width="${rootWidth}"
-         height="${rootHeight}"
-         ${rootId ? `id="${rootId}"` : ''}>
-      ${gradients}
-      ${clipPaths}
+         width="${data.rootWidth}"
+         height="${data.rootHeight}"
+         ${data.rootId ? `id="${data.rootId}"` : ''}>
+      ${data.gradients}
+      ${data.clipPaths}
       ${svg.join('\r\n')}
     </svg>`;
   }

@@ -8,6 +8,7 @@
 
 import { existsSync, mkdirSync, writeFile } from 'fs';
 import { CliOptions } from './cli/models';
+import { ArtboardMap } from './core/models';
 import { xd2svg } from './xd2svg';
 
 const inputFileName: string = process.argv[2];
@@ -53,22 +54,27 @@ if (inputFileName) {
   console.log(`Proceed file %s with options\n%O`, inputFileName, options);
 
   xd2svg(inputFileName, options)
-    .then((svgImages: string | string[]) => {
-      if (svgImages instanceof Array) {
-        if (!existsSync(options.output)) {
-          mkdirSync(options.output);
-        }
+    .then((svgImages: string | ArtboardMap) => {
+      const path: string[] = options.output.split('/');
+      if (options.single) path.pop();
 
-        let i = 0;
+      if (path.length) {
+        path.reduce((prev, cur) => {
+          const newPath = `${prev}/${cur}`;
 
-        if (!existsSync(options.output)) {
-          mkdirSync(options.output);
-        }
+          if (!existsSync(newPath)) {
+            mkdirSync(newPath);
+          }
 
-        svgImages.map((curSvg) => writeFile(`${options.output}/${i++}.${options.format}`, curSvg, errorHandler));
-      } else {
-        writeFile(options.output, svgImages, errorHandler);
+          return newPath;
+        }, '.');
       }
+
+      console.log(Object.keys(svgImages));
+
+      typeof svgImages === 'string' ?
+        writeFile(options.output, svgImages, errorHandler)
+        : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${key}.${options.format}`, svgImages[key], errorHandler));
     });
 } else {
   console.log(`Usage: xd2svg-cli InputFile.xd [options]
