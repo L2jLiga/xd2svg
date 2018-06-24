@@ -8,7 +8,6 @@
 import { Color } from '../styles/models';
 
 export function colorTransformer(color: Color = {}): string {
-  /* TODO: Add support for another modes */
   switch (color.mode) {
     case 'RGB':
       if (color.alpha) {
@@ -23,8 +22,8 @@ export function colorTransformer(color: Color = {}): string {
         return 'hsl(' + color.value.h + ',' + color.value.s + ',' + color.value.l + ')';
       }
     default:
-      return color.value ?
-        '#' + color.value.toString(16)
-      : 'white';
+      return '#' + color.value ?
+        color.value.toString(16)
+      : 'fff';
   }
 }
