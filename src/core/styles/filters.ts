@@ -23,6 +23,8 @@ function filtersParser(src: any, parentElement: Element): string {
     const filterName = filter.type.includes('#blur') ? 'blur' : camelToDash(filter.type);
     const filterParams = filter.params[filter.type + 's'] || filter.params || {};
 
+    if (!filterParams.visible) return;
+
     switch (filterName) {
       case 'blur': {
         const filterId: string = `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
@@ -51,7 +53,6 @@ function filtersParser(src: any, parentElement: Element): string {
 
       case 'drop-shadow': {
         for (const {dx, dy, r, color} of filterParams) {
-          if (!filterParams.visible) continue;
 
           const filterId: string = `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
 
