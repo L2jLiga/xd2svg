@@ -46,6 +46,8 @@ function filtersParser(src: any, parentElement: Element): string {
 
       case 'drop-shadow': {
         for (const {dx, dy, r, color} of filterParams) {
+          if (!filterParams.visible) continue;
+
           const filterId: string = `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
 
           const svgFilterElement = document.createElementNS('http://www.w3.org/2000/svg', 'filter');

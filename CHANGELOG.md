@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Compound paths support
 - Border radius support for rectangles
 
+### Changed
+- Don't render drop-shadow filter when it invisible
+
 ### Fixed
 - Incorrect size of specific SVGs
 - First gradient in resources didn't proceed correctly
