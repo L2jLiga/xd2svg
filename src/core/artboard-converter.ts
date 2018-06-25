@@ -59,6 +59,11 @@ function createShape(srcObj: Shape, resources: ResourcesMap): Element {
       object.setAttribute('y', srcObj.y);
       object.setAttribute('width', srcObj.width);
       object.setAttribute('height', srcObj.height);
+
+      if (srcObj.r) {
+        object.setAttribute('rx', srcObj.r[0]);
+        object.setAttribute('ry', srcObj.r[1]);
+      }
       break;
 
     case 'circle':

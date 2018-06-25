@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Matrix transform support
 - Information about name and id of each element in generated SVG
 - Compound paths support
+- Border radius support for rectangles
 
 ### Fixed
 - Incorrect size of specific SVGs

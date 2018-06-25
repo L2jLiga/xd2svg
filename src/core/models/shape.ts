@@ -22,6 +22,7 @@ interface Rectangle {
   type: 'rect';
   x: string;
   y: string;
+  r: string;
   width: string;
   height: string;
 }
