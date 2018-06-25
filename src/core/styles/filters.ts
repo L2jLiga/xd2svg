@@ -30,12 +30,17 @@ function filtersParser(src: any, parentElement: Element): string {
         const svgFilterElement = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
 
         const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+        const flood = document.createElementNS('http://www.w3.org/2000/svg', 'feFlood');
 
         blur.setAttribute('in', 'SourceGraphic');
         blur.setAttribute('stdDeviation', filterParams.blurAmount);
 
+        flood.setAttribute('in', 'SourceGraphic');
+        flood.setAttribute('flood-opacity', filterParams.fillOpacity);
+
         svgFilterElement.setAttribute('id', filterId);
         svgFilterElement.appendChild(blur);
+        svgFilterElement.appendChild(flood);
 
         parentElement.appendChild(svgFilterElement);
 
