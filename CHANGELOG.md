@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - HEX color support
 - Line shape support
+- Matrix transform support
+- Information about name and id of each element in generated SVG
+- Compound paths support
+
+### Fixed
+- Incorrect size of specific SVGs
+- First gradient in resources didn't proceed correctly
+
+### Removed
+- Obsolete code
 
 ## [0.6.3]
 ### Removed
