@@ -11,6 +11,7 @@ import { Text } from './text';
 
 export interface CommonArtboard {
   id: string;
+  name?: string;
   type: string;
   children: Artboard[];
   artboard?: Artboard;

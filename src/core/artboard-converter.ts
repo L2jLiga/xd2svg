@@ -144,6 +144,14 @@ export function createElem<T extends Element>(svgObjCollection: { children: Artb
           return;
       }
 
+      if (svgObject.id) {
+        node.setAttribute('id', svgObject.id);
+      }
+
+      if (svgObject.name) {
+        node.setAttribute('name', svgObject.name);
+      }
+
       if (svgObject.style) {
         node.setAttribute('style', createStyles(svgObject.style, parentElement, svgObject.id, resources));
       }
