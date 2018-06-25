@@ -7,6 +7,7 @@
  */
 
 export interface TextAttributes {
+  letterSpacing: number;
   lineHeight: number;
   paragraphAlign: string;
 }
