@@ -115,9 +115,8 @@ function createText(srcObj: Text): SVGElement {
   return svgTextElement;
 }
 
-/* TODO: Parse another transformations */
 function createTransforms(src): string {
-  return `translate(${src.tx}, ${src.ty})`;
+  return `matrix(${src.a}, ${src.b}, ${src.c}, ${src.d}, ${src.tx}, ${src.ty})`;
 }
 
 export function createElem<T extends Element>(svgObjCollection: { children: Artboard[] }, parentElement: T, resources: ResourcesMap): T {
