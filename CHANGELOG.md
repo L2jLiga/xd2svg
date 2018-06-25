@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.7.0]
 ### Added
 - HEX color support
 - Line shape support
@@ -12,13 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Information about name and id of each element in generated SVG
 - Compound paths support
 - Border radius support for rectangles
-
-### Changed
-- Don't render drop-shadow filter when it invisible
+- Letter spacing support
 
 ### Fixed
-- Incorrect size of specific SVGs
-- First gradient in resources didn't proceed correctly
+- Specific SVGs had incorrect size
+- First gradient in resources did not proceed correctly
+- Opacity filter did not applied
+- Invisible filters were visible
 
 ### Removed
 - Obsolete code
@@ -206,7 +208,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add Artboard parser
 
-[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v0.6.3...HEAD
+[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/L2jLiga/xd2svg/compare/v0.6.3...v0.7.0
 [0.6.3]: https://github.com/L2jLiga/xd2svg/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/L2jLiga/xd2svg/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/L2jLiga/xd2svg/compare/v0.6.0...v0.6.1
