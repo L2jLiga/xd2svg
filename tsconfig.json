@@ -9,7 +9,6 @@
     "removeComments": true,
     "outDir": "dist",
     "baseUrl": "src",
-    "sourceRoot": "src",
     "lib": [
       "es2017",
       "dom"
@@ -18,7 +17,6 @@
       "node"
     ],
     "target": "es2017",
-    "sourceMap": true,
     "typeRoots": [
       "node_modules/@types"
     ]
