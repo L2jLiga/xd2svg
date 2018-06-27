@@ -22,6 +22,9 @@ export interface InjectableSvgData {
   clipPaths: string;
 }
 
+export function proceedFile(directory: Directory, single: true): string;
+export function proceedFile(directory: Directory, single: false): Dictionary<string>;
+export function proceedFile(directory: Directory, single: boolean): OutputFormat;
 export function proceedFile(directory: Directory, single: boolean): OutputFormat {
   const dimensions: { width: number, height: number } = {width: 0, height: 0};
 

@@ -7,7 +7,7 @@
  */
 
 import { colorTransformer } from '../utils/color-transformer';
-import { document } from '../utils/global-namespace';
+import { createElement } from '../utils/create-element';
 import { Fill, Parser, Pattern } from './models';
 
 export const fill: Parser = {
@@ -32,17 +32,15 @@ export function fillParser(src: Fill, parentElement: Element, uuid: string, reso
   }
 }
 
-function createPattern(uuid: string, resources: any, patternObject: Pattern): SVGElement {
-  const pattern: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
-  const image: SVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-
-  pattern.setAttribute('id', uuid);
-  pattern.setAttribute('x', '0');
-  pattern.setAttribute('y', '0');
-  pattern.setAttribute('width', '1');
-  pattern.setAttribute('height', '1');
-
-  image.setAttribute('xlink:href', resources[patternObject.meta.ux.uid]);
+function createPattern(uuid: string, resources: any, patternObject: Pattern): SVGPatternElement {
+  const pattern: SVGPatternElement = createElement('pattern', {
+    height: '1',
+    id: uuid,
+    width: '1',
+    x: '0',
+    y: '0',
+  });
+  const image: SVGImageElement = createElement('image', {'xlink:href': resources[patternObject.meta.ux.uid]});
 
   if (patternObject.meta.ux.scaleBehavior === 'cover' || patternObject.meta.ux.scaleBehavior === 'fill') {
     pattern.setAttribute('patternContentUnits', 'objectBoundingBox');

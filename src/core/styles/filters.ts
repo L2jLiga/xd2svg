@@ -8,7 +8,7 @@
 
 import { camelToDash } from '../utils/camel-to-dash';
 import { colorTransformer } from '../utils/color-transformer';
-import { document } from '../utils/global-namespace';
+import { createElement } from '../utils/create-element';
 import { Parser } from './models';
 
 export const filters: Parser = {
@@ -29,18 +29,17 @@ function filtersParser(src: any, parentElement: Element): string {
       case 'blur': {
         const filterId: string = `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
 
-        const svgFilterElement = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+        const svgFilterElement = createElement('filter', {id: filterId});
 
-        const blur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
-        const flood = document.createElementNS('http://www.w3.org/2000/svg', 'feFlood');
+        const blur = createElement('fegaussianblur', {
+          in: 'SourceGraphic',
+          stdDeviation: filterParams.blurAmount,
+        });
+        const flood = createElement('feflood', {
+          'flood-opacity': filterParams.fillOpacity,
+          'in': 'SourceGraphic',
+        });
 
-        blur.setAttribute('in', 'SourceGraphic');
-        blur.setAttribute('stdDeviation', filterParams.blurAmount);
-
-        flood.setAttribute('in', 'SourceGraphic');
-        flood.setAttribute('flood-opacity', filterParams.fillOpacity);
-
-        svgFilterElement.setAttribute('id', filterId);
         svgFilterElement.appendChild(blur);
         svgFilterElement.appendChild(flood);
 
@@ -56,15 +55,14 @@ function filtersParser(src: any, parentElement: Element): string {
 
           const filterId: string = `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
 
-          const svgFilterElement = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+          const svgFilterElement = createElement('filter', {id: filterId});
 
-          svgFilterElement.setAttribute('id', filterId);
-
-          const dropShadow = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow');
-          dropShadow.setAttribute('dx', dx);
-          dropShadow.setAttribute('dy', dy);
-          dropShadow.setAttribute('stdDeviation', r);
-          dropShadow.setAttribute('flood-color', colorTransformer(color));
+          const dropShadow = createElement('fedropshadow', {
+            dx,
+            dy,
+            'flood-color': colorTransformer(color),
+            'stdDeviation': r,
+          });
 
           svgFilterElement.appendChild(dropShadow);
 

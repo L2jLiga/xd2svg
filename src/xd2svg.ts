@@ -1,3 +1,11 @@
+/**
+ * @license
+ * Copyright Andrey Chalkin <L2jLiga>. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
+ */
+
 import { Options } from 'extract-zip';
 import { dirSync, SynchrounousResult } from 'tmp';
 import { promisify } from 'util';
@@ -7,6 +15,17 @@ import { Dictionary, Directory } from './core/models';
 
 const extract: (zipPath: string, opts: Options) => Promise<void> = promisify(require('extract-zip'));
 
+interface SingleOutput extends CliOptions {
+  single: true;
+}
+
+interface MultipleOutput extends CliOptions {
+  single: false;
+}
+
+export async function xd2svg(input: string | Directory, options: SingleOutput): Promise<string>;
+export async function xd2svg(input: string | Directory, options: MultipleOutput): Promise<Dictionary<string>>;
+export async function xd2svg(input: string | Directory, options: CliOptions): Promise<OutputFormat>;
 export async function xd2svg(input: string | Directory, options: CliOptions): Promise<OutputFormat> {
   const directory: Directory = typeof input === 'string' ?
     await openFile(input)

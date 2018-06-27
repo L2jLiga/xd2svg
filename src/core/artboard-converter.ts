@@ -8,14 +8,14 @@
 
 import { createStyles } from './create-styles';
 import { Artboard, ArtboardInfo, Line, Paragraph, ResourcesMap, Shape, Text } from './models';
-import { document } from './utils/global-namespace';
+import { createElement } from './utils/create-element';
 
 export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
   const svgImages: string[] = [];
 
   artboardsRoot.children
     .map((imageRootObject: Artboard): void => {
-      const svg: Element = createNativeSvgElement('svg', {
+      const svg = createElement('svg', {
         'enable-background': `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
         'id': imageRootObject.id,
         'viewBox': `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
@@ -23,11 +23,11 @@ export function artboardConverter(artboardsRoot: Artboard, artboardInfo: Artboar
       if (artboardInfo.width) svg.setAttribute('width', `${artboardInfo.width}`);
       if (artboardInfo.height) svg.setAttribute('height', `${artboardInfo.height}`);
 
-      const title: Element = createNativeSvgElement('title');
+      const title = createElement('title');
       title.innerHTML = artboardInfo.name;
       svg.appendChild(title);
 
-      const backGround: Element = createNativeSvgElement('rect', {
+      const backGround = createElement('rect', {
         height: artboardInfo.height,
         style: createStyles(imageRootObject.style, svg, imageRootObject.id, resources),
         transform: `translate(${artboardInfo.x} ${artboardInfo.y})`,
@@ -43,8 +43,8 @@ export function artboardConverter(artboardsRoot: Artboard, artboardInfo: Artboar
   return svgImages;
 }
 
-function createShape(srcObj: Shape, resources: ResourcesMap): Element {
-  const object = createNativeSvgElement(srcObj.type);
+function createShape(srcObj: Shape, resources: ResourcesMap) {
+  const object = createElement(srcObj.type === 'compound' ? 'path' : srcObj.type);
 
   switch (srcObj.type) {
     case 'compound':
@@ -93,14 +93,14 @@ function createShape(srcObj: Shape, resources: ResourcesMap): Element {
   return object;
 }
 
-function createText(srcObj: Text): SVGElement {
-  const svgTextElement: SVGElement = createNativeSvgElement('text');
+function createText(srcObj: Text) {
+  const svgTextElement = createElement('text');
   const rawText = srcObj.rawText;
 
   srcObj.paragraphs.map((paragraph: Paragraph) => {
     paragraph.lines.map((line: Line[]) => {
       line.map((linePart: Line) => {
-        const element: SVGElement = createNativeSvgElement('tspan');
+        const element: SVGElement = createElement('tspan');
 
         element.innerHTML = rawText.substring(linePart.from, linePart.to);
 
@@ -124,10 +124,10 @@ function createTransforms(src): string {
   return `matrix(${src.a}, ${src.b}, ${src.c}, ${src.d}, ${src.tx}, ${src.ty})`;
 }
 
-export function createElem<T extends Element>(svgObjCollection: { children: Artboard[] }, parentElement: T, resources: ResourcesMap): T {
+export function createElem<T extends SVGElement>(svgObjCollection: { children: Artboard[] }, parentElement: T, resources: ResourcesMap): T {
   svgObjCollection.children
     .map((svgObject: Artboard): void => {
-      let node: Element;
+      let node: SVGElement;
 
       switch (svgObject.type) {
         case 'shape':
@@ -139,7 +139,7 @@ export function createElem<T extends Element>(svgObjCollection: { children: Artb
           break;
 
         case 'group':
-          node = createNativeSvgElement('g');
+          node = createElement('g');
           createElem(svgObject.group, node, resources);
           break;
 
@@ -168,14 +168,4 @@ export function createElem<T extends Element>(svgObjCollection: { children: Artb
     });
 
   return parentElement;
-}
-
-function createNativeSvgElement(tagName: string, attrs: {} = {}): SVGElement {
-  const svgElement = document.createElementNS('http://www.w3.org/2000/svg', tagName);
-
-  Object.keys(attrs).map((attr: string) => {
-    svgElement.setAttribute(attr, attrs[attr]);
-  });
-
-  return svgElement;
 }

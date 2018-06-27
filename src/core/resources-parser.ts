@@ -9,8 +9,9 @@
 import { readFileSync } from 'fs';
 import { createElem } from './artboard-converter';
 import { ArtboardInfo, Directory, Resources } from './models';
+import { Color } from './styles/models';
 import { colorTransformer } from './utils/color-transformer';
-import { document } from './utils/global-namespace';
+import { createElement } from './utils/create-element';
 
 export function resourcesParser(directory: Directory): Resources {
   const json = readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
@@ -45,7 +46,7 @@ function buildArtboardsInfo(artboards: { [id: string]: any }): { [name: string]:
 }
 
 function buildGradients(gradients): string {
-  const defs: Element = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  const defs: SVGDefsElement = createElement('defs');
 
   const gradientsId: string[] = Object.keys(gradients);
 
@@ -62,17 +63,14 @@ function buildGradients(gradients): string {
   return defs.innerHTML;
 }
 
-function buildElement(gradient: { [key: string]: any }, gradientId: string): Element {
-  const currentGradient = document.createElementNS('http://www.w3.org/2000/svg', gradient.type + 'Gradient');
-  currentGradient.setAttribute('id', gradientId);
+function buildElement({type, stops}, gradientId: string): Element {
+  const currentGradient = createElement(type === 'linear' ? 'lineargradient' : 'radialgradient', {id: gradientId});
 
-  const stops = gradient.stops;
-
-  stops.forEach((stop) => {
-    const elem = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-
-    elem.setAttribute('offset', stop.offset);
-    elem.setAttribute('stop-color', colorTransformer(stop.color));
+  stops.forEach((stop: { offset: string, color: Color }) => {
+    const elem = createElement('stop', {
+      'offset': stop.offset,
+      'stop-color': colorTransformer(stop.color),
+    });
 
     currentGradient.appendChild(elem);
   });
@@ -85,7 +83,7 @@ function buildClipPaths(clipPaths: any): string {
 
   Object.keys(clipPaths).forEach((clipPathId: string) => {
     const clipPath = clipPaths[clipPathId];
-    const clipPathElement = createElem(clipPath, document.createElementNS('http://www.w3.org/2000/svg', 'clipPath'), null);
+    const clipPathElement = createElem(clipPath, createElement('clippath'), null);
 
     clipPathElement.setAttribute('id', clipPathId);
 
