@@ -37,11 +37,10 @@ async function openFile(inputFile): Promise<SynchrounousResult> {
 
 async function promiseAllObject(svg: Dictionary<string>, isHtml): Promise<Dictionary<string>> {
   const keys = Object.keys(svg);
-  const values: Array<Promise<string>> =
-    Object.values(svg).map((value: string) => prepareAndOptimizeSvg(value, isHtml));
+  const values = await Promise.all(Object.values(svg).map((value: string) => prepareAndOptimizeSvg(value, isHtml)));
 
-  return await keys.reduce(async (obj, key, index) => {
-    obj[key] = await values[index];
+  return keys.reduce((obj, key, index) => {
+    obj[key] = values[index];
 
     return obj;
   }, {});
