@@ -8,7 +8,7 @@
 
 export * from './artboard';
 export * from './artboard-info';
-export * from './artboard-map';
+export * from './dictionary';
 export * from './directory';
 export * from './manifest-parser';
 export * from './resources';

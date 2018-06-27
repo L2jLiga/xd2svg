@@ -7,8 +7,7 @@
  */
 
 import { existsSync, mkdirSync, writeFile } from 'fs';
-import { CliOptions } from './cli/models';
-import { ArtboardMap } from './core/models';
+import { CliOptions, OutputFormat } from './cli/models';
 import { xd2svg } from './xd2svg';
 
 const inputFileName: string = process.argv[2];
@@ -54,7 +53,7 @@ if (inputFileName) {
   console.log(`Proceed file %s with options\n%O`, inputFileName, options);
 
   xd2svg(inputFileName, options)
-    .then((svgImages: string | ArtboardMap) => {
+    .then((svgImages: OutputFormat) => {
       const path: string[] = options.output.split('/');
       if (options.single) path.pop();
 

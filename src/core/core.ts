@@ -7,9 +7,10 @@
  */
 
 import { readFileSync } from 'fs';
+import { OutputFormat } from '../cli/models';
 import { artboardConverter } from './artboard-converter';
 import { manifestParser } from './manifest-parser';
-import { Artboard, ArtboardMap, Directory, Resources } from './models';
+import { Artboard, Dictionary, Directory, Resources } from './models';
 import { resourcesParser } from './resources-parser';
 import { svgo } from './svgo';
 
@@ -21,13 +22,13 @@ export interface InjectableSvgData {
   clipPaths: string;
 }
 
-export function proceedFile(directory: Directory, single: boolean): string | ArtboardMap {
+export function proceedFile(directory: Directory, single: boolean): OutputFormat {
   const dimensions: { width: number, height: number } = {width: 0, height: 0};
 
   const manifestInfo = manifestParser(directory);
   const resourcesInfo: Resources = resourcesParser(directory);
 
-  const convertedArtboards: ArtboardMap = {};
+  const convertedArtboards: Dictionary<string> = {};
 
   manifestInfo.artboards.forEach((artboardItem: any) => {
     const json = readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
