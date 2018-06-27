@@ -16,12 +16,13 @@
     "url": "https://github.com/L2jLiga/xd2svg/issues"
   },
   "license": "MIT",
-  "author": "L2jLiga",
+  "author": "Andrey Chalkin <L2jLiga@gmail.com> (https://t.me/L2jLiga)",
   "files": [
     "bin",
     "dist"
   ],
   "main": "dist/xd2svg.js",
+  "man": ["./man/xd2svg.1", "./man/cli.1"],
   "bin": {
     "xd2svg-cli": "bin/xd2svg-cli"
   },

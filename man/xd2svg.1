@@ -1,0 +1,46 @@
+.\" Manpage for xd2svg.
+.\" Contact L2jLiga@gmail.com to correct errors or typos.
+.TH xd2svg 1 "27 Jun 2018" "0.7.0" "xd2svg man page"
+.SH NAME
+xd2svg - convert xd file to svg or html
+.SH SYNOPSIS
+.B xd2svg
+.B InputFileName.xd
+[
+.BI "\fB\-\-format\fR=" "svg"
+]
+[
+.BI "\fB\-\-output\fR=" "OutputFileName.svg"
+]
+[
+.BI "\fB\-\-signle\fR=" "true"
+]
+.SH DESCRIPTION
+.B xd2svg
+is utility for converting Adobe XD files (*.xd) to SVG or HTML
+.SH OPTIONS
+
+.TP
+.BI "\fB\-\-format\fR=" "format"
+Set output format, possible values: \fIsvg, \fIhtml. \fRThe default format is \fBsvg.
+
+.TP
+.BI "\fB\-\-output\fR=" "destination"
+Set the output filename/directory to
+.IR destination .
+The default destination path is specified by the input file name.
+
+.TP
+.BI "\fB\-\-single\fR=" "boolean"
+.R Specify does output should be single file with all artboards or directory with separated each other.
+.R The default value is \fBtrue.
+
+.SH BUGS
+List of bugs can be found at https://github.com/L2jLiga/xd2svg/issues
+.SH VERSION
+0.7.0
+.SH AUTHOR
+Andrey Chalkin (L2jLiga@gmail.com)
+.SH COPYRIGHT
+Copyright (C) 2017-2018 Andrey Chalkin <L2jLiga>.
+
