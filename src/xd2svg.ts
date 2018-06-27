@@ -47,7 +47,7 @@ async function promiseAllObject(svg: Dictionary<string>, isHtml): Promise<Dictio
   }, {});
 }
 
-function prepareAndOptimizeSvg(svg: string, isHtml: boolean): Promise<string> {
-  return optimizeSvg(svg)
+async function prepareAndOptimizeSvg(svg: string, isHtml: boolean): Promise<string> {
+  return await optimizeSvg(svg)
     .then((result: string) => Promise.resolve(isHtml ? injectHtml(result) : result));
 }

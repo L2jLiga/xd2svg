@@ -51,9 +51,9 @@ You can use utility from CLI
    xd2svg-cli InputFile.xd [options]
    
      options:
-       --output - specify output path (default FileName directory or FileName.svg)
-       --format - specify output format: svg, html (default: svg)
-       --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
+       -o, --output - specify output path (default FileName directory or FileName.svg)
+       -f, --format - specify output format: svg, html (default: svg)
+       -s, --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
    ```
 
 Or in your project

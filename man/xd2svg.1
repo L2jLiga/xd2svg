@@ -7,13 +7,13 @@ xd2svg - convert xd file to svg or html
 .B xd2svg
 .B InputFileName.xd
 [
-.BI "\fB\-\-format\fR=" "svg"
+.BI "\fB-f\fR, \fB\-\-format\fR=" "svg"
 ]
 [
-.BI "\fB\-\-output\fR=" "OutputFileName.svg"
+.BI "\fB-o\fR, \fB\-\-output\fR=" "OutputFileName.svg"
 ]
 [
-.BI "\fB\-\-signle\fR=" "true"
+.BI "\fB-s\fR, \fB\-\-signle\fR=" "true"
 ]
 .SH DESCRIPTION
 .B xd2svg
@@ -21,17 +21,17 @@ is utility for converting Adobe XD files (*.xd) to SVG or HTML
 .SH OPTIONS
 
 .TP
-.BI "\fB\-\-format\fR=" "format"
+.BI "\fB-f\fR, \fB\-\-format\fR=" "format"
 Set output format, possible values: \fIsvg, \fIhtml. \fRThe default format is \fBsvg.
 
 .TP
-.BI "\fB\-\-output\fR=" "destination"
+.BI "\fB-o\fR, \fB\-\-output\fR=" "destination"
 Set the output filename/directory to
 .IR destination .
 The default destination path is specified by the input file name.
 
 .TP
-.BI "\fB\-\-single\fR=" "boolean"
+.BI "\fB-s\fR, \fB\-\-single\fR=" "boolean"
 .R Specify does output should be single file with all artboards or directory with separated each other.
 .R The default value is \fBtrue.
 
