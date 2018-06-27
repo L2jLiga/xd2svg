@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1]
+### Added
+- Man file
+
+### Changed
+- Updated deps
+- Improved typing (usefull if you use package in your project)
+- Improved performance
+
 ## [0.7.0]
 ### Added
 - HEX color support
@@ -208,7 +217,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add Artboard parser
 
-[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/L2jLiga/xd2svg/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/L2jLiga/xd2svg/compare/v0.6.3...v0.7.0
 [0.6.3]: https://github.com/L2jLiga/xd2svg/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/L2jLiga/xd2svg/compare/v0.6.1...v0.6.2

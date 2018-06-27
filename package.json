@@ -1,6 +1,6 @@
 {
   "name": "xd2svg",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Utility for converting Adobe XD files (*.xd) to SVG",
   "keywords": [
     "svg",
@@ -22,7 +22,10 @@
     "dist"
   ],
   "main": "dist/xd2svg.js",
-  "man": ["./man/xd2svg.1", "./man/cli.1"],
+  "man": [
+    "./man/xd2svg.1",
+    "./man/cli.1"
+  ],
   "bin": {
     "xd2svg-cli": "bin/xd2svg-cli"
   },
