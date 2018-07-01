@@ -9,7 +9,9 @@
 import { document } from './global-namespace';
 
 export function createElement<K extends keyof SVGElementTagNameMap>(tagName: K, attrs?: {}): SVGElementTagNameMap[K];
+export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, attrs?: {}): HTMLElementTagNameMap[K];
 export function createElement(tagName: string, attrs?: {}): SVGElement;
+
 export function createElement<K extends keyof SVGElementTagNameMap>(tagName: K, attrs: {} = {}): SVGElementTagNameMap[K] {
   const svgElement = document.createElementNS('http://www.w3.org/2000/svg', tagName);
 

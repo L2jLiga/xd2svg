@@ -11,10 +11,8 @@ import { Artboard, ArtboardInfo, Line, Paragraph, ResourcesMap, Shape, Text } fr
 import { createElement }                                                      from './utils/create-element';
 
 export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
-  const svgImages: string[] = [];
-
-  artboardsRoot.children
-    .map((imageRootObject: Artboard): void => {
+  return artboardsRoot.children
+    .map((imageRootObject: Artboard): string => {
       const svg = createElement('svg', {
         'enable-background': `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
         'id': imageRootObject.id,
@@ -37,10 +35,8 @@ export function artboardConverter(artboardsRoot: Artboard, artboardInfo: Artboar
       });
       svg.appendChild(backGround);
 
-      svgImages.push(createElem(imageRootObject.artboard, svg, resources).outerHTML);
+      return createElem(imageRootObject.artboard, svg, resources).outerHTML;
     });
-
-  return svgImages;
 }
 
 function createShape(srcObj: Shape, resources: ResourcesMap) {
