@@ -24,6 +24,6 @@ export function colorTransformer(color: Color = {}): string {
     default:
       return '#' + color.value ?
         color.value.toString(16)
-      : 'fff';
+        : 'fff';
   }
 }

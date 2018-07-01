@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { createStyles } from './create-styles';
+import { createStyles }                                                       from './create-styles';
 import { Artboard, ArtboardInfo, Line, Paragraph, ResourcesMap, Shape, Text } from './models';
-import { createElement } from './utils/create-element';
+import { createElement }                                                      from './utils/create-element';
 
 export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo, resources: { [path: string]: string }): string[] {
   const svgImages: string[] = [];

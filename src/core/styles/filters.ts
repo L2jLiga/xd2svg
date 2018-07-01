@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { camelToDash } from '../utils/camel-to-dash';
+import { camelToDash }      from '../utils/camel-to-dash';
 import { colorTransformer } from '../utils/color-transformer';
-import { createElement } from '../utils/create-element';
-import { Parser } from './models';
+import { createElement }    from '../utils/create-element';
+import { Parser }           from './models';
 
 export const filters: Parser = {
   name: 'filter',

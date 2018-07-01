@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { colorTransformer } from '../utils/color-transformer';
-import { createElement } from '../utils/create-element';
+import { colorTransformer }      from '../utils/color-transformer';
+import { createElement }         from '../utils/create-element';
 import { Fill, Parser, Pattern } from './models';
 
 export const fill: Parser = {

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { fillParser } from './fill';
+import { fillParser }     from './fill';
 import { Parser, Stroke } from './models';
 
 export const stroke: Parser = {

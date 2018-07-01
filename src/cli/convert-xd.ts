@@ -7,8 +7,8 @@
  */
 
 import { existsSync, mkdirSync, writeFile } from 'fs';
-import { xd2svg } from '../xd2svg';
-import { CliOptions, OutputFormat } from './models';
+import { xd2svg }                           from '../xd2svg';
+import { CliOptions, OutputFormat }         from './models';
 
 export async function convertXd(input: string, options: CliOptions): Promise<void> {
   const svgImages: OutputFormat = await xd2svg(process.argv[2], options);

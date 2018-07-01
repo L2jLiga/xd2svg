@@ -6,13 +6,13 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { clipPath } from './clip-path';
-import { fill } from './fill';
-import { filters } from './filters';
-import { font } from './font';
-import { Parser } from './models';
-import { opacity } from './opacity';
-import { stroke } from './stroke';
+import { clipPath }       from './clip-path';
+import { fill }           from './fill';
+import { filters }        from './filters';
+import { font }           from './font';
+import { Parser }         from './models';
+import { opacity }        from './opacity';
+import { stroke }         from './stroke';
 import { textAttributes } from './text-attributes';
 
 const parsers: { [parser: string]: Parser } = {

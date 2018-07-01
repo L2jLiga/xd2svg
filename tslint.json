@@ -37,7 +37,8 @@
       "array-simple"
     ],
     "radix": false,
-    "prefer-for-of": false
+    "prefer-for-of": false,
+    "import-spacing": false
   },
   "rulesDirectory": []
 }

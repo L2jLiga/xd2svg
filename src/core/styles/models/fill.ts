@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Color } from './color';
+import { Color }   from './color';
 import { Pattern } from './pattern';
 
 export interface Fill {

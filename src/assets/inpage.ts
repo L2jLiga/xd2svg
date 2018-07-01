@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { helpTemplate } from './help-template';
+import { helpTemplate }                     from './help-template';
 import { CachedStyles, Loupe, Rule, State } from './models';
 
 function gridlyRules(): HTMLDivElement {
@@ -476,7 +476,7 @@ function refreshRules() {
   rowsBox.style.top = oy + 'px';
 }
 
-function diffLabels(rule1: Rule, rule2: Rule, rulesList: {[key: number]: Rule}) {
+function diffLabels(rule1: Rule, rule2: Rule, rulesList: { [key: number]: Rule }) {
   const keys = [rule1.p, rule2.p];
   for (const key in rulesList) {
     if (!rulesList.hasOwnProperty(key)) {

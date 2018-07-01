@@ -6,13 +6,13 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { readFileSync } from 'fs';
-import { OutputFormat } from '../cli/models';
-import { artboardConverter } from './artboard-converter';
-import { manifestParser } from './manifest-parser';
+import { readFileSync }                               from 'fs';
+import { OutputFormat }                               from '../cli/models';
+import { artboardConverter }                          from './artboard-converter';
+import { manifestParser }                             from './manifest-parser';
 import { Artboard, Dictionary, Directory, Resources } from './models';
-import { resourcesParser } from './resources-parser';
-import { svgo } from './svgo';
+import { resourcesParser }                            from './resources-parser';
+import { svgo }                                       from './svgo';
 
 export interface InjectableSvgData {
   rootWidth: number;

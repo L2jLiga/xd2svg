@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { readFileSync } from 'fs';
+import { readFileSync }                                       from 'fs';
 import { Directory, ManifestFile, RawResource, ResourcesMap } from './models';
 
 export function manifestParser(directory: Directory) {

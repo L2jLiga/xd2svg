@@ -7,7 +7,7 @@
  */
 
 import { Shape } from './shape';
-import { Text } from './text';
+import { Text }  from './text';
 
 export interface CommonArtboard {
   id: string;
