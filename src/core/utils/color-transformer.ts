@@ -22,8 +22,8 @@ export function colorTransformer(color: Color = {}): string {
         return 'hsl(' + color.value.h + ',' + color.value.s + ',' + color.value.l + ')';
       }
     default:
-      return '#' + color.value ?
+      return '#' + (color.value ?
         color.value.toString(16)
-        : 'fff';
+        : 'fff');
   }
 }

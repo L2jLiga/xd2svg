@@ -96,7 +96,7 @@ function createText(srcObj: Text) {
   srcObj.paragraphs.map((paragraph: Paragraph) => {
     paragraph.lines.map((line: Line[]) => {
       line.map((linePart: Line) => {
-        const element: SVGElement = createElement('tspan');
+        const element: SVGTSpanElement = createElement('tspan');
 
         element.innerHTML = rawText.substring(linePart.from, linePart.to);
 

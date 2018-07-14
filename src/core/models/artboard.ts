@@ -10,7 +10,7 @@ import { Shape } from './shape';
 import { Text }  from './text';
 
 export interface CommonArtboard {
-  id: string;
+  id?: string;
   name?: string;
   type: string;
   children: Artboard[];
