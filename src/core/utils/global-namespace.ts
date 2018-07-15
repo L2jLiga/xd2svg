@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { JSDOM } from 'jsdom';
+import { DOMWindow, JSDOM } from 'jsdom';
 
 export const context = new JSDOM();
-export const window: Window = context.window;
+export const window: DOMWindow = context.window;
 export const document: Document = window.document;

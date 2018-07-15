@@ -14,7 +14,8 @@
       "dom"
     ],
     "types": [
-      "node"
+      "node",
+      "mocha"
     ],
     "target": "es2017",
     "typeRoots": [

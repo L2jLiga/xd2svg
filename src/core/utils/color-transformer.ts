@@ -11,18 +11,18 @@ import { Color } from '../styles/models';
 export function colorTransformer(color: Color = {}): string {
   switch (color.mode) {
     case 'RGB':
-      const rgb = `${color.value.r}, ${color.value.g}, ${color.value.b}`;
+      const rgb = `${color.value.r},${color.value.g},${color.value.b}`;
 
       if (color.alpha) {
-        return `rgba(${rgb}, ${color.alpha})`;
+        return `rgba(${rgb},${color.alpha})`;
       } else {
         return `rgb(${rgb})`;
       }
     case 'HSL':
-      const hsl = `${color.value.h}, ${color.value.s}, ${color.value.l}`;
+      const hsl = `${color.value.h},${color.value.s},${color.value.l}`;
 
       if (color.alpha) {
-        return `hsla(${hsl}, ${color.alpha})`;
+        return `hsla(${hsl},${color.alpha})`;
       } else {
         return `hsl(${hsl})`;
       }

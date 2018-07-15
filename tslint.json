@@ -3,7 +3,6 @@
   "extends": [
     "tslint:recommended"
   ],
-  "jsRules": {},
   "rules": {
     "max-line-length": {
       "options": [
@@ -40,5 +39,11 @@
     "prefer-for-of": false,
     "import-spacing": false
   },
-  "rulesDirectory": []
+  "rulesDirectory": [],
+  "object-literal-sort-keys": [
+    true,
+    "ignore-case",
+    "match-declaration-order",
+    "shorthand-first"
+  ]
 }

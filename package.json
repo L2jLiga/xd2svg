@@ -20,7 +20,8 @@
   "directories": {
     "bin": "./bin",
     "lib": "./lib",
-    "man": "./man"
+    "man": "./man",
+    "test": "./test"
   },
   "files": [
     "bin",
@@ -45,6 +46,7 @@
     "build:core": "tsc -p tsconfig.core.json",
     "clean": "rimraf lib",
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
+    "test": "mocha --require ts-node/register 'test/**/*.spec.ts'",
     "prepublish": "npm run lint && npm run clean && npm run build"
   },
   "dependencies": {
@@ -54,12 +56,16 @@
     "tmp": "0.0.33"
   },
   "devDependencies": {
+    "@types/chai": "4.1.4",
     "@types/extract-zip": "1.6.2",
     "@types/jsdom": "11.0.6",
+    "@types/mocha": "5.2.4",
     "@types/node": "8.10.20",
     "@types/svgo": "1.0.1",
     "@types/tmp": "0.0.33",
+    "chai": "4.1.2",
     "copy-webpack-plugin": "4.5.2",
+    "mocha": "5.2.0",
     "rimraf": "2.6.2",
     "ts-loader": "4.4.2",
     "ts-node": "7.0.0",
