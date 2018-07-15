@@ -7,6 +7,7 @@
  */
 
 import { clipPath }       from './clip-path';
+import { display }        from './display';
 import { fill }           from './fill';
 import { filters }        from './filters';
 import { font }           from './font';
@@ -17,6 +18,7 @@ import { textAttributes } from './text-attributes';
 
 const parsers: { [parser: string]: Parser } = {
   clipPath,
+  display,
   fill,
   filters,
   font,

@@ -22,9 +22,9 @@ export function fillParser(src: Fill, parentElement: Element, uuid: string, reso
     case 'gradient':
       return `url(#${src.gradient.ref})`;
     case 'pattern':
-      parentElement.appendChild(createPattern(uuid, resources, src.pattern));
+      parentElement.appendChild(createPattern(src.pattern, resources));
 
-      return `url(#${uuid})`;
+      return `url(#${src.pattern.meta.ux.uid})`;
     case 'none':
       return 'none';
     default:
@@ -32,10 +32,10 @@ export function fillParser(src: Fill, parentElement: Element, uuid: string, reso
   }
 }
 
-function createPattern(uuid: string, resources: any, patternObject: Pattern): SVGPatternElement {
+function createPattern(patternObject: Pattern, resources: any): SVGPatternElement {
   const pattern: SVGPatternElement = createElement('pattern', {
     height: '1',
-    id: uuid,
+    id: patternObject.meta.ux.uid,
     width: '1',
     x: '0',
     y: '0',

@@ -152,6 +152,10 @@ export function createElem<T extends SVGElement>(svgObjCollection: { children: A
         node.setAttribute('name', svgObject.name);
       }
 
+      if (svgObject.visible === false) {
+        svgObject.style ? svgObject.style.display = 'none' : svgObject.style = {display: 'none'};
+      }
+
       if (svgObject.style) {
         node.setAttribute('style', createStyles(svgObject.style, parentElement, svgObject.id, resources));
       }

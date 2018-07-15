@@ -15,6 +15,7 @@ export interface CommonArtboard {
   type: string;
   children: Artboard[];
   artboard?: Artboard;
+  visible?: boolean;
   style: { [style: string]: any };
   transform: { [transform: string]: any };
 }
