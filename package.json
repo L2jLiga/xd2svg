@@ -42,13 +42,13 @@
     "url": "https://github.com/L2jLiga/xd2svg.git"
   },
   "scripts": {
-    "build": "npm run build:core && npm run build:browser",
+    "build": "yarn run build:core && yarn run build:browser",
     "build:browser": "webpack",
     "build:core": "tsc -p tsconfig.core.json",
     "clean": "rimraf lib",
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
     "test": "mocha --require ts-node/register 'test/**/*.spec.ts'",
-    "prepublish": "npm run lint && npm run clean && npm run build"
+    "prepublish": "yarn run lint && yarn run clean && yarn run build"
   },
   "dependencies": {
     "extract-zip": "1.6.7",
