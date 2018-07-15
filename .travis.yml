@@ -2,7 +2,7 @@ os:
   - linux
   - osx
 sudo: false
-language: node_js
+language: cpp
 env:
   matrix:
     - TRAVIS_NODE_VERSION="8"
