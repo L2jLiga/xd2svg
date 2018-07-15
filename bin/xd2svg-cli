@@ -10,4 +10,4 @@
 
 process.title = 'xd2svg';
 
-require('../dist/cli.js');
+require('../lib/cli.js');

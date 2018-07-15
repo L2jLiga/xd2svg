@@ -10,9 +10,10 @@ package-lock.json
 *.xd
 *.html
 
-# JetBrains IDE
+# IDE
+.config/
 .idea/
 
 # Dist
-dist/
+lib/
 node_modules/

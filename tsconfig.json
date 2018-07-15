@@ -7,7 +7,7 @@
     "noUnusedParameters": false,
     "noUnusedLocals": false,
     "removeComments": true,
-    "outDir": "dist",
+    "outDir": "lib",
     "baseUrl": "src",
     "lib": [
       "es2017",

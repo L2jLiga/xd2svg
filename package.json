@@ -1,6 +1,6 @@
 {
   "name": "xd2svg",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Utility for converting Adobe XD files (*.xd) to SVG",
   "keywords": [
     "svg",
@@ -17,12 +17,17 @@
   },
   "license": "MIT",
   "author": "Andrey Chalkin <L2jLiga@gmail.com> (https://t.me/L2jLiga)",
+  "directories": {
+    "bin": "./bin",
+    "lib": "./lib",
+    "man": "./man"
+  },
   "files": [
     "bin",
-    "dist",
+    "lib",
     "man"
   ],
-  "main": "dist/xd2svg.js",
+  "main": "lib/xd2svg.js",
   "man": [
     "./man/xd2svg.1",
     "./man/cli.1"
@@ -38,7 +43,7 @@
     "build": "npm run build:core && npm run build:browser",
     "build:browser": "webpack",
     "build:core": "tsc -p tsconfig.core.json",
-    "clean": "rimraf dist",
+    "clean": "rimraf lib",
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
     "prepublish": "npm run lint && npm run clean && npm run build"
   },
