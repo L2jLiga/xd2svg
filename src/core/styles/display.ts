@@ -10,9 +10,5 @@ import { Parser } from './models';
 
 export const display: Parser = {
   name: 'display',
-  parse: displayParser,
+  parse: (src) => src,
 };
-
-function displayParser(src: string): string {
-  return src;
-}
