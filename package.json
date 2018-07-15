@@ -19,7 +19,8 @@
   "author": "Andrey Chalkin <L2jLiga@gmail.com> (https://t.me/L2jLiga)",
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "man"
   ],
   "main": "dist/xd2svg.js",
   "man": [
