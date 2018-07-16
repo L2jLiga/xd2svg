@@ -56,57 +56,15 @@ You can use utility from CLI
        -s, --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
    ```
 
-Or in your project
-   - You can provide path to file which you want to convert
-   ```js
-   const fs = require('fs');
-   const { xd2svg } = require('xd2svg');
-
-   const inputFileName = 'myFile.xd';
-   const options = {
-     format: 'html',
-     single: true
-   };
-
-   xd2svg(inputFileName, options)
-     .then((result) => fs.writeFile('outputFile.html', result));
-   ```
-
-   - Also you can provide directory with extracted file
-   ```js
-   const extract = require('extract-zip');
-   const { writeFile } = require('fs');
-   const { dirSync } = require('tmp');
-   const { promisify } = require('util');
-   const { xd2svg } = require('xd2svg');
-
-   prepareSvg('myFile.xd');
-
-   async function prepareSvg(inputFileName) {
-     const directory = dirSync();
-     /***
-      * example of directory
-      *  {
-      *    name: "/path/to/directory/with/extracted/file",
-      *    removeCallback(): console.log('Optional callback which was executed when convertation finished')
-      *  }
-      */
-
-     await promisify(extract)(inputFileName);
-
-     const preparedSvgs = xd2svg(directory, {
-       format: 'svg',
-       single: false
-     });
-
-     Object
-       .keys(preparedSvgs)
-       .map((key) => writeFile(`${key}.svg`, preparedSvgs[key]));
-   }
-   ```
+Or [import package into your project](example)
 
 ## Contributing
 Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+*TL;DR*
+
+- Don't duplicate issues
+- PR's are welcome!
 
 ## Versioning
 We use [SemVer](http://semver.org/spec/v2.0.0.html) for versioning.

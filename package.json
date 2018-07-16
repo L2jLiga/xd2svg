@@ -19,6 +19,7 @@
   "author": "Andrey Chalkin <L2jLiga@gmail.com> (https://t.me/L2jLiga)",
   "directories": {
     "bin": "./bin",
+    "example": "./example",
     "lib": "./lib",
     "man": "./man",
     "test": "./test"

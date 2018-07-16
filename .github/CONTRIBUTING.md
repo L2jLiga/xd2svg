@@ -44,13 +44,4 @@
    ```
 
 ### Coding conventions
-The code must pass the eslint check, used rules:
-
-Basic
-   + eslint:recommend
-   + eslint-config-nodejs
-   + eslint-config-google
-
-Custom
-   + Maximal line length = 160
-   + Allow to use `console`
+   tslint should pass w/o errors
