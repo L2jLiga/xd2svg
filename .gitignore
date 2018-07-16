@@ -17,3 +17,7 @@ package-lock.json
 # Dist
 lib/
 node_modules/
+
+# Coverages
+.nyc_output/
+coverage/

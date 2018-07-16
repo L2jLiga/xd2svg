@@ -9,6 +9,9 @@ node_js:
   - "10"
 cache: yarn
 script:
+  - yarn add codecov --dev
   - yarn lint
   - yarn build
-  - yarn test
+  - yarn test:coverage
+after_success:
+  - ./node_modules/.bin/codecov
