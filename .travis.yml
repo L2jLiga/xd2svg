@@ -7,3 +7,8 @@ node_js:
   - "8"
   - "9"
   - "10"
+cache: yarn
+script:
+  - yarn lint
+  - yarn build
+  - yarn test
