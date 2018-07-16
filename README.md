@@ -4,6 +4,7 @@
 [![node](https://img.shields.io/node/v/xd2svg.svg?colorB=brightgreen)](https://www.npmjs.com/package/xd2svg)
 [![Dependency Status](https://img.shields.io/david/L2jLiga/xd2svg.svg)](https://david-dm.org/L2jLiga/xd2svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![codecov](https://codecov.io/gh/L2jLiga/xd2svg/branch/master/graph/badge.svg)](https://codecov.io/gh/L2jLiga/xd2svg)
 
 Utility for converting Adobe eXperience Design files into SVG.
 
