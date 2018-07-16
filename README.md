@@ -61,6 +61,11 @@ Or [import package into your project](example)
 ## Contributing
 Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
+*TL;DR*
+
+- Don't duplicate issues
+- PR's are welcome!
+
 ## Versioning
 We use [SemVer](http://semver.org/spec/v2.0.0.html) for versioning.
 For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
