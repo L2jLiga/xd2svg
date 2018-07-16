@@ -42,13 +42,15 @@
     "url": "https://github.com/L2jLiga/xd2svg.git"
   },
   "scripts": {
-    "build": "npm run build:core && npm run build:browser",
+    "build": "yarn run build:core && yarn run build:browser",
     "build:browser": "webpack",
     "build:core": "tsc -p tsconfig.core.json",
     "clean": "rimraf lib",
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
-    "test": "mocha --require ts-node/register 'test/**/*.spec.ts'",
-    "prepublish": "npm run lint && npm run clean && npm run build"
+    "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json mocha --require ts-node/register 'test/**/*.spec.ts'",
+    "test:coverage": "nyc yarn test",
+    "test:watch": "yarn test --watch-extensions ts --watch",
+    "prepublish": "yarn run lint && yarn test && yarn run clean && yarn run build"
   },
   "dependencies": {
     "extract-zip": "1.6.7",
@@ -66,7 +68,9 @@
     "@types/tmp": "0.0.33",
     "chai": "4.1.2",
     "copy-webpack-plugin": "4.5.2",
+    "cross-env": "5.2.0",
     "mocha": "5.2.0",
+    "nyc": "12.0.2",
     "rimraf": "2.6.2",
     "ts-loader": "4.4.2",
     "ts-node": "7.0.0",
@@ -77,6 +81,18 @@
   },
   "engines": {
     "node": ">= 8.6.0"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "reporter": [
+      "lcov"
+    ]
   },
   "preferGlobal": true
 }

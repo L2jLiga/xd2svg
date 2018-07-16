@@ -22,7 +22,7 @@ const fontWeightVariants = {
 export const font: Parser = {parse: fontParser};
 
 function fontParser(src: Font) {
-  const cssArr: string[] = [''];
+  const cssArr: string[] = [];
   const fontFamilies: string[] = [];
   const fontStyle = fontWeightVariants[src.style];
 
@@ -31,8 +31,6 @@ function fontParser(src: Font) {
   if (fontFamilies.length) cssArr.push(`font-family: ${fontFamilies.join(', ')}`);
   if (fontStyle) cssArr.push(`font-weight: ${fontStyle}`);
   if (src.size) cssArr.push(`font-size: ${src.size}px`);
-
-  cssArr.push('');
 
   return cssArr.join(';');
 }

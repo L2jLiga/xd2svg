@@ -15,5 +15,6 @@ export const stroke: Parser = {
 };
 
 function strokeParser(src: Stroke, parentElement, uuid, resources) {
-  return fillParser(src, parentElement, uuid, resources) + `;stroke-width:${src.width}px`;
+  const strokeStyle = fillParser(src, parentElement, uuid, resources);
+  return strokeStyle + (src.width ? `;stroke-width:${src.width}px` : '');
 }
