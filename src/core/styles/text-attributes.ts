@@ -15,11 +15,11 @@ export const textAttributes: Parser = {
 function textAttributesParser(src: TextAttributes): string {
   const textAttrsStyles: string[] = [];
 
-  if (src.lineHeight) textAttrsStyles.push(`;line-height: ${src.lineHeight}px`);
+  if (src.lineHeight) textAttrsStyles.push(`line-height: ${src.lineHeight}px`);
 
-  if (src.paragraphAlign) textAttrsStyles.push(`;text-align: ${src.paragraphAlign}`);
+  if (src.paragraphAlign) textAttrsStyles.push(`text-align: ${src.paragraphAlign}`);
 
-  if (src.letterSpacing) textAttrsStyles.push(`;letter-spacing: ${src.letterSpacing / 1000}em`);
+  if (src.letterSpacing) textAttrsStyles.push(`letter-spacing: ${src.letterSpacing / 1000}em`);
 
   return textAttrsStyles.join(';');
 }
