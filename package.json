@@ -87,6 +87,9 @@
     "include": [
       "src/**/*.ts"
     ],
+    "exclude": [
+      "**/models/**"
+    ],
     "extension": [
       ".ts"
     ],
