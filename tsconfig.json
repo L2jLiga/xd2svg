@@ -14,12 +14,14 @@
       "dom"
     ],
     "types": [
-      "node",
-      "mocha"
+      "node"
     ],
     "target": "es2017",
     "typeRoots": [
       "node_modules/@types"
     ]
-  }
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
 }
