@@ -31,7 +31,7 @@ describe('Core > Create styles', () => {
 
     if (parsersSpy.callCount) {
       done();
-      
+
       return;
     }
 

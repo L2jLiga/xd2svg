@@ -48,23 +48,17 @@ function buildArtboardsInfo(artboards: { [id: string]: any }): { [name: string]:
 function buildGradients(gradients): string {
   const defs: SVGDefsElement = createElement('defs');
 
-  const gradientsId: string[] = Object.keys(gradients);
-
-  let gradientsCount: number = gradientsId.length - 1;
-
-  for (; gradientsCount >= 0; gradientsCount--) {
-    const gradientId: string = gradientsId[gradientsCount];
-
+  Object.keys(gradients).forEach((gradientId: string) => {
     const buildedElement: Element = buildElement(gradients[gradientId], gradientId);
 
     defs.appendChild(buildedElement);
-  }
+  });
 
   return defs.innerHTML;
 }
 
 function buildElement({type, stops}, gradientId: string): Element {
-  const currentGradient = createElement(type === 'linear' ? 'lineargradient' : 'radialgradient', {id: gradientId});
+  const gradient = createElement(type === 'linear' ? 'lineargradient' : 'radialgradient', {id: gradientId});
 
   stops.forEach((stop: { offset: string, color: Color }) => {
     const elem = createElement('stop', {
@@ -72,10 +66,10 @@ function buildElement({type, stops}, gradientId: string): Element {
       'stop-color': colorTransformer(stop.color),
     });
 
-    currentGradient.appendChild(elem);
+    gradient.appendChild(elem);
   });
 
-  return currentGradient;
+  return gradient;
 }
 
 function buildClipPaths(clipPaths: any): string {
