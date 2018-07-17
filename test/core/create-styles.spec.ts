@@ -31,6 +31,8 @@ describe('Core > Create styles', () => {
 
     if (parsersSpy.callCount) {
       done();
+      
+      return;
     }
 
     done('Test failed: parser wasn\'t used');
