@@ -90,8 +90,10 @@
       "src/**/*.ts"
     ],
     "exclude": [
+      "**/*.d.ts",
+      "**/assets/**",
       "**/models/**",
-      "**/*.d.ts"
+      "**/node_modules/**"
     ],
     "require": [
       "ts-node/register"
