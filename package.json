@@ -48,7 +48,7 @@
     "clean": "rimraf lib",
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
     "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json mocha --require ts-node/register 'test/**/*.spec.ts'",
-    "test:coverage": "nyc yarn test",
+    "test:coverage": "cross-env TS_NODE_PROJECT=test/tsconfig.json nyc yarn test",
     "test:watch": "yarn test --watch-extensions ts --watch",
     "prepublish": "yarn run lint && yarn test && yarn run clean && yarn run build"
   },
@@ -90,7 +90,11 @@
       "src/**/*.ts"
     ],
     "exclude": [
-      "**/models/**"
+      "**/models/**",
+      "**/*.d.ts"
+    ],
+    "require": [
+      "ts-node/register"
     ],
     "extension": [
       ".ts"
