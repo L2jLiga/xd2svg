@@ -1,0 +1,4 @@
+--require ts-node/register
+--full-trace
+--bail
+test/**/*.spec.ts
