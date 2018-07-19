@@ -6,7 +6,7 @@ const BlinkDiff = require('blink-diff');
 describe('Complex test for xd2svg', () => {
   it('should convert xd to svg', (done) => {
     xd2svg('test/test.xd', {single: true})
-      .then((svgImage: string) => convert(svgImage) as Promise<Buffer>)
+      .then((svgImage: string) => convert(svgImage, {puppeteer: {args: ['--no-sandbox']}}) as Promise<Buffer>)
       .then((converted) => {
         const diff = new BlinkDiff({
           delta: 50,
