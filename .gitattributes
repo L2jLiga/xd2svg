@@ -1,1 +1,3 @@
-* text eol=lf
+*.*     text    eol=lf
+*.xd    binary
+*.png   binary
