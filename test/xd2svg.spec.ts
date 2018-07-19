@@ -1,0 +1,34 @@
+import { convert } from 'convert-svg-to-png';
+import { xd2svg }  from '../src/xd2svg';
+
+const BlinkDiff = require('blink-diff');
+
+describe('Complex test for xd2svg', () => {
+  it('should convert xd to svg', (done) => {
+    xd2svg('test/test.xd', {single: true})
+      .then((svgImage: string) => convert(svgImage) as Promise<Buffer>)
+      .then((converted) => {
+        const diff = new BlinkDiff({
+          delta: 50,
+          hideShift: true,
+          imageAPath: 'test/preview.png',
+          imageB: converted,
+
+          threshold: .1,
+          thresholdType: BlinkDiff.THRESHOLD_PERCENT,
+        });
+
+        diff.run((error, result) => {
+          if (error) {
+            return done(error);
+          }
+
+          if (!diff.hasPassed(result.code)) {
+            return done('Too much difference!');
+          }
+
+          return done();
+        });
+      });
+  });
+});
