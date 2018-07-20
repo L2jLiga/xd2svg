@@ -2,7 +2,6 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "sourceMap": true,
-    "removeComments": false,
     "types": [
       "node",
       "mocha"

@@ -31,7 +31,7 @@ export function parseParams(): CliOptions {
     switch (arg[0]) {
       case '-f':
       case '--format':
-        options.format = /^html$/i.test(arg[1]) ? 'html' : 'svg';
+        options.format = /^jpeg$/i.test(arg[1]) ? 'jpg' : arg[1].toLocaleLowerCase() as 'png' | 'jpg' | 'svg';
         break;
 
       case '-o':

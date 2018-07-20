@@ -7,7 +7,6 @@
  */
 
 import { readFileSync }                               from 'fs';
-import { OutputFormat }                               from '../cli/models';
 import { artboardConverter }                          from './artboard-converter';
 import { manifestParser }                             from './manifest-parser';
 import { Artboard, Dictionary, Directory, Resources } from './models';
@@ -24,8 +23,8 @@ export interface InjectableSvgData {
 
 export function proceedFile(directory: Directory, single: true): string;
 export function proceedFile(directory: Directory, single: false): Dictionary<string>;
-export function proceedFile(directory: Directory, single: boolean): OutputFormat;
-export function proceedFile(directory: Directory, single: boolean): OutputFormat {
+export function proceedFile(directory: Directory, single: boolean): string | Dictionary<string>;
+export function proceedFile(directory: Directory, single: boolean): string | Dictionary<string> {
   const dimensions: { width: number, height: number } = {width: 0, height: 0};
 
   const manifestInfo = manifestParser(directory);
@@ -67,15 +66,6 @@ export function proceedFile(directory: Directory, single: boolean): OutputFormat
 export async function optimizeSvg(svgImage: string) {
   return await svgo.optimize(svgImage)
     .then((result) => result.data);
-}
-
-export function injectHtml(svg: string): string {
-  return `<!DOCTYPE html>
-<meta charset="utf-8" />
-<style>${readFileSync(`${__dirname}/../assets/inpage.css`, 'utf-8')}</style>
-${svg}
-<script>${readFileSync(`${__dirname}/../assets/inpage.js`, 'utf-8')}</script>
-`;
 }
 
 export function injectSvgResources(
