@@ -2,7 +2,7 @@ const extract = require('extract-zip');
 const { writeFile } = require('fs');
 const { dirSync } = require('tmp');
 const { promisify } = require('util');
-const { xd2svg } = require('xd2svg');
+const xd2svg = require('xd2svg');
 
 prepareSvg('myFile.xd');
 

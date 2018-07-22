@@ -25,10 +25,10 @@ interface MultipleOutput extends CliOptions {
   single: false;
 }
 
-export async function xd2svg(input: string | Directory, options: SingleOutput): Promise<string | Buffer>;
-export async function xd2svg(input: string | Directory, options: MultipleOutput): Promise<Dictionary<string | Buffer>>;
-export async function xd2svg(input: string | Directory, options: CliOptions): Promise<OutputFormat>;
-export async function xd2svg(input: string | Directory, options: CliOptions): Promise<OutputFormat> {
+export default async function xd2svg(input: string | Directory, options: SingleOutput): Promise<string | Buffer>;
+export default async function xd2svg(input: string | Directory, options: MultipleOutput): Promise<Dictionary<string | Buffer>>;
+export default async function xd2svg(input: string | Directory, options: CliOptions): Promise<OutputFormat>;
+export default async function xd2svg(input: string | Directory, options: CliOptions): Promise<OutputFormat> {
   const directory: Directory = typeof input === 'string' ?
     await openFile(input)
     : input;

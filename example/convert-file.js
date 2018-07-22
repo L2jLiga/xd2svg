@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { xd2svg } = require('xd2svg');
+const xd2svg = require('xd2svg');
 
 const inputFileName = 'myFile.xd';
 const options = {
