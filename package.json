@@ -103,7 +103,7 @@
       ".ts"
     ],
     "reporter": [
-      "lcov"
+      "lcovonly"
     ]
   },
   "preferGlobal": true
