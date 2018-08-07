@@ -29,11 +29,6 @@ export function parseParams(): CliOptions {
 
     const arg = process.argv[argIdx].split('=');
     switch (arg[0]) {
-      case '-f':
-      case '--format':
-        options.format = /^jpeg$/i.test(arg[1]) ? 'jpg' : arg[1].toLocaleLowerCase() as 'png' | 'jpg' | 'svg';
-        break;
-
       case '-o':
       case '--output':
         options.output = arg[1];

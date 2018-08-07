@@ -6,8 +6,6 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { convert as convertToJpg }     from 'convert-svg-to-jpeg';
-import { convert as convertToPng }     from 'convert-svg-to-png';
 import { Options }                     from 'extract-zip';
 import { dirSync, SynchrounousResult } from 'tmp';
 import { promisify }                   from 'util';
@@ -29,15 +27,15 @@ export default async function xd2svg(input: string | Directory, options: SingleO
 export default async function xd2svg(input: string | Directory, options: MultipleOutput): Promise<Dictionary<string | Buffer>>;
 export default async function xd2svg(input: string | Directory, options: CliOptions): Promise<OutputFormat>;
 export default async function xd2svg(input: string | Directory, options: CliOptions): Promise<OutputFormat> {
-  const directory: Directory = typeof input === 'string' ?
-    await openFile(input)
+  const directory: Directory = typeof input === 'string'
+    ? await openFile(input)
     : input;
   const svg: string | Dictionary<string> = proceedFile(directory, options.single);
 
   const optimizedSvg: OutputFormat =
     typeof svg === 'string' ?
-      await prepareAndOptimizeImage(svg, options.format)
-      : await promiseAllObject(svg, options.format);
+      await optimizeSvg(svg)
+      : await promiseAllObject(svg);
 
   if (typeof input !== 'string' && input.removeCallback) input.removeCallback();
 
@@ -55,27 +53,13 @@ async function openFile(inputFile): Promise<SynchrounousResult> {
   return directory;
 }
 
-async function promiseAllObject(svg: Dictionary<string>, format: 'svg' | 'png' | 'jpg' | 'jpeg'): Promise<Dictionary<string | Buffer>> {
+async function promiseAllObject(svg: Dictionary<string>): Promise<Dictionary<string | Buffer>> {
   const keys = Object.keys(svg);
-  const values = await Promise.all(Object.values(svg).map((value: string) => prepareAndOptimizeImage(value, format)));
+  const values = await Promise.all(Object.values(svg).map((value: string) => optimizeSvg(value)));
 
   return keys.reduce((obj, key, index) => {
     obj[key] = values[index];
 
     return obj;
   }, {});
-}
-
-async function prepareAndOptimizeImage(svg: string, format: 'svg' | 'png' | 'jpg' | 'jpeg'): Promise<string | Buffer> {
-  const optimizedSvg = await optimizeSvg(svg);
-
-  if (format === 'png') {
-    return await convertToPng(optimizedSvg, {puppeteer: {args: ['--no-sandbox']}}) as Buffer;
-  }
-
-  if (format === 'jpg' || format === 'jpeg') {
-    return await convertToJpg(optimizedSvg, {puppeteer: {args: ['--no-sandbox']}}) as Buffer;
-  }
-
-  return optimizedSvg;
 }
