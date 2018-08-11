@@ -3,9 +3,10 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "noUnusedLocals": true,
-    "removeComments": true,
     "outDir": "lib",
     "baseUrl": "src",
+    "removeComments": false,
+    "declaration": true,
     "lib": [
       "es2017",
       "dom"
@@ -18,6 +19,9 @@
       "node_modules/@types"
     ]
   },
+  "files": [
+    "src/cli.ts"
+  ],
   "include": [
     "src/**/*.ts"
   ],

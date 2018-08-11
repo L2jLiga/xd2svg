@@ -6,7 +6,4 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-export interface CachedStyles {
-  e: Element;
-  s?: CSSStyleDeclaration;
-}
+export * from './src/xd2svg';

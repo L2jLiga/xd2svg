@@ -7,7 +7,7 @@
  */
 
 export interface CliOptions {
-  format?: 'svg' | 'html';
+  format?: 'svg';
   output?: string;
   single?: boolean;
 }

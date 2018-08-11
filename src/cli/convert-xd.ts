@@ -7,7 +7,7 @@
  */
 
 import { existsSync, mkdirSync, writeFile } from 'fs';
-import { xd2svg }                           from '../xd2svg';
+import xd2svg                               from '../xd2svg';
 import { CliOptions, OutputFormat }         from './models';
 
 export async function convertXd(input: string, options: CliOptions): Promise<void> {

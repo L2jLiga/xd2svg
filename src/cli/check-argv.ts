@@ -13,7 +13,7 @@ export function checkArgv(): void {
     console.log(`Usage: xd2svg-cli InputFile.xd [options]
   options:
   -o, --output - specify output path (default FileName directory or FileName.svg)
-  -f, --format - specify output format: svg, html (default: svg)
+  -f, --format - specify output format: svg, jpg, png (default: svg)
   -s, --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
 
   For additional information: man xd2svg-cli`);
