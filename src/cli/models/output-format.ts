@@ -8,4 +8,4 @@
 
 import { Dictionary } from '../../core/models';
 
-export type OutputFormat = string | Buffer | Dictionary<string | Buffer>;
+export type OutputFormat = string | Dictionary<string>;

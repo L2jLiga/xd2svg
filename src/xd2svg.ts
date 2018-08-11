@@ -23,8 +23,8 @@ interface MultipleOutput extends CliOptions {
   single: false;
 }
 
-export default async function xd2svg(input: string | Directory, options: SingleOutput): Promise<string | Buffer>;
-export default async function xd2svg(input: string | Directory, options: MultipleOutput): Promise<Dictionary<string | Buffer>>;
+export default async function xd2svg(input: string | Directory, options: SingleOutput): Promise<string>;
+export default async function xd2svg(input: string | Directory, options: MultipleOutput): Promise<Dictionary<string>>;
 export default async function xd2svg(input: string | Directory, options: CliOptions): Promise<OutputFormat>;
 export default async function xd2svg(input: string | Directory, options: CliOptions): Promise<OutputFormat> {
   const directory: Directory = typeof input === 'string'
@@ -53,7 +53,7 @@ async function openFile(inputFile): Promise<SynchrounousResult> {
   return directory;
 }
 
-async function promiseAllObject(svg: Dictionary<string>): Promise<Dictionary<string | Buffer>> {
+async function promiseAllObject(svg: Dictionary<string>): Promise<Dictionary<string>> {
   const keys = Object.keys(svg);
   const values = await Promise.all(Object.values(svg).map((value: string) => optimizeSvg(value)));
 
