@@ -89,6 +89,8 @@
       "src/**/*.ts"
     ],
     "exclude": [
+      "**/cli.ts",
+      "**/cli/**",
       "**/*.d.ts",
       "**/*.spec.ts",
       "**/assets/**",
