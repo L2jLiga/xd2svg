@@ -23,7 +23,7 @@ function filtersParser(src: any, parentElement: Element): string {
     const filterName = filter.type.includes('#blur') ? 'blur' : camelToDash(filter.type);
     const filterParams = filter.params[filter.type + 's'] || filter.params || {};
 
-    if (!filterParams.visible) return;
+    if (filterParams.visible === false) return;
 
     switch (filterName) {
       case 'blur': {
