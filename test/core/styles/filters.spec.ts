@@ -1,5 +1,6 @@
-import { assert }  from 'chai';
-import { filters } from '../../../src/core/styles/filters';
+import { assert }      from 'chai';
+import { filters }     from '../../../src/core/styles/filters';
+import { camelToDash } from '../../../src/core/utils/camel-to-dash';
 
 describe('Core > Styles parsers > Filters', () => {
   it('should skip invisible filter and return empty list', () => {
@@ -81,5 +82,22 @@ describe('Core > Styles parsers > Filters', () => {
     const result = filters.parse([dropShadow], parentNode);
 
     assert.equal(result, `url(#drop-shadow-0-3-3-RGB)`);
+  });
+
+  it('should log to console when unknown filter', (done) => {
+    const filterName = 'unknownFilter';
+    const log = console.log;
+
+    const filterSrc = [{type: filterName}];
+
+    console.log = (msg) => {
+      assert.equal(msg, `Currently unsupported filter: ${camelToDash(filterName)}`);
+
+      console.log = log;
+
+      done();
+    };
+
+    filters.parse(filterSrc);
   });
 });
