@@ -5,8 +5,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.8.1]
+### Added
+- Test case for converting when XD was extracted
+
+### Changed
+- Updated all dependencies
+- Improved typing in 3rd-part pkg
+- Excluded CLI from coverage report
+- Increased mocha timeout to avoid build crashing on Travis-CI
+
+### Removed
+- PNG, JPG output formats
+
+## [0.8.0]
 ### Added
 - Man page for xd2svg-cli (previously works only `man xd2svg`)
+- PNG, JPG output formats
+
+### Changed
+- Use TypeScript 3.0 for build
+- Improved typing in 3rd-part pkg
+
+### Removed
+- HTML output format
 
 ## [0.7.2]
 ### Changed
@@ -227,7 +250,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add Artboard parser
 
-[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v0.7.2...HEAD
+[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/L2jLiga/xd2svg/compare/v0.8.0...v0.8.0
+[0.8.0]: https://github.com/L2jLiga/xd2svg/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/L2jLiga/xd2svg/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/L2jLiga/xd2svg/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/L2jLiga/xd2svg/compare/v0.6.3...v0.7.0
