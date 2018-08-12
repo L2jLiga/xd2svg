@@ -21,9 +21,9 @@ function filtersParser(src: any, parentElement: Element): string {
 
   src.forEach((filter) => {
     const filterName = filter.type.includes('#blur') ? 'blur' : camelToDash(filter.type);
-    const filterParams = filter.params[filter.type + 's'] || filter.params || {};
+    const filterParams = filter.params && filter.params[filter.type + 's'] || filter.params || {};
 
-    if (!filterParams.visible) return;
+    if (filterParams.visible === false) return;
 
     switch (filterName) {
       case 'blur': {
