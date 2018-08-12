@@ -43,4 +43,43 @@ describe('Core > Styles parsers > Filters', () => {
 
     assert.equal(result, `url(#blur-12-15)`);
   });
+
+  it('should correctly parse drop-shadow filter', () => {
+    const dropShadow = {
+      type: 'dropShadow',
+      params: {
+        dropShadows: [
+          {
+            dx: 0,
+            dy: 3,
+            r: 3,
+            color: {
+              mode: 'RGB',
+              value: {
+                r: 0,
+                g: 0,
+                b: 0,
+              },
+              alpha: 1,
+            },
+          },
+        ],
+      },
+    };
+
+    const expectedOutput =
+      '<filter id="drop-shadow-0-3-3-RGB">' +
+      '<fedropshadow dx="0" dy="3" flood-color="rgba(0,0,0,1)" stdDeviation="3"></fedropshadow>' +
+      '</filter>';
+
+    const parentNode = {
+      appendChild(child) {
+        assert.equal(child.outerHTML, expectedOutput);
+      },
+    };
+
+    const result = filters.parse([dropShadow], parentNode);
+
+    assert.equal(result, `url(#drop-shadow-0-3-3-RGB)`);
+  });
 });
