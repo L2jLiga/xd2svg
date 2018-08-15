@@ -6,14 +6,14 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Options }                     from 'extract-zip';
+import * as extractZip                 from 'extract-zip';
 import { dirSync, SynchrounousResult } from 'tmp';
 import { promisify }                   from 'util';
 import { CliOptions, OutputFormat }    from './cli/models';
 import { optimizeSvg, proceedFile }    from './core';
 import { Dictionary, Directory }       from './core/models';
 
-const extract: (zipPath: string, opts: Options) => Promise<void> = promisify(require('extract-zip'));
+const extract = promisify(extractZip);
 
 interface SingleOutput extends CliOptions {
   single: true;
