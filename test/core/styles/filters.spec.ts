@@ -1,4 +1,4 @@
-import { assert }      from 'chai';
+import * as assert from 'assert';
 import { filters }     from '../../../src/core/styles/filters';
 import { camelToDash } from '../../../src/core/utils/camel-to-dash';
 

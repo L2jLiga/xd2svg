@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { assert }        from 'chai';
+import * as assert from 'assert';
 import { createElement } from '../../../src/core/utils/create-element';
 import { window }        from '../../../src/core/utils/global-namespace';
 
@@ -15,7 +15,7 @@ describe('Core > Utils > Create Element:', () => {
     const element = createElement('svg');
 
     assert.equal(element.tagName, 'svg');
-    assert.isTrue(element instanceof window.Element);
+    assert.ok(element instanceof window.Element);
   });
 
   it('should create element with attributes', () => {
@@ -27,6 +27,6 @@ describe('Core > Utils > Create Element:', () => {
     assert.equal(element.tagName, 'body');
     assert.equal(element.getAttribute('class'), 'myClass');
     assert.equal(element.getAttribute('id'), 'attrVal');
-    assert.isTrue(element instanceof window.Element);
+    assert.ok(element instanceof window.Element);
   });
 });

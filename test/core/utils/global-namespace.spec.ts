@@ -6,14 +6,14 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { assert }                    from 'chai';
+import * as assert from 'assert';
 import { JSDOM }                     from 'jsdom';
 import { context, document, window } from '../../../src/core/utils/global-namespace';
 
 describe('Core > Utils > Global namespace', () => {
   it('should be expected instance of', () => {
-    assert.isTrue(context instanceof JSDOM);
-    assert.isDefined(window);
-    assert.isDefined(document);
+    assert.ok(context instanceof JSDOM);
+    assert.ok(window);
+    assert.ok(document);
   });
 });

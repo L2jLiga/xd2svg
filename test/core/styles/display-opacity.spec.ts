@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { assert }  from 'chai';
+import * as assert from 'assert';
 import { display } from '../../../src/core/styles/display';
 import { opacity } from '../../../src/core/styles/opacity';
 
