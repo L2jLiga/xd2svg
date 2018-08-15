@@ -14,6 +14,12 @@ import xd2svg        from '../src/xd2svg';
 const BlinkDiff = require('blink-diff');
 
 describe('Complex test for xd2svg', () => {
+  it('should throw an error when file does not exist', (done) => {
+    xd2svg('test/path/to/not/existed/file.xd', {})
+      .then(() => done('Something went wrong'))
+      .catch(() => done());
+  });
+
   it('should convert xd to svg', (done) => {
     xd2svg('test/test.xd', {single: true})
       .then((svgImage: string) => convert(svgImage, {puppeteer: {args: ['--no-sandbox']}}) as Promise<Buffer>)
