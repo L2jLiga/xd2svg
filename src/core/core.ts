@@ -58,7 +58,7 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
     rootWidth: dimensions.width,
   });
 
-  directory.removeCallback();
+  if (directory.removeCallback) directory.removeCallback();
 
   return single ? totalSvg : convertedArtboards;
 }

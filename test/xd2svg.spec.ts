@@ -6,16 +6,23 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { convert }   from 'convert-svg-to-png';
-import { dirSync }   from 'tmp';
-import { promisify } from 'util';
-import xd2svg        from '../src/xd2svg';
+import { convert }     from 'convert-svg-to-png';
+import * as extractZip from 'extract-zip';
+import { dirSync }     from 'tmp';
+import { promisify }   from 'util';
+import xd2svg          from '../src/xd2svg';
 
 const BlinkDiff = require('blink-diff');
 
 describe('Complex test for xd2svg', () => {
   it('should throw an error when file does not exist', (done) => {
     xd2svg('test/path/to/not/existed/file.xd', {})
+      .then(() => done('Something went wrong'))
+      .catch(() => done());
+  });
+
+  it('should throw an error when file is invalid', (done) => {
+    xd2svg('test/invalid-mockup.xd', {})
       .then(() => done('Something went wrong'))
       .catch(() => done());
   });
@@ -49,14 +56,14 @@ describe('Complex test for xd2svg', () => {
       .catch(done);
   });
 
-  it('should correctly convert directory', (done) => {
+  it('should correctly convert extracted mockup', (done) => {
     const tmpDir = dirSync({
       postfix: 'test-directory',
       unsafeCleanup: true,
     });
 
-    promisify(require('extract-zip'))('test/test.xd', {dir: tmpDir.name})
-      .then(() => xd2svg(tmpDir, {single: false}))
+    promisify(extractZip)('test/test.xd', {dir: tmpDir.name})
+      .then(() => xd2svg(tmpDir.name, {single: false}))
       .then((SVGs) => convert(Object.values(SVGs)[0], {puppeteer: {args: ['--no-sandbox']}}))
       .then((imageB) => {
         const diff = new BlinkDiff({
@@ -81,6 +88,7 @@ describe('Complex test for xd2svg', () => {
           return done();
         });
       })
+      .then(() => tmpDir.removeCallback())
       .catch(done);
   });
 });

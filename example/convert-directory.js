@@ -7,18 +7,11 @@ const xd2svg = require('xd2svg');
 prepareSvg('myFile.xd');
 
 async function prepareSvg(inputFileName) {
-  const directory = dirSync();
-  /***
-   * example of directory
-   *  {
-      *    name: "/path/to/directory/with/extracted/file",
-      *    removeCallback(): console.log('Optional callback which was executed when convertation finished')
-      *  }
-   */
+  const dir = dirSync().name;
 
-  await promisify(extract)(inputFileName);
+  await promisify(extract)(inputFileName, {dir});
 
-  const preparedSvgs = xd2svg(directory, {
+  const preparedSvgs = xd2svg(dir, {
     format: 'svg',
     single: false
   });
