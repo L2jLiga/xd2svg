@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { assert }           from 'chai';
+import * as assert from 'assert';
 import { Color }            from '../../../src/core/styles/models';
 import { colorTransformer } from '../../../src/core/utils/color-transformer';
 

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { assert }         from 'chai';
+import * as assert        from 'assert';
 import { fill }           from '../../../src/core/styles/fill';
 import { Color, Pattern } from '../../../src/core/styles/models';
 import { stroke }         from '../../../src/core/styles/stroke';
@@ -79,6 +79,33 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
       assert.equal(parent.childElementCount, 1);
       assert.equal(parent.children[0].tagName, 'pattern');
+    });
+
+    it('should correctly parse pattern without scale', () => {
+      const uuid = 'uuid';
+      const pattern: Pattern = {
+        meta: {
+          ux: {
+            uid: 'uid',
+            scaleBehavior: 'null',
+            hrefLastModifiedDate: 1,
+          },
+        },
+        href: 'href',
+        height: 1,
+        width: 1,
+      };
+
+      const expected = '<pattern height="1" id="uid" width="1" x="0" y="0"><image xlink:href="undefined" width="1" height="1"></image></pattern>';
+      const parent = {
+        appendChild: ({outerHTML}) => {
+          assert.equal(outerHTML, expected);
+        },
+      };
+
+      const actual = fill.parse({type: 'pattern', pattern}, parent, uuid, {});
+
+      assert.equal(actual, `url(#${pattern.meta.ux.uid})`);
     });
   });
 

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { assert }         from 'chai';
+import * as assert from 'assert';
 import { textAttributes } from '../../../src/core/styles/text-attributes';
 
 describe('Core > Styles parsers > Text attributes', () => {
