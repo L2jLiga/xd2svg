@@ -90,7 +90,7 @@ export function injectSvgResources(
          ${data.rootId ? `id="${data.rootId}"` : ''}>
       ${data.gradients}
       ${data.clipPaths}
-      ${svg.join('\r\n')}
+      ${svg.join('\n')}
     </svg>`;
   }
 }

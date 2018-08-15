@@ -1,0 +1,69 @@
+import * as assert from 'assert';
+import { injectSvgResources } from '../../src/core';
+
+describe('Core > Inject resources into SVGs', () => {
+  it('should return empty string when empty SVGs list provided', () => {
+    const result = injectSvgResources([], null);
+
+    assert.equal(result, '');
+  });
+
+  it('should inject resources in first SVG and return it when list length equal to 1', () => {
+    const resources = {
+      clipPaths: 'clipPaths',
+      gradients: 'gradients',
+      rootHeight: 2,
+      rootWidth: 1,
+    };
+
+    const actual = injectSvgResources(['<svg></svg>'], resources);
+    const expected = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">gradientsclipPaths</svg>';
+
+    assert.equal(actual, expected);
+  });
+
+  it('should inject resources and all SVGs into new one and return it when list length 2 or more', () => {
+    const resources = {
+      clipPaths: 'clipPaths',
+      gradients: 'gradients',
+      rootHeight: 2,
+      rootId: 'test',
+      rootWidth: 1,
+    };
+
+    const actual = injectSvgResources(['<svg id="g1"></svg>', '<svg id="g2"></svg>'], resources);
+    const expected = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         width="1"
+         height="2"
+         id="test">
+      gradients
+      clipPaths
+      <svg id="g1"></svg>
+<svg id="g2"></svg>
+    </svg>`;
+
+    assert.equal(actual, expected);
+  });
+
+  it('shouldn\'t paste id in root svg if it is not exist', () => {
+    const resources = {
+      clipPaths: 'clipPaths',
+      gradients: 'gradients',
+      rootHeight: 2,
+      rootWidth: 1,
+    };
+
+    const actual = injectSvgResources(['<svg id="g1"></svg>', '<svg id="g2"></svg>'], resources);
+    const expected = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+         width="1"
+         height="2"
+         >
+      gradients
+      clipPaths
+      <svg id="g1"></svg>
+<svg id="g2"></svg>
+    </svg>`;
+
+    assert.equal(actual, expected);
+  });
+});
