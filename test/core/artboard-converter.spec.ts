@@ -1,7 +1,35 @@
-import * as assert    from 'assert';
-import { createElem } from '../../src/core/artboard-converter';
+import * as assert                       from 'assert';
+import { artboardConverter, createElem } from '../../src/core/artboard-converter';
+import { Artboard, ArtboardInfo }        from '../../src/core/models';
 
 describe('Core > Artboard converter', () => {
+  it('should create svg from empty artboard', () => {
+    const artboard: Artboard = {
+      children: [{
+        artboard: {
+          children: [],
+        },
+        style: {},
+      }],
+    } as any;
+
+    const artboardInfo: ArtboardInfo = {
+      name: 'some',
+      x: 0,
+      y: 0,
+    } as any;
+
+    const actual = artboardConverter(artboard, artboardInfo, null);
+    const expected = [
+      '<svg enable-background="new 0 0 undefined undefined" id="undefined" viewBox="0 0 undefined undefined">' +
+      '<title>some</title>' +
+      '<rect height="undefined" style="" transform="translate(0 0)" width="undefined" x="0" y="0"></rect>' +
+      '</svg>',
+    ];
+
+    assert.deepEqual(actual, expected);
+  });
+
   describe('Create element', () => {
     it('should warn when unknown type', (done) => {
       const warn = console.warn;
