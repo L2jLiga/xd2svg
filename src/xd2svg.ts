@@ -43,7 +43,7 @@ export default async function xd2svg(input: string | Directory, options: CliOpti
 }
 
 async function openFile(inputFile): Promise<SynchrounousResult> {
-  const directory: SynchrounousResult = dirSync({unsafeCleanup: true});
+  const directory: SynchrounousResult = dirSync({unsafeCleanup: true, postfix: `_${Date.now()}`});
 
   await extract(inputFile, {dir: directory.name})
     .catch((error) => {
