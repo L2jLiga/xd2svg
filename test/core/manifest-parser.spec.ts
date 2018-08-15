@@ -35,9 +35,23 @@ describe('Core > Manifest parser', () => {
 
     readFileSyncStub.returns(JSON.stringify(manifest));
 
-    const result = manifestParser({name: ''} as any);
+    const result = manifestParser({name: ''});
 
     assert.equal(result.artboards.length, 2);
     assert.deepEqual(result.artboards, manifest.children[0].children);
+  });
+
+  it('shouldn\'t fail when resource doesn\'t has any components', () => {
+    const manifest = {
+      children: [{
+        name: 'resources',
+      }],
+    };
+
+    readFileSyncStub.returns(JSON.stringify(manifest));
+
+    const result = manifestParser({name: ''});
+
+    assert.deepEqual(result.resources, {});
   });
 });
