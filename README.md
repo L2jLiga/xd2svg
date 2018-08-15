@@ -54,7 +54,6 @@ You can use utility from CLI
    
      options:
        -o, --output - specify output path (default FileName directory or FileName.svg)
-       -f, --format - specify output format: svg, html (default: svg)
        -s, --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
    ```
 
