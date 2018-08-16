@@ -49,8 +49,7 @@
     "test:coverage": "cross-env TS_NODE_PROJECT=test/tsconfig.json nyc mocha",
     "test:publish": "codecov",
     "test:watch": "yarn test --watch-extensions ts --watch",
-    "prepublish": "yarn run lint && yarn run clean && yarn run build && yarn test",
-    "postpublish": "git push && git push --tags"
+    "prepublish": "yarn run lint && yarn run clean && yarn run build"
   },
   "dependencies": {
     "extract-zip": "1.6.7",
