@@ -19,8 +19,8 @@ describe('Complex test for xd2svg', () => {
 
   before(() => {
     maxListeners = process.getMaxListeners();
-    console.log(maxListeners);
-    process.setMaxListeners(16);
+
+    process.setMaxListeners(0);
   });
 
   after(() => {
@@ -80,7 +80,7 @@ describe('Complex test for xd2svg', () => {
       .then(() => xd2svg(tmpDir.name, {single: false}))
       .then((SVGs) => {
         keys = Object.keys(SVGs);
-        return Promise.all(Object.values(SVGs).map((SVG) => convert(SVG, {puppeteer: {args: ['--no-sandbox']}})));
+        return Promise.all(Object.values(SVGs).map((SVG) => convert(SVG, {puppeteer: {timeout: 180000, args: ['--no-sandbox']}})));
       })
       .then((images) => {
         const diffs = keys.map((key: string, index: number) => {
