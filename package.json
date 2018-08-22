@@ -83,11 +83,10 @@
   "nyc": {
     "all": true,
     "include": [
-      "src/**/*.ts"
+      "src/xd2svg.ts",
+      "src/core/**/*.ts"
     ],
     "exclude": [
-      "**/cli.ts",
-      "**/cli/**",
       "**/*.d.ts",
       "**/*.spec.ts",
       "**/assets/**",
