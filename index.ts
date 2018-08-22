@@ -6,4 +6,4 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-export * from './src/xd2svg';
+export * from './lib/xd2svg';
