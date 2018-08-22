@@ -13,6 +13,7 @@ import { promisify }                   from 'util';
 import { CliOptions, OutputFormat }    from './cli/models';
 import { optimizeSvg, proceedFile }    from './core';
 import { Dictionary, Directory }       from './core/models';
+import * as logger                     from './utils/logger';
 
 const extract = promisify(extractZip);
 
@@ -38,7 +39,9 @@ export default async function xd2svg(input: string, options: CliOptions): Promis
 
 async function openMockup(inputFile): Promise<Directory> {
   if (!existsSync(inputFile)) {
-    throw new Error('File doesn\'t exists!');
+    logger.error(`No such file or directory: ${inputFile}, please make sure that path is correct`);
+
+    throw null;
   }
 
   if (lstatSync(inputFile).isDirectory()) {
@@ -51,7 +54,9 @@ async function openMockup(inputFile): Promise<Directory> {
 
   await extract(inputFile, {dir: directory.name})
     .catch((error) => {
-      throw new Error(error);
+      logger.error(`Unable to unpack XD, please make sure that provided file is correct`);
+
+      throw error;
     });
 
   return directory;

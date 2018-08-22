@@ -7,6 +7,7 @@
  */
 
 import { existsSync, mkdirSync, writeFile } from 'fs';
+import * as logger                          from '../utils/logger';
 import xd2svg                               from '../xd2svg';
 import { CliOptions, OutputFormat }         from './models';
 
@@ -38,5 +39,7 @@ function preparePath(options: CliOptions): void {
 }
 
 function errorHandler(error) {
-  if (error) throw error;
+  logger.error('An error occured while flushing to disk, reason: %O', error);
+
+  throw error;
 }
