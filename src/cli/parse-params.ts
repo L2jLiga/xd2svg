@@ -19,7 +19,6 @@ export function parseParams(): CliOptions {
   }
 
   const options: CliOptions = {
-    format: 'svg',
     output: inputName.join('.'),
     single: true,
   };
@@ -42,7 +41,7 @@ export function parseParams(): CliOptions {
   }
 
   if (!customOutput && options.single) {
-    options.output += `.${options.format}`;
+    options.output += `.svg`;
   }
 
   return options;

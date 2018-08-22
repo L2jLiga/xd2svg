@@ -7,7 +7,6 @@
  */
 
 export interface CliOptions {
-  format?: 'svg';
   output?: string;
   single?: boolean;
 }
