@@ -7,6 +7,7 @@
  */
 
 import { existsSync, mkdirSync, writeFile } from 'fs';
+import * as logger                          from '../utils/logger';
 import xd2svg                               from '../xd2svg';
 import { CliOptions, OutputFormat }         from './models';
 
@@ -17,7 +18,7 @@ export async function convertXd(input: string, options: CliOptions): Promise<voi
 
   typeof svgImages === 'string' ?
     writeFile(options.output, svgImages, errorHandler)
-    : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${key}.${options.format}`, svgImages[key], errorHandler));
+    : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${key}.svg`, svgImages[key], errorHandler));
 }
 
 function preparePath(options: CliOptions): void {
@@ -38,5 +39,7 @@ function preparePath(options: CliOptions): void {
 }
 
 function errorHandler(error) {
-  if (error) throw error;
+  logger.error('An error occured while flushing to disk, reason: %O', error);
+
+  throw error;
 }

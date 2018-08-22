@@ -10,11 +10,19 @@ import { checkArgv }   from './cli/check-argv';
 import { convertXd }   from './cli/convert-xd';
 import { CliOptions }  from './cli/models';
 import { parseParams } from './cli/parse-params';
+import * as logger     from './utils/logger';
 
 checkArgv();
 
 const options: CliOptions = parseParams();
 
-console.log(`Proceed file %s with options\n%O`, process.argv[2], options);
+console.log(logger.blue(logger.bold('XD2SVG starts their work, given input:')) +
+  logger.blue('filename: ') + '%s\n' +
+  logger.blue('output type: ') + '%s\n' +
+  logger.blue('output path: ') + '%s',
+  process.argv[2],
+  options.single ? 'single' : 'multiple',
+  options.output,
+);
 
 convertXd(process.argv[2], options);

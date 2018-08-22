@@ -5,16 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [1.0.0-0]
 ### Changed
 - ***Breaking change:*** xd2svg accepts only string input type, it may be directory or file, see [example](example/convert-directory.js)
 - Improved code coverage
 - Improved typing
 - Refactored all tests
 - Updated examples, README
+- Terminal output
+- Updated jsdom to 12.0.0
 
 ### Fixed
 - Fixed crash when params doesn't present in filters
 - Fixed issue when filters doesn't proceed if they have not 'visible' property
+
+### Removed
+- All refs to "format" option
 
 ## [0.8.1]
 ### Added
@@ -260,7 +266,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add Artboard parser
 
-[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v1.0.0-0...HEAD
+[1.0.0-0]: https://github.com/L2jLiga/xd2svg/compare/v0.8.1...v1.0.0-0
 [0.8.1]: https://github.com/L2jLiga/xd2svg/compare/v0.8.0...v0.8.0
 [0.8.0]: https://github.com/L2jLiga/xd2svg/compare/v0.7.2...v0.8.0
 [0.7.2]: https://github.com/L2jLiga/xd2svg/compare/v0.7.1...v0.7.2
