@@ -50,15 +50,17 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
     dimensions.height = Math.max(dimensions.height, resourcesInfo.artboards[artboardItem.name].height);
   });
 
-  const totalSvg: string = injectSvgResources(Object.values(convertedArtboards), {
-    clipPaths: resourcesInfo.clipPaths,
-    gradients: resourcesInfo.gradients,
-    rootHeight: dimensions.height,
-    rootId: manifestInfo.id,
-    rootWidth: dimensions.width,
-  });
+  if (single) {
+    return injectSvgResources(Object.values(convertedArtboards), {
+      clipPaths: resourcesInfo.clipPaths,
+      gradients: resourcesInfo.gradients,
+      rootHeight: dimensions.height,
+      rootId: manifestInfo.id,
+      rootWidth: dimensions.width,
+    });
+  }
 
-  return single ? totalSvg : convertedArtboards;
+  return convertedArtboards;
 }
 
 export async function optimizeSvg(svgImage: string): Promise<string> {
