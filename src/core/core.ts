@@ -13,7 +13,7 @@ import { Artboard, Dictionary, Directory, Resources } from './models';
 import { resourcesParser }                            from './resources-parser';
 import { svgo }                                       from './svgo';
 
-export interface InjectableSvgData {
+interface InjectableSvgData {
   rootWidth: number;
   rootHeight: number;
   rootId?: string;
