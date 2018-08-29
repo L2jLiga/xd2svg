@@ -32,22 +32,28 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
 
   const convertedArtboards: Dictionary<string> = {};
 
-  manifestInfo.artboards.forEach((artboardItem: any) => {
+  manifestInfo.artboards.map((artboardItem: any) => {
     const json = readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
     const artboard: Artboard = JSON.parse(json);
 
     const contentOfArtboard: string[] = artboardConverter(artboard, resourcesInfo.artboards[artboardItem.name], manifestInfo.resources);
 
-    convertedArtboards[artboardItem.name] = (single ? contentOfArtboard.join('\n') : injectSvgResources(contentOfArtboard, {
+    if (single) {
+      convertedArtboards[artboardItem.name] = contentOfArtboard.join('\n');
+
+      dimensions.width = Math.max(dimensions.width, resourcesInfo.artboards[artboardItem.name].width);
+      dimensions.height = Math.max(dimensions.height, resourcesInfo.artboards[artboardItem.name].height);
+
+      return;
+    }
+
+    convertedArtboards[artboardItem.name] = injectSvgResources(contentOfArtboard, {
       clipPaths: resourcesInfo.clipPaths,
       gradients: resourcesInfo.gradients,
       rootHeight: resourcesInfo.artboards[artboardItem.name].height,
       rootWidth: resourcesInfo.artboards[artboardItem.name].width,
-    }));
-
-    dimensions.width = Math.max(dimensions.width, resourcesInfo.artboards[artboardItem.name].width);
-    dimensions.height = Math.max(dimensions.height, resourcesInfo.artboards[artboardItem.name].height);
+    });
   });
 
   if (single) {
