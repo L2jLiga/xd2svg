@@ -1,6 +1,6 @@
 {
   "name": "xd2svg",
-  "version": "1.0.0-0",
+  "version": "1.0.0-1",
   "description": "Utility for converting Adobe XD files (*.xd) to SVG",
   "keywords": [
     "svg",
@@ -61,8 +61,8 @@
     "@types/extract-zip": "1.6.2",
     "@types/jsdom": "11.0.6",
     "@types/mocha": "5.2.5",
-    "@types/node": "8.10.26",
-    "@types/sinon": "5.0.1",
+    "@types/node": "8.10.28",
+    "@types/sinon": "5.0.2",
     "@types/svgo": "1.0.1",
     "@types/tmp": "0.0.33",
     "blink-diff": "1.0.13",
