@@ -58,14 +58,13 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
     rootWidth: dimensions.width,
   });
 
-  if (directory.removeCallback) directory.removeCallback();
-
   return single ? totalSvg : convertedArtboards;
 }
 
-export async function optimizeSvg(svgImage: string) {
-  return await svgo.optimize(svgImage)
-    .then((result) => result.data);
+export async function optimizeSvg(svgImage: string): Promise<string> {
+  const optimizedSvg = await svgo.optimize(svgImage);
+
+  return optimizedSvg.data;
 }
 
 export function injectSvgResources(
