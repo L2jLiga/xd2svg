@@ -11,6 +11,8 @@ import * as logger                          from '../utils/logger';
 import xd2svg                               from '../xd2svg';
 import { CliOptions, OutputFormat }         from './models';
 
+const sanitize = require('sanitize-filename');
+
 export async function convertXd(input: string, options: CliOptions): Promise<void> {
   const svgImages: OutputFormat = await xd2svg(input, options);
 
@@ -18,7 +20,7 @@ export async function convertXd(input: string, options: CliOptions): Promise<voi
 
   typeof svgImages === 'string' ?
     writeFile(options.output, svgImages, errorHandler)
-    : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${key}.svg`, svgImages[key], errorHandler));
+    : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${sanitize(key)}.svg`, svgImages[key], errorHandler));
 }
 
 function preparePath(options: CliOptions): void {
