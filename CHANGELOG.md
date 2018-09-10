@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Update all deps to their latest version
+
+### Fixed
+- Warning message when actually no errors
+- Error when saving artboard which name contain special chars
+- Filters parser doesn't work properly
+
+## [1.0.0-1]
+### Added
+- Support for buffer input
+
+### Fixed
+- Perf: don't generate total svg when multiple output
+- Perf: don't calculate total width/height for multiple output
+
 ## [1.0.0-0]
 ### Changed
 - ***Breaking change:*** xd2svg accepts only string input type, it may be directory or file, see [example](example/convert-directory.js)
