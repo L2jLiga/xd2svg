@@ -39,6 +39,8 @@ function preparePath(options: CliOptions): void {
 }
 
 function errorHandler(error) {
+  if (!error) return;
+
   logger.error('An error occured while flushing to disk, reason: %O', error);
 
   throw error;
