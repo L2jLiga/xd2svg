@@ -17,6 +17,7 @@ export const filters: Parser = {
 };
 
 function filtersParser(src: any, parentElement: Element): string {
+  const defs = createElement('defs');
   const filterList: string[] = [];
 
   src.forEach((filter) => {
@@ -31,11 +32,11 @@ function filtersParser(src: any, parentElement: Element): string {
 
         const svgFilterElement = createElement('filter', {id: filterId});
 
-        const blur = createElement('fegaussianblur', {
+        const blur = createElement('feGaussianBlur', {
           in: 'SourceGraphic',
           stdDeviation: filterParams.blurAmount,
         });
-        const flood = createElement('feflood', {
+        const flood = createElement('feFlood', {
           'flood-opacity': filterParams.fillOpacity,
           'in': 'SourceGraphic',
         });
@@ -43,7 +44,7 @@ function filtersParser(src: any, parentElement: Element): string {
         svgFilterElement.appendChild(blur);
         svgFilterElement.appendChild(flood);
 
-        parentElement.appendChild(svgFilterElement);
+        defs.appendChild(svgFilterElement);
 
         filterList.push(`url(#${filterId})`);
 
@@ -57,7 +58,7 @@ function filtersParser(src: any, parentElement: Element): string {
 
           const svgFilterElement = createElement('filter', {id: filterId});
 
-          const dropShadow = createElement('fedropshadow', {
+          const dropShadow = createElement('feDropShadow', {
             dx,
             dy,
             'flood-color': colorTransformer(color),
@@ -66,7 +67,7 @@ function filtersParser(src: any, parentElement: Element): string {
 
           svgFilterElement.appendChild(dropShadow);
 
-          parentElement.appendChild(svgFilterElement);
+          defs.appendChild(svgFilterElement);
 
           filterList.push(`url(#${filterId})`);
         }
@@ -78,6 +79,10 @@ function filtersParser(src: any, parentElement: Element): string {
         console.log(`Currently unsupported filter: ${filterName}`);
     }
   });
+
+  if (filterList.length) {
+    parentElement.appendChild(defs);
+  }
 
   return `${filterList.join(' ')}`;
 }

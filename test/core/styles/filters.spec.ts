@@ -37,10 +37,10 @@ describe('Core > Styles parsers > Filters', () => {
     };
 
     const expectedOutput =
-      '<filter id="blur-12-15">' +
-      '<fegaussianblur in="SourceGraphic" stdDeviation="12"></fegaussianblur>' +
-      '<feflood flood-opacity="1" in="SourceGraphic"></feflood>' +
-      '</filter>';
+      '<defs><filter id="blur-12-15">' +
+      '<feGaussianBlur in="SourceGraphic" stdDeviation="12"></feGaussianBlur>' +
+      '<feFlood flood-opacity="1" in="SourceGraphic"></feFlood>' +
+      '</filter></defs>';
 
     const parentNode = {
       appendChild(child) {
@@ -77,9 +77,9 @@ describe('Core > Styles parsers > Filters', () => {
     };
 
     const expectedOutput =
-      '<filter id="drop-shadow-0-3-3-RGB">' +
-      '<fedropshadow dx="0" dy="3" flood-color="rgba(0,0,0,1)" stdDeviation="3"></fedropshadow>' +
-      '</filter>';
+      '<defs><filter id="drop-shadow-0-3-3-RGB">' +
+      '<feDropShadow dx="0" dy="3" flood-color="rgba(0,0,0,1)" stdDeviation="3"></feDropShadow>' +
+      '</filter></defs>';
 
     const parentNode = {
       appendChild(child) {
