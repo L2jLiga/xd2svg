@@ -68,17 +68,17 @@ Please read [CONTRIBUTING.md](.github/CONTRIBUTING.md) for details on our code o
 - PR's are welcome!
 
 ## Versioning
-We use [SemVer](http://semver.org/spec/v2.0.0.html) for versioning.
-For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](https://semver.org/spec/v2.0.0.html) for versioning.
+For the versions available, see the [releases](https://github.com/L2jLiga/xd2svg/releases) and [tags](https://github.com/L2jLiga/xd2svg/tags) on this repository. 
 
 ## Changelog
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 For the versions changelog, see the [CHANGELOG.md](CHANGELOG.md)
 
 ## Authors
 * **Andrey Chalkin** - *Initial work* - [L2jLiga](https://github.com/L2jLiga)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/L2jLiga/xd2svg/contributors) who participated in this project.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
@@ -90,7 +90,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 * **Can I know more about Adobe XD?**
 
-   Yes, see this [link](http://www.adobe.com/ru/products/xd.html).
+   Yes, you can know more on [official website](https://www.adobe.com/ru/products/xd.html).
 
 * **What is present \*.xd files?**
 
