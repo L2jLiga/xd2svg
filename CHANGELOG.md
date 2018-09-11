@@ -5,13 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [1.0.0-2]
 ### Changed
 - Update all deps to their latest version
 
 ### Fixed
 - Warning message when actually no errors
 - Error when saving artboard which name contain special chars
-- Filters parser doesn't work properly
+- Filters parser doesn't work properly (#28)
 
 ## [1.0.0-1]
 ### Added
@@ -282,7 +283,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add Artboard parser
 
-[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v1.0.0-0...HEAD
+[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v1.0.0-2...HEAD
+[1.0.0-2]: https://github.com/L2jLiga/xd2svg/compare/v1.0.0-1...v1.0.0-2
+[1.0.0-1]: https://github.com/L2jLiga/xd2svg/compare/v1.0.0-0...v1.0.0-1
 [1.0.0-0]: https://github.com/L2jLiga/xd2svg/compare/v0.8.1...v1.0.0-0
 [0.8.1]: https://github.com/L2jLiga/xd2svg/compare/v0.8.0...v0.8.0
 [0.8.0]: https://github.com/L2jLiga/xd2svg/compare/v0.7.2...v0.8.0
