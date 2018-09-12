@@ -8,6 +8,7 @@
 
 import { XMLElementOrXMLNode }   from 'xmlbuilder';
 import { colorTransformer }      from '../utils/color-transformer';
+import { defs }                  from '../utils/defs-list';
 import { Fill, Parser, Pattern } from './models';
 
 export const fill: Parser = {
@@ -33,7 +34,7 @@ export function fillParser(src: Fill, parentElement: XMLElementOrXMLNode, uuid: 
 }
 
 function createPattern(patternObject: Pattern, resources: any, parentElement: XMLElementOrXMLNode): void {
-  const pattern = parentElement[((parentElement as any).isRoot ? 'ele' : 'insertBefore')]('pattern', {
+  const pattern = defs.element('pattern', {
     height: '1',
     id: patternObject.meta.ux.uid,
     width: '1',

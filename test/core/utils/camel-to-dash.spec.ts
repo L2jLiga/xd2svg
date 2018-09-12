@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert from 'assert';
+import * as assert     from 'assert';
 import { camelToDash } from '../../../src/core/utils/camel-to-dash';
 
 describe('Core > Utils > Camel to Dash:', () => {

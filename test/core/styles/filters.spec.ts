@@ -7,11 +7,16 @@
  */
 
 import * as assert     from 'assert';
-import * as builder from 'xmlbuilder';
+import * as builder    from 'xmlbuilder';
 import { filters }     from '../../../src/core/styles/filters';
 import { camelToDash } from '../../../src/core/utils/camel-to-dash';
+import { defs }        from '../../../src/core/utils/defs-list';
 
 describe('Core > Styles parsers > Filters', () => {
+  beforeEach(() => {
+    (defs as any).children = [];
+  });
+
   it('should skip invisible filter and return empty list', () => {
     const filtersSrc = [
       {
@@ -38,17 +43,15 @@ describe('Core > Styles parsers > Filters', () => {
     };
 
     const expectedOutput =
-      '<g><defs><filter id="blur-12-15">' +
+      '<defs><filter id="blur-12-15">' +
       '<feGaussianBlur in="SourceGraphic" stdDeviation="12"/>' +
       '<feFlood flood-opacity="1" in="SourceGraphic"/>' +
-      '</filter></defs></g>';
+      '</filter></defs>';
 
-    const parentNode = builder.begin().ele('g');
-
-    const result = filters.parse([blurFilter], parentNode);
+    const result = filters.parse([blurFilter]);
 
     assert.equal(result, `url(#blur-12-15)`);
-    assert.equal(parentNode.end(), expectedOutput);
+    assert.equal(defs.end(), expectedOutput);
   });
 
   it('should correctly parse drop-shadow filter', () => {
@@ -75,16 +78,16 @@ describe('Core > Styles parsers > Filters', () => {
     };
 
     const expectedOutput =
-      '<g><defs><filter id="drop-shadow-0-3-3-RGB">' +
+      '<defs>' +
+      '<filter id="drop-shadow-0-3-3-RGB">' +
       '<feDropShadow dx="0" dy="3" flood-color="rgba(0,0,0,1)" stdDeviation="3"/>' +
-      '</filter></defs></g>';
+      '</filter>' +
+      '</defs>';
 
-    const parentNode = builder.begin().ele('g');
-
-    const result = filters.parse([dropShadow], parentNode);
+    const result = filters.parse([dropShadow]);
 
     assert.equal(result, `url(#drop-shadow-0-3-3-RGB)`);
-    assert.equal(parentNode.end(), expectedOutput);
+    assert.equal(defs.end(), expectedOutput);
   });
 
   it('should log to console when unknown filter', (done) => {
@@ -101,6 +104,6 @@ describe('Core > Styles parsers > Filters', () => {
       done();
     };
 
-    filters.parse(filterSrc, builder.begin().ele('g'));
+    filters.parse(filterSrc);
   });
 });

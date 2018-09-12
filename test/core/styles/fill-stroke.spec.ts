@@ -11,8 +11,13 @@ import * as builder       from 'xmlbuilder';
 import { fill }           from '../../../src/core/styles/fill';
 import { Color, Pattern } from '../../../src/core/styles/models';
 import { stroke }         from '../../../src/core/styles/stroke';
+import { defs }           from '../../../src/core/utils/defs-list';
 
 describe('Core > Styles parsers', () => {
+  beforeEach(() => {
+    (defs as any).children = [];
+  });
+
   describe(' > Fill', () => {
     it('should return none when type is none', () => {
       const type = 'none';
@@ -77,8 +82,14 @@ describe('Core > Styles parsers', () => {
       const result = fill.parse({type: 'pattern', pattern}, parent, uuid, {});
 
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
-      assert.equal(parent.children.length, 1);
-      assert.equal(parent.children[0].name, 'pattern');
+      assert.equal(
+        defs.end(),
+        '<defs>' +
+        '<pattern height="1" id="uid" width="1" x="0" y="0" patternContentUnits="objectBoundingBox">' +
+        '<image xlink:href="undefined" preserveAspectRatio="none" width="1" height="1"/>' +
+        '</pattern>' +
+        '</defs>',
+      );
     });
 
     it('should correctly parse pattern without scale', () => {
@@ -101,12 +112,11 @@ describe('Core > Styles parsers', () => {
         '<image xlink:href="undefined" width="1" height="1"/>' +
         '</pattern>' +
         '</defs>';
-      const parent = builder.begin().element('defs');
 
-      const actual = fill.parse({type: 'pattern', pattern}, parent, uuid, {});
+      const actual = fill.parse({type: 'pattern', pattern}, null, uuid, {});
 
       assert.equal(actual, `url(#${pattern.meta.ux.uid})`);
-      assert.equal(parent.end(), expected);
+      assert.equal(defs.end(), expected);
     });
   });
 
@@ -174,8 +184,6 @@ describe('Core > Styles parsers', () => {
       const result = stroke.parse({type: 'pattern', pattern}, parent, uuid, {});
 
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
-      assert.equal(parent.children.length, 1);
-      assert.equal(parent.children[0].name, 'pattern');
     });
 
     it('should add stroke width if it present', () => {
@@ -185,6 +193,7 @@ describe('Core > Styles parsers', () => {
       const result = stroke.parse({type, fill: {color}, width: 1});
 
       assert.equal(result, `#${color.value.toString(16)};stroke-width:1px`);
+      assert.equal(defs.end(), '<defs/>');
     });
   });
 });
