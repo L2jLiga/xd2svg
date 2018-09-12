@@ -17,7 +17,7 @@ export const filters: Parser = {
 };
 
 function filtersParser(src: any, parentElement: XMLElementOrXMLNode): string {
-  const defs = parentElement.element('defs');
+  const defs = parentElement[((parentElement as any).isRoot ? 'ele' : 'insertBefore')]('defs');
   const filterList: string[] = [];
 
   src.forEach((filter) => {

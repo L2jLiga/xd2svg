@@ -33,7 +33,7 @@ export function fillParser(src: Fill, parentElement: XMLElementOrXMLNode, uuid: 
 }
 
 function createPattern(patternObject: Pattern, resources: any, parentElement: XMLElementOrXMLNode): void {
-  const pattern = parentElement.element('pattern', {
+  const pattern = parentElement[((parentElement as any).isRoot ? 'ele' : 'insertBefore')]('pattern', {
     height: '1',
     id: patternObject.meta.ux.uid,
     width: '1',

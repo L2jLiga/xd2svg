@@ -96,8 +96,12 @@ describe('Core > Styles parsers', () => {
         width: 1,
       };
 
-      const expected = '<pattern height="1" id="uid" width="1" x="0" y="0"><image xlink:href="undefined" width="1" height="1"/></pattern>';
-      const parent = builder.begin();
+      const expected = '<defs>' +
+        '<pattern height="1" id="uid" width="1" x="0" y="0">' +
+        '<image xlink:href="undefined" width="1" height="1"/>' +
+        '</pattern>' +
+        '</defs>';
+      const parent = builder.begin().element('defs');
 
       const actual = fill.parse({type: 'pattern', pattern}, parent, uuid, {});
 

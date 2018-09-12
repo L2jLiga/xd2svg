@@ -22,7 +22,7 @@ describe('Core > Styles parsers > Filters', () => {
       },
     ];
 
-    const result = filters.parse(filtersSrc, builder.begin());
+    const result = filters.parse(filtersSrc, builder.create('svg'));
 
     assert.equal(result, '');
   });
@@ -38,12 +38,12 @@ describe('Core > Styles parsers > Filters', () => {
     };
 
     const expectedOutput =
-      '<defs><filter id="blur-12-15">' +
+      '<g><defs><filter id="blur-12-15">' +
       '<feGaussianBlur in="SourceGraphic" stdDeviation="12"/>' +
       '<feFlood flood-opacity="1" in="SourceGraphic"/>' +
-      '</filter></defs>';
+      '</filter></defs></g>';
 
-    const parentNode = builder.begin();
+    const parentNode = builder.begin().ele('g');
 
     const result = filters.parse([blurFilter], parentNode);
 
@@ -75,11 +75,11 @@ describe('Core > Styles parsers > Filters', () => {
     };
 
     const expectedOutput =
-      '<defs><filter id="drop-shadow-0-3-3-RGB">' +
+      '<g><defs><filter id="drop-shadow-0-3-3-RGB">' +
       '<feDropShadow dx="0" dy="3" flood-color="rgba(0,0,0,1)" stdDeviation="3"/>' +
-      '</filter></defs>';
+      '</filter></defs></g>';
 
-    const parentNode = builder.begin();
+    const parentNode = builder.begin().ele('g');
 
     const result = filters.parse([dropShadow], parentNode);
 
@@ -101,6 +101,6 @@ describe('Core > Styles parsers > Filters', () => {
       done();
     };
 
-    filters.parse(filterSrc, builder.begin());
+    filters.parse(filterSrc, builder.begin().ele('g'));
   });
 });
