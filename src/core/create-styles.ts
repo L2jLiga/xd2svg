@@ -6,9 +6,10 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import parsers from './styles';
+import { XMLElementOrXMLNode } from 'xmlbuilder';
+import parsers                 from './styles';
 
-export function createStyles(stylesSrc, parentElement: Element, uuid: string, resources: { [path: string]: string }): string {
+export function createStyles(stylesSrc, parentElement: XMLElementOrXMLNode, uuid: string, resources: { [path: string]: string }): string {
   let styleAttr: string = '';
 
   Object.getOwnPropertyNames(stylesSrc).map((styleName) => {

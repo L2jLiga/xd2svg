@@ -6,7 +6,8 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert from 'assert';
+import * as assert     from 'assert';
+import * as builder from 'xmlbuilder';
 import { filters }     from '../../../src/core/styles/filters';
 import { camelToDash } from '../../../src/core/utils/camel-to-dash';
 
@@ -21,7 +22,7 @@ describe('Core > Styles parsers > Filters', () => {
       },
     ];
 
-    const result = filters.parse(filtersSrc);
+    const result = filters.parse(filtersSrc, builder.begin());
 
     assert.equal(result, '');
   });
@@ -38,19 +39,16 @@ describe('Core > Styles parsers > Filters', () => {
 
     const expectedOutput =
       '<defs><filter id="blur-12-15">' +
-      '<feGaussianBlur in="SourceGraphic" stdDeviation="12"></feGaussianBlur>' +
-      '<feFlood flood-opacity="1" in="SourceGraphic"></feFlood>' +
+      '<feGaussianBlur in="SourceGraphic" stdDeviation="12"/>' +
+      '<feFlood flood-opacity="1" in="SourceGraphic"/>' +
       '</filter></defs>';
 
-    const parentNode = {
-      appendChild(child) {
-        assert.equal(child.outerHTML, expectedOutput);
-      },
-    };
+    const parentNode = builder.begin();
 
     const result = filters.parse([blurFilter], parentNode);
 
     assert.equal(result, `url(#blur-12-15)`);
+    assert.equal(parentNode.end(), expectedOutput);
   });
 
   it('should correctly parse drop-shadow filter', () => {
@@ -78,18 +76,15 @@ describe('Core > Styles parsers > Filters', () => {
 
     const expectedOutput =
       '<defs><filter id="drop-shadow-0-3-3-RGB">' +
-      '<feDropShadow dx="0" dy="3" flood-color="rgba(0,0,0,1)" stdDeviation="3"></feDropShadow>' +
+      '<feDropShadow dx="0" dy="3" flood-color="rgba(0,0,0,1)" stdDeviation="3"/>' +
       '</filter></defs>';
 
-    const parentNode = {
-      appendChild(child) {
-        assert.equal(child.outerHTML, expectedOutput);
-      },
-    };
+    const parentNode = builder.begin();
 
     const result = filters.parse([dropShadow], parentNode);
 
     assert.equal(result, `url(#drop-shadow-0-3-3-RGB)`);
+    assert.equal(parentNode.end(), expectedOutput);
   });
 
   it('should log to console when unknown filter', (done) => {
@@ -106,6 +101,6 @@ describe('Core > Styles parsers > Filters', () => {
       done();
     };
 
-    filters.parse(filterSrc);
+    filters.parse(filterSrc, builder.begin());
   });
 });

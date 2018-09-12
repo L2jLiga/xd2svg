@@ -7,10 +7,10 @@
  */
 
 import * as assert        from 'assert';
+import * as builder       from 'xmlbuilder';
 import { fill }           from '../../../src/core/styles/fill';
 import { Color, Pattern } from '../../../src/core/styles/models';
 import { stroke }         from '../../../src/core/styles/stroke';
-import { createElement }  from '../../../src/core/utils/create-element';
 
 describe('Core > Styles parsers', () => {
   describe(' > Fill', () => {
@@ -60,7 +60,7 @@ describe('Core > Styles parsers', () => {
 
     it('should append pattern element to parent and return ref to this pattern if type is pattern', () => {
       const uuid = 'uuid';
-      const parent = createElement('svg');
+      const parent: any = builder.create('svg');
       const pattern: Pattern = {
         meta: {
           ux: {
@@ -77,8 +77,8 @@ describe('Core > Styles parsers', () => {
       const result = fill.parse({type: 'pattern', pattern}, parent, uuid, {});
 
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
-      assert.equal(parent.childElementCount, 1);
-      assert.equal(parent.children[0].tagName, 'pattern');
+      assert.equal(parent.children.length, 1);
+      assert.equal(parent.children[0].name, 'pattern');
     });
 
     it('should correctly parse pattern without scale', () => {
@@ -96,16 +96,13 @@ describe('Core > Styles parsers', () => {
         width: 1,
       };
 
-      const expected = '<pattern height="1" id="uid" width="1" x="0" y="0"><image xlink:href="undefined" width="1" height="1"></image></pattern>';
-      const parent = {
-        appendChild: ({outerHTML}) => {
-          assert.equal(outerHTML, expected);
-        },
-      };
+      const expected = '<pattern height="1" id="uid" width="1" x="0" y="0"><image xlink:href="undefined" width="1" height="1"/></pattern>';
+      const parent = builder.begin();
 
       const actual = fill.parse({type: 'pattern', pattern}, parent, uuid, {});
 
       assert.equal(actual, `url(#${pattern.meta.ux.uid})`);
+      assert.equal(parent.end(), expected);
     });
   });
 
@@ -156,7 +153,7 @@ describe('Core > Styles parsers', () => {
 
     it('should append pattern element to parent and return ref to this pattern if type is pattern', () => {
       const uuid = 'uuid';
-      const parent = createElement('svg');
+      const parent: any = builder.create('svg');
       const pattern: Pattern = {
         meta: {
           ux: {
@@ -173,8 +170,8 @@ describe('Core > Styles parsers', () => {
       const result = stroke.parse({type: 'pattern', pattern}, parent, uuid, {});
 
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
-      assert.equal(parent.childElementCount, 1);
-      assert.equal(parent.children[0].tagName, 'pattern');
+      assert.equal(parent.children.length, 1);
+      assert.equal(parent.children[0].name, 'pattern');
     });
 
     it('should add stroke width if it present', () => {
