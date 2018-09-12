@@ -37,8 +37,8 @@ describe('Core > Resources parser', () => {
 
     assert.deepEqual(result, {
       artboards: {},
-      clipPaths: '',
-      gradients: '',
+      clipPaths: '<defs/>',
+      gradients: '<defs/>',
     });
   });
 
@@ -69,8 +69,8 @@ describe('Core > Resources parser', () => {
       artboards: {
         [values.artboards['artboard-uuid'].name]: values.artboards['artboard-uuid'],
       },
-      clipPaths: '',
-      gradients: '',
+      clipPaths: '<defs/>',
+      gradients: '<defs/>',
     });
   });
 
@@ -93,8 +93,8 @@ describe('Core > Resources parser', () => {
 
     assert.deepEqual(result, {
       artboards: {},
-      clipPaths: '<clippath id="clipPathId"></clippath>',
-      gradients: '',
+      clipPaths: '<defs><clipPath id="clipPathId"/></defs>',
+      gradients: '<defs/>',
     });
   });
 
@@ -122,8 +122,8 @@ describe('Core > Resources parser', () => {
 
     assert.deepEqual(result, {
       artboards: {},
-      clipPaths: '',
-      gradients: '<lineargradient id="gradient1"><stop offset="0" stop-color="#fff"></stop></lineargradient><radialgradient id="gradient2"></radialgradient>',
+      clipPaths: '<defs/>',
+      gradients: '<defs><lineargradient id="gradient1"><stop offset="0" stop-color="#fff"/></lineargradient><radialgradient id="gradient2"/></defs>',
     });
   });
 });

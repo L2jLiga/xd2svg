@@ -7,11 +7,12 @@
  */
 
 import { readFileSync }                       from 'fs';
+import * as builder                           from 'xmlbuilder';
+import { XMLElementOrXMLNode }                from 'xmlbuilder';
 import { createElem }                         from './artboard-converter';
 import { ArtboardInfo, Directory, Resources } from './models';
 import { Color }                              from './styles/models';
 import { colorTransformer }                   from './utils/color-transformer';
-import { createElement }                      from './utils/create-element';
 
 export function resourcesParser(directory: Directory): Resources {
   const json = readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
@@ -46,43 +47,33 @@ function buildArtboardsInfo(artboards: { [id: string]: any }): { [name: string]:
 }
 
 function buildGradients(gradients): string {
-  const defs: SVGDefsElement = createElement('defs');
+  const defs = builder.begin().element('defs');
 
-  Object.keys(gradients).forEach((gradientId: string) => {
-    const buildedElement: Element = buildElement(gradients[gradientId], gradientId);
+  Object.keys(gradients).forEach((gradientId: string) => buildElement(gradients[gradientId], gradientId, defs));
 
-    defs.appendChild(buildedElement);
-  });
-
-  return defs.innerHTML;
+  return defs.end();
 }
 
-function buildElement({type, stops}, gradientId: string): Element {
-  const gradient = createElement(type === 'linear' ? 'lineargradient' : 'radialgradient', {id: gradientId});
+function buildElement({type, stops}, gradientId: string, defs: XMLElementOrXMLNode): void {
+  const gradient = defs.element(type === 'linear' ? 'lineargradient' : 'radialgradient', {id: gradientId});
 
   stops.forEach((stop: { offset: string, color: Color }) => {
-    const elem = createElement('stop', {
+    gradient.element('stop', {
       'offset': stop.offset,
       'stop-color': colorTransformer(stop.color),
     });
-
-    gradient.appendChild(elem);
   });
-
-  return gradient;
 }
 
 function buildClipPaths(clipPaths: any): string {
-  const clipPathsArr: string[] = [];
+  const root = builder.begin().element('defs');
 
   Object.keys(clipPaths).forEach((clipPathId: string) => {
     const clipPath = clipPaths[clipPathId];
-    const clipPathElement = createElem(clipPath, createElement('clippath'), null);
+    const clipPathElement = createElem(clipPath, root.element('clipPath'), null);
 
-    clipPathElement.setAttribute('id', clipPathId);
-
-    clipPathsArr.push(clipPathElement.outerHTML);
+    clipPathElement.attribute('id', clipPathId);
   });
 
-  return clipPathsArr.join('');
+  return root.end();
 }

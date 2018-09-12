@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
+import { XMLElementOrXMLNode }   from 'xmlbuilder';
 import { colorTransformer }      from '../utils/color-transformer';
-import { createElement }         from '../utils/create-element';
 import { Fill, Parser, Pattern } from './models';
 
 export const fill: Parser = {
@@ -15,14 +15,14 @@ export const fill: Parser = {
   parse: fillParser,
 };
 
-export function fillParser(src: Fill, parentElement: Element, uuid: string, resources): string {
+export function fillParser(src: Fill, parentElement: XMLElementOrXMLNode, uuid: string, resources): string {
   switch (src.type) {
     case 'color':
       return colorTransformer(src.fill.color);
     case 'gradient':
       return `url(#${src.gradient.ref})`;
     case 'pattern':
-      parentElement.appendChild(createPattern(src.pattern, resources));
+      createPattern(src.pattern, resources, parentElement);
 
       return `url(#${src.pattern.meta.ux.uid})`;
     case 'none':
@@ -32,27 +32,23 @@ export function fillParser(src: Fill, parentElement: Element, uuid: string, reso
   }
 }
 
-function createPattern(patternObject: Pattern, resources: any): SVGPatternElement {
-  const pattern: SVGPatternElement = createElement('pattern', {
+function createPattern(patternObject: Pattern, resources: any, parentElement: XMLElementOrXMLNode): void {
+  const pattern = parentElement.element('pattern', {
     height: '1',
     id: patternObject.meta.ux.uid,
     width: '1',
     x: '0',
     y: '0',
   });
-  const image: SVGImageElement = createElement('image', {'xlink:href': resources[patternObject.meta.ux.uid]});
+  const image = pattern.element('image', {'xlink:href': `${resources[patternObject.meta.ux.uid]}`});
 
   if (patternObject.meta.ux.scaleBehavior === 'cover' || patternObject.meta.ux.scaleBehavior === 'fill') {
-    pattern.setAttribute('patternContentUnits', 'objectBoundingBox');
-    image.setAttribute('preserveAspectRatio', 'none');
-    image.setAttribute('width', '1');
-    image.setAttribute('height', '1');
+    pattern.attribute('patternContentUnits', 'objectBoundingBox');
+    image.attribute('preserveAspectRatio', 'none');
+    image.attribute('width', '1');
+    image.attribute('height', '1');
   } else {
-    image.setAttribute('width', `${patternObject.width}`);
-    image.setAttribute('height', `${patternObject.height}`);
+    image.attribute('width', `${patternObject.width}`);
+    image.attribute('height', `${patternObject.height}`);
   }
-
-  pattern.appendChild(image);
-
-  return pattern;
 }

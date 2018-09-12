@@ -6,18 +6,18 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { camelToDash }      from '../utils/camel-to-dash';
-import { colorTransformer } from '../utils/color-transformer';
-import { createElement }    from '../utils/create-element';
-import { Parser }           from './models';
+import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { camelToDash }         from '../utils/camel-to-dash';
+import { colorTransformer }    from '../utils/color-transformer';
+import { Parser }              from './models';
 
 export const filters: Parser = {
   name: 'filter',
   parse: filtersParser,
 };
 
-function filtersParser(src: any, parentElement: Element): string {
-  const defs = createElement('defs');
+function filtersParser(src: any, parentElement: XMLElementOrXMLNode): string {
+  const defs = parentElement.element('defs');
   const filterList: string[] = [];
 
   src.forEach((filter) => {
@@ -30,21 +30,16 @@ function filtersParser(src: any, parentElement: Element): string {
       case 'blur': {
         const filterId: string = `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
 
-        const svgFilterElement = createElement('filter', {id: filterId});
+        const svgFilterElement = defs.element('filter', {id: filterId});
 
-        const blur = createElement('feGaussianBlur', {
+        svgFilterElement.element('feGaussianBlur', {
           in: 'SourceGraphic',
           stdDeviation: filterParams.blurAmount,
         });
-        const flood = createElement('feFlood', {
+        svgFilterElement.element('feFlood', {
           'flood-opacity': filterParams.fillOpacity,
           'in': 'SourceGraphic',
         });
-
-        svgFilterElement.appendChild(blur);
-        svgFilterElement.appendChild(flood);
-
-        defs.appendChild(svgFilterElement);
 
         filterList.push(`url(#${filterId})`);
 
@@ -56,18 +51,14 @@ function filtersParser(src: any, parentElement: Element): string {
 
           const filterId: string = `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
 
-          const svgFilterElement = createElement('filter', {id: filterId});
+          const svgFilterElement = defs.element('filter', {id: filterId});
 
-          const dropShadow = createElement('feDropShadow', {
+          svgFilterElement.element('feDropShadow', {
             dx,
             dy,
             'flood-color': colorTransformer(color),
             'stdDeviation': r,
           });
-
-          svgFilterElement.appendChild(dropShadow);
-
-          defs.appendChild(svgFilterElement);
 
           filterList.push(`url(#${filterId})`);
         }
@@ -79,10 +70,6 @@ function filtersParser(src: any, parentElement: Element): string {
         console.log(`Currently unsupported filter: ${filterName}`);
     }
   });
-
-  if (filterList.length) {
-    parentElement.appendChild(defs);
-  }
 
   return `${filterList.join(' ')}`;
 }

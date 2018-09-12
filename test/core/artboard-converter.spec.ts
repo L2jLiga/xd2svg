@@ -1,4 +1,5 @@
 import * as assert                       from 'assert';
+import * as builder                   from 'xmlbuilder';
 import { artboardConverter, createElem } from '../../src/core/artboard-converter';
 import { Artboard, ArtboardInfo }        from '../../src/core/models';
 
@@ -23,7 +24,7 @@ describe('Core > Artboard converter', () => {
     const expected = [
       '<svg enable-background="new 0 0 undefined undefined" id="undefined" viewBox="0 0 undefined undefined">' +
       '<title>some</title>' +
-      '<rect height="undefined" style="" transform="translate(0 0)" width="undefined" x="0" y="0"></rect>' +
+      '<rect height="undefined" style="" transform="translate(0 0)" width="undefined" x="0" y="0"/>' +
       '</svg>',
     ];
 
@@ -46,11 +47,7 @@ describe('Core > Artboard converter', () => {
     });
 
     it('should create text element', () => {
-      const parent: any = {
-        appendChild({outerHTML}) {
-          assert.equal(outerHTML, '<text style=";display:  none;"><tspan>raw</tspan></text>');
-        },
-      };
+      const parent = builder.begin();
 
       const svgObjCollection: any = {
         children: [
@@ -73,6 +70,8 @@ describe('Core > Artboard converter', () => {
       };
 
       createElem(svgObjCollection, parent, null);
+
+      assert.equal(parent.end(), '<text style=";display:  none;"><tspan>raw</tspan></text>');
     });
 
     it('should warn when unsupported shape', (done) => {
@@ -85,16 +84,12 @@ describe('Core > Artboard converter', () => {
       };
 
       createElem({
-        children: [{type: 'shape', shape: {}}],
-      } as any, null, null);
+        children: [{type: 'shape', shape: {type: 'unknownShape'}}],
+      } as any, builder.begin(), null);
     });
 
     it('should create compound element', () => {
-      const parent: any = {
-        appendChild({outerHTML}) {
-          assert.equal(outerHTML, '<path d="abcdef"></path>');
-        },
-      };
+      const parent = builder.begin();
 
       const svgObjCollection: any = {
         children: [{
@@ -108,14 +103,12 @@ describe('Core > Artboard converter', () => {
       };
 
       createElem(svgObjCollection, parent, null);
+
+      assert.equal(parent.end(), '<path d="abcdef"/>');
     });
 
     it('should create path element', () => {
-      const parent: any = {
-        appendChild({outerHTML}) {
-          assert.equal(outerHTML, '<path d="abcdef"></path>');
-        },
-      };
+      const parent = builder.begin();
 
       const svgObjCollection: any = {
         children: [{
@@ -128,14 +121,12 @@ describe('Core > Artboard converter', () => {
       };
 
       createElem(svgObjCollection, parent, null);
+
+      assert.equal(parent.end(), '<path d="abcdef"/>');
     });
 
     it('should create rectangle element', () => {
-      const parent: any = {
-        appendChild({outerHTML}) {
-          assert.equal(outerHTML, '<rect x="1" y="2" width="3" height="4" rx="5" ry="6"></rect>');
-        },
-      };
+      const parent = builder.begin();
 
       const svgObjCollection: any = {
         children: [{
@@ -152,14 +143,12 @@ describe('Core > Artboard converter', () => {
       };
 
       createElem(svgObjCollection, parent, null);
+
+      assert.equal(parent.end(), '<rect x="1" y="2" width="3" height="4" rx="5" ry="6"/>');
     });
 
     it('should create circle element', () => {
-      const parent: any = {
-        appendChild({outerHTML}) {
-          assert.equal(outerHTML, '<circle cx="1" cy="2" r="3"></circle>');
-        },
-      };
+      const parent = builder.begin();
 
       const svgObjCollection: any = {
         children: [{
@@ -174,14 +163,12 @@ describe('Core > Artboard converter', () => {
       };
 
       createElem(svgObjCollection, parent, null);
+
+      assert.equal(parent.end(), '<circle cx="1" cy="2" r="3"/>');
     });
 
     it('should create ellipse element', () => {
-      const parent: any = {
-        appendChild({outerHTML}) {
-          assert.equal(outerHTML, '<ellipse cx="1" cy="2" rx="3" ry="4"></ellipse>');
-        },
-      };
+      const parent = builder.begin();
 
       const svgObjCollection: any = {
         children: [{
@@ -197,14 +184,12 @@ describe('Core > Artboard converter', () => {
       };
 
       createElem(svgObjCollection, parent, null);
+
+      assert.equal(parent.end(), '<ellipse cx="1" cy="2" rx="3" ry="4"/>');
     });
 
     it('should create line element', () => {
-      const parent: any = {
-        appendChild({outerHTML}) {
-          assert.equal(outerHTML, '<line x1="1" y1="3" x2="2" y2="4"></line>');
-        },
-      };
+      const parent = builder.begin();
 
       const svgObjCollection: any = {
         children: [{
@@ -220,6 +205,8 @@ describe('Core > Artboard converter', () => {
       };
 
       createElem(svgObjCollection, parent, null);
+
+      assert.equal(parent.end(), '<line x1="1" y1="3" x2="2" y2="4"/>');
     });
   });
 });
