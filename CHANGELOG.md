@@ -10,9 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced jsDOM with xmlbuilder
    - Reduced installation time
    - Reduced time to convert mockup
+- Speed-up Travis build
+- Speed-up processing when multiple output
 
 ### Fixed
 - Unhandled rejection warning when running via CLI
+- Some blur filters don't work properly
 
 ## [1.0.0-2]
 ### Changed

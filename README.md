@@ -78,6 +78,8 @@ For the versions changelog, see the [CHANGELOG.md](CHANGELOG.md)
 ## Authors
 * **Andrey Chalkin** - *Initial work* - [L2jLiga](https://github.com/L2jLiga)
 
+* **Yang Sibai** - *Testing* - [yangsibai](https://github.com/yangsibai)
+
 See also the list of [contributors](https://github.com/L2jLiga/xd2svg/contributors) who participated in this project.
 
 ## License
