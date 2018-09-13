@@ -7,8 +7,8 @@
  */
 
 import * as assert from 'assert';
-import * as SVGO  from 'svgo';
-import { svgo }   from '../../src/core/svgo';
+import * as SVGO   from 'svgo';
+import { svgo }    from '../../src/core/svgo';
 
 describe('Core > SVGO', () => {
   it('should create SVGO instance', () => {

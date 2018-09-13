@@ -7,7 +7,7 @@
  */
 
 import * as assert from 'assert';
-import { font }   from '../../../src/core/styles/font';
+import { font }    from '../../../src/core/styles/font';
 
 describe('Core > Styles parsers > Font', () => {
   it('should return styles string with presented styles', () => {

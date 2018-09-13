@@ -11,4 +11,7 @@ cache: yarn
 script:
   - yarn test:coverage
 after_success:
+  - yarn add codecov
   - yarn codecov
+  - yarn add codacy-coverage
+  - cat ./coverage/lcov.info | yarn codacy-coverage

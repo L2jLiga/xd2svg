@@ -7,7 +7,7 @@
  */
 
 import * as assert     from 'assert';
-import * as builder from 'xmlbuilder';
+import * as builder    from 'xmlbuilder';
 import { filters }     from '../../../src/core/styles/filters';
 import { camelToDash } from '../../../src/core/utils/camel-to-dash';
 
@@ -22,12 +22,13 @@ describe('Core > Styles parsers > Filters', () => {
       },
     ];
 
-    const result = filters.parse(filtersSrc, builder.begin());
+    const result = filters.parse(filtersSrc, builder.create('svg'));
 
     assert.equal(result, '');
   });
 
   it('should correctly parse blur filter', () => {
+    const defs = builder.begin().ele('defs');
     const blurFilter = {
       params: {
         blurAmount: 12,
@@ -40,18 +41,16 @@ describe('Core > Styles parsers > Filters', () => {
     const expectedOutput =
       '<defs><filter id="blur-12-15">' +
       '<feGaussianBlur in="SourceGraphic" stdDeviation="12"/>' +
-      '<feFlood flood-opacity="1" in="SourceGraphic"/>' +
       '</filter></defs>';
 
-    const parentNode = builder.begin();
+    const result = filters.parse([blurFilter], defs);
 
-    const result = filters.parse([blurFilter], parentNode);
-
-    assert.equal(result, `url(#blur-12-15)`);
-    assert.equal(parentNode.end(), expectedOutput);
+    assert.equal(result, `url(#blur-12-15) ;fill-opacity: 1`);
+    assert.equal(defs.end(), expectedOutput);
   });
 
   it('should correctly parse drop-shadow filter', () => {
+    const defs = builder.begin().ele('defs');
     const dropShadow = {
       type: 'dropShadow',
       params: {
@@ -75,19 +74,20 @@ describe('Core > Styles parsers > Filters', () => {
     };
 
     const expectedOutput =
-      '<defs><filter id="drop-shadow-0-3-3-RGB">' +
+      '<defs>' +
+      '<filter id="drop-shadow-0-3-3-RGB">' +
       '<feDropShadow dx="0" dy="3" flood-color="rgba(0,0,0,1)" stdDeviation="3"/>' +
-      '</filter></defs>';
+      '</filter>' +
+      '</defs>';
 
-    const parentNode = builder.begin();
-
-    const result = filters.parse([dropShadow], parentNode);
+    const result = filters.parse([dropShadow], defs);
 
     assert.equal(result, `url(#drop-shadow-0-3-3-RGB)`);
-    assert.equal(parentNode.end(), expectedOutput);
+    assert.equal(defs.end(), expectedOutput);
   });
 
   it('should log to console when unknown filter', (done) => {
+    const defs = builder.begin().ele('defs');
     const filterName = 'unknownFilter';
     const log = console.log;
 
@@ -101,6 +101,6 @@ describe('Core > Styles parsers > Filters', () => {
       done();
     };
 
-    filters.parse(filterSrc, builder.begin());
+    filters.parse(filterSrc, defs);
   });
 });

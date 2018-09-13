@@ -16,8 +16,7 @@ export const filters: Parser = {
   parse: filtersParser,
 };
 
-function filtersParser(src: any, parentElement: XMLElementOrXMLNode): string {
-  const defs = parentElement.element('defs');
+function filtersParser(src: any, defs: XMLElementOrXMLNode): string {
   const filterList: string[] = [];
 
   src.forEach((filter) => {
@@ -30,37 +29,33 @@ function filtersParser(src: any, parentElement: XMLElementOrXMLNode): string {
       case 'blur': {
         const filterId: string = `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
 
-        const svgFilterElement = defs.element('filter', {id: filterId});
+        defs
+          .element('filter', {id: filterId})
+          .element('feGaussianBlur', {
+            in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',
+            stdDeviation: filterParams.blurAmount,
+          });
 
-        svgFilterElement.element('feGaussianBlur', {
-          in: 'SourceGraphic',
-          stdDeviation: filterParams.blurAmount,
-        });
-        svgFilterElement.element('feFlood', {
-          'flood-opacity': filterParams.fillOpacity,
-          'in': 'SourceGraphic',
-        });
-
-        filterList.push(`url(#${filterId})`);
+        filterList.unshift(`url(#${filterId})`);
+        filterList.push(`;fill-opacity: ${filterParams.fillOpacity}`);
 
         break;
       }
 
       case 'drop-shadow': {
         for (const {dx, dy, r, color} of filterParams) {
-
           const filterId: string = `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
 
-          const svgFilterElement = defs.element('filter', {id: filterId});
+          defs
+            .element('filter', {id: filterId})
+            .element('feDropShadow', {
+              dx,
+              dy,
+              'flood-color': colorTransformer(color),
+              'stdDeviation': r,
+            });
 
-          svgFilterElement.element('feDropShadow', {
-            dx,
-            dy,
-            'flood-color': colorTransformer(color),
-            'stdDeviation': r,
-          });
-
-          filterList.push(`url(#${filterId})`);
+          filterList.unshift(`url(#${filterId})`);
         }
 
         break;

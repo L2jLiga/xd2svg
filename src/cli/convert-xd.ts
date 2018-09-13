@@ -14,13 +14,17 @@ import { CliOptions, OutputFormat }         from './models';
 const sanitize = require('sanitize-filename');
 
 export async function convertXd(input: string, options: CliOptions): Promise<void> {
-  const svgImages: OutputFormat = await xd2svg(input, options);
+  try {
+    const svgImages: OutputFormat = await xd2svg(input, options);
 
-  preparePath(options);
+    preparePath(options);
 
-  typeof svgImages === 'string' ?
-    writeFile(options.output, svgImages, errorHandler)
-    : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${sanitize(key)}.svg`, svgImages[key], errorHandler));
+    typeof svgImages === 'string' ?
+      writeFile(options.output, svgImages, errorHandler)
+      : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${sanitize(key)}.svg`, svgImages[key], errorHandler));
+  } catch (e) {
+    process.exit(-1);
+  }
 }
 
 function preparePath(options: CliOptions): void {

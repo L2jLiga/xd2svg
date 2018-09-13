@@ -11,6 +11,7 @@ import * as extractZip  from 'extract-zip';
 import { readFileSync } from 'fs';
 import { dirSync }      from 'tmp';
 import { promisify }    from 'util';
+import { manifestInfo } from '../src/core/manifest-parser';
 import xd2svg           from '../src/xd2svg';
 
 const BlinkDiff = require('blink-diff');
@@ -22,6 +23,11 @@ describe('Complex test for xd2svg', () => {
     maxListeners = process.getMaxListeners();
 
     process.setMaxListeners(0);
+  });
+
+  beforeEach(() => {
+    manifestInfo.resources = null;
+    manifestInfo.artboards = [];
   });
 
   after(() => {
@@ -51,58 +57,16 @@ describe('Complex test for xd2svg', () => {
 
     xd2svg(inputBuffer, {single: true})
       .then((svgImage: string) => convert(svgImage, {puppeteer: {args: ['--no-sandbox']}}) as Promise<Buffer>)
-      .then((actual) => {
-        const diff = new BlinkDiff({
-          delta: 50,
-          hideShift: true,
-          imageAPath: 'test/expected/single.png',
-          imageB: actual,
-
-          threshold: .1,
-          thresholdType: BlinkDiff.THRESHOLD_PERCENT,
-        });
-
-        diff.run((error, result) => {
-          if (error) {
-            return done(error);
-          }
-
-          if (!diff.hasPassed(result.code)) {
-            return done('Too much difference!');
-          }
-
-          return done();
-        });
-      })
+      .then((actual) => runDiffFor(actual, 'test/expected/single.png'))
+      .then(done)
       .catch(done);
   });
 
   it('should correctly convert when provided path to file', (done) => {
     xd2svg('test/single.xd', {single: true})
       .then((svgImage: string) => convert(svgImage, {puppeteer: {args: ['--no-sandbox']}}) as Promise<Buffer>)
-      .then((actual) => {
-        const diff = new BlinkDiff({
-          delta: 50,
-          hideShift: true,
-          imageAPath: 'test/expected/single.png',
-          imageB: actual,
-
-          threshold: .1,
-          thresholdType: BlinkDiff.THRESHOLD_PERCENT,
-        });
-
-        diff.run((error, result) => {
-          if (error) {
-            return done(error);
-          }
-
-          if (!diff.hasPassed(result.code)) {
-            return done('Too much difference!');
-          }
-
-          return done();
-        });
-      })
+      .then((actual) => runDiffFor(actual, 'test/expected/single.png'))
+      .then(done)
       .catch(done);
   });
 
@@ -126,31 +90,7 @@ describe('Complex test for xd2svg', () => {
         })));
       })
       .then((images) => {
-        const diffs = keys.map((key: string, index: number) => {
-          const diff = new BlinkDiff({
-            delta: 50,
-            hideShift: true,
-            imageAPath: `test/expected/${key}`,
-            imageB: images[index],
-
-            threshold: .1,
-            thresholdType: BlinkDiff.THRESHOLD_PERCENT,
-          });
-
-          return new Promise((resolve, reject) => {
-            diff.run((error, result) => {
-              if (error) {
-                return reject(error);
-              }
-
-              if (!diff.hasPassed(result.code)) {
-                return reject('Too much difference!');
-              }
-
-              return resolve();
-            });
-          });
-        });
+        const diffs = keys.map((key: string, index: number) => runDiffFor(images[index], `test/expected/${key}`));
 
         return Promise.all(diffs);
       })
@@ -158,3 +98,29 @@ describe('Complex test for xd2svg', () => {
       .catch(done);
   });
 });
+
+function runDiffFor(actual: Buffer, expected: string): Promise<void> {
+  const diff = new BlinkDiff({
+    delta: 50,
+    hideShift: true,
+    imageAPath: expected,
+    imageB: actual,
+
+    threshold: .1,
+    thresholdType: BlinkDiff.THRESHOLD_PERCENT,
+  });
+
+  return new Promise((resolve, reject) => {
+    diff.run((error, result) => {
+      if (error) {
+        return reject(error);
+      }
+
+      if (!diff.hasPassed(result.code)) {
+        return reject('Too much difference!');
+      }
+
+      return resolve();
+    });
+  });
+}

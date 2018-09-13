@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert from 'assert';
+import * as assert      from 'assert';
 import { spy, stub }    from 'sinon';
 import { createStyles } from '../../src/core/create-styles';
 import parsers          from '../../src/core/styles';
@@ -19,7 +19,7 @@ describe('Core > Create styles', () => {
 
     const consoleSpy = stub(console, 'warn');
 
-    const result = createStyles(stylesSrc, null, null, null);
+    const result = createStyles(stylesSrc, null, null);
 
     assert.equal(result, '');
     assert.equal(consoleSpy.called, true);
@@ -35,7 +35,7 @@ describe('Core > Create styles', () => {
 
     const parsersSpy = spy(parsers.display, 'parse');
 
-    createStyles(stylesSrc, null, null, null);
+    createStyles(stylesSrc, null, null);
 
     if (parsersSpy.callCount) {
       done();

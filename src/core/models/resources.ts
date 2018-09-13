@@ -6,14 +6,6 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { ArtboardInfo } from './index';
-
-export interface Resources {
-  artboards: { [name: string]: ArtboardInfo };
-  gradients: string;
-  clipPaths: string;
-}
-
 export interface RawResource {
   path: string;
   type: string;

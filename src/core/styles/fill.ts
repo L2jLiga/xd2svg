@@ -15,14 +15,14 @@ export const fill: Parser = {
   parse: fillParser,
 };
 
-export function fillParser(src: Fill, parentElement: XMLElementOrXMLNode, uuid: string, resources): string {
+export function fillParser(src: Fill, defs: XMLElementOrXMLNode, uuid: string, resources): string {
   switch (src.type) {
     case 'color':
       return colorTransformer(src.fill.color);
     case 'gradient':
       return `url(#${src.gradient.ref})`;
     case 'pattern':
-      createPattern(src.pattern, resources, parentElement);
+      createPattern(src.pattern, resources, defs);
 
       return `url(#${src.pattern.meta.ux.uid})`;
     case 'none':
@@ -32,8 +32,8 @@ export function fillParser(src: Fill, parentElement: XMLElementOrXMLNode, uuid: 
   }
 }
 
-function createPattern(patternObject: Pattern, resources: any, parentElement: XMLElementOrXMLNode): void {
-  const pattern = parentElement.element('pattern', {
+function createPattern(patternObject: Pattern, resources: any, defs: XMLElementOrXMLNode): void {
+  const pattern = defs.element('pattern', {
     height: '1',
     id: patternObject.meta.ux.uid,
     width: '1',

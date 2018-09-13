@@ -6,30 +6,25 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { readFileSync }                       from 'fs';
-import * as builder                           from 'xmlbuilder';
-import { XMLElementOrXMLNode }                from 'xmlbuilder';
-import { createElem }                         from './artboard-converter';
-import { ArtboardInfo, Directory, Resources } from './models';
-import { Color }                              from './styles/models';
-import { colorTransformer }                   from './utils/color-transformer';
+import { readFileSync }                        from 'fs';
+import { createElem }                          from './artboard-converter';
+import { ArtboardInfo, Dictionary, Directory } from './models';
+import { Color }                               from './styles/models';
+import { colorTransformer }                    from './utils/color-transformer';
+import { defs }                                from './utils/defs-list';
 
-export function resourcesParser(directory: Directory): Resources {
+export function resourcesParser(directory: Directory): Dictionary<ArtboardInfo> {
   const json = readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
-
   const resources = JSON.parse(json);
 
-  return {
-    artboards: buildArtboardsInfo(resources.artboards),
+  buildGradients(resources.resources.gradients);
+  buildClipPaths(resources.resources.clipPaths);
 
-    gradients: buildGradients(resources.resources.gradients),
-
-    clipPaths: buildClipPaths(resources.resources.clipPaths),
-  };
+  return buildArtboardsInfo(resources.artboards);
 }
 
-function buildArtboardsInfo(artboards: { [id: string]: any }): { [name: string]: ArtboardInfo } {
-  const artboardsInfoList: { [name: string]: ArtboardInfo } = {};
+function buildArtboardsInfo(artboards: { [id: string]: any }): Dictionary<ArtboardInfo> {
+  const artboardsInfoList: Dictionary<ArtboardInfo> = {};
 
   Object.keys(artboards).forEach((artboardId: string) => {
     artboardsInfoList[artboards[artboardId].name] = {
@@ -46,15 +41,13 @@ function buildArtboardsInfo(artboards: { [id: string]: any }): { [name: string]:
   return artboardsInfoList;
 }
 
-function buildGradients(gradients): string {
-  const defs = builder.begin().element('defs');
-
-  Object.keys(gradients).forEach((gradientId: string) => buildElement(gradients[gradientId], gradientId, defs));
-
-  return defs.end();
+function buildGradients(gradients): void {
+  Object
+    .keys(gradients)
+    .forEach((gradientId: string) => buildElement(gradients[gradientId], gradientId));
 }
 
-function buildElement({type, stops}, gradientId: string, defs: XMLElementOrXMLNode): void {
+function buildElement({type, stops}, gradientId: string): void {
   const gradient = defs.element(type === 'linear' ? 'lineargradient' : 'radialgradient', {id: gradientId});
 
   stops.forEach((stop: { offset: string, color: Color }) => {
@@ -65,15 +58,11 @@ function buildElement({type, stops}, gradientId: string, defs: XMLElementOrXMLNo
   });
 }
 
-function buildClipPaths(clipPaths: any): string {
-  const root = builder.begin().element('defs');
-
+function buildClipPaths(clipPaths: any): void {
   Object.keys(clipPaths).forEach((clipPathId: string) => {
     const clipPath = clipPaths[clipPathId];
-    const clipPathElement = createElem(clipPath, root.element('clipPath'), null);
+    const clipPathElement = createElem(clipPath, defs.element('clipPath'), defs);
 
     clipPathElement.attribute('id', clipPathId);
   });
-
-  return root.end();
 }

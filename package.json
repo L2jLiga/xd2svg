@@ -1,6 +1,6 @@
 {
   "name": "xd2svg",
-  "version": "1.0.0-2",
+  "version": "1.0.0-3",
   "description": "Utility for converting Adobe XD files (*.xd) to SVG",
   "keywords": [
     "svg",
@@ -47,7 +47,6 @@
     "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
     "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json mocha",
     "test:coverage": "cross-env TS_NODE_PROJECT=test/tsconfig.json nyc mocha",
-    "test:publish": "codecov",
     "test:watch": "yarn test --watch-extensions ts --watch",
     "prepublish": "yarn run lint && yarn run clean && yarn run build"
   },
@@ -67,13 +66,12 @@
     "@types/tmp": "0.0.33",
     "@types/xmlbuilder": "0.0.33",
     "blink-diff": "1.0.13",
-    "codecov": "3.1.0",
     "convert-svg-to-png": "0.4.0",
     "cross-env": "5.2.0",
     "mocha": "5.2.0",
     "nyc": "13.0.1",
     "rimraf": "2.6.2",
-    "sinon": "6.2.0",
+    "sinon": "6.3.1",
     "ts-node": "7.0.1",
     "tslint": "5.11.0",
     "typescript": "3.0.3"

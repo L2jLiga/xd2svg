@@ -13,6 +13,19 @@ import { Color, Pattern } from '../../../src/core/styles/models';
 import { stroke }         from '../../../src/core/styles/stroke';
 
 describe('Core > Styles parsers', () => {
+  const pattern: Pattern = {
+    height: 1,
+    href: 'href',
+    meta: {
+      ux: {
+        hrefLastModifiedDate: 1,
+        scaleBehavior: 'null',
+        uid: 'uid',
+      },
+    },
+    width: 1,
+  };
+
   describe(' > Fill', () => {
     it('should return none when type is none', () => {
       const type = 'none';
@@ -58,51 +71,39 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, `url(#${gradientRef})`);
     });
 
-    it('should append pattern element to parent and return ref to this pattern if type is pattern', () => {
+    it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
       const uuid = 'uuid';
-      const parent: any = builder.create('svg');
-      const pattern: Pattern = {
-        meta: {
-          ux: {
-            uid: 'uid',
-            scaleBehavior: 'fill',
-            hrefLastModifiedDate: 1,
-          },
-        },
-        href: 'href',
-        height: 1,
-        width: 1,
-      };
+      const defs: any = builder.begin().ele('defs');
+      pattern.meta.ux.scaleBehavior = 'fill';
 
-      const result = fill.parse({type: 'pattern', pattern}, parent, uuid, {});
+      const result = fill.parse({type: 'pattern', pattern}, defs, uuid, {});
 
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
-      assert.equal(parent.children.length, 1);
-      assert.equal(parent.children[0].name, 'pattern');
+      assert.equal(
+        defs.end(),
+        '<defs>' +
+        '<pattern height="1" id="uid" width="1" x="0" y="0" patternContentUnits="objectBoundingBox">' +
+        '<image xlink:href="undefined" preserveAspectRatio="none" width="1" height="1"/>' +
+        '</pattern>' +
+        '</defs>',
+      );
     });
 
     it('should correctly parse pattern without scale', () => {
       const uuid = 'uuid';
-      const pattern: Pattern = {
-        meta: {
-          ux: {
-            uid: 'uid',
-            scaleBehavior: 'null',
-            hrefLastModifiedDate: 1,
-          },
-        },
-        href: 'href',
-        height: 1,
-        width: 1,
-      };
+      const defs: any = builder.begin().ele('defs');
+      pattern.meta.ux.scaleBehavior = 'null';
 
-      const expected = '<pattern height="1" id="uid" width="1" x="0" y="0"><image xlink:href="undefined" width="1" height="1"/></pattern>';
-      const parent = builder.begin();
+      const expected = '<defs>' +
+        '<pattern height="1" id="uid" width="1" x="0" y="0">' +
+        '<image xlink:href="undefined" width="1" height="1"/>' +
+        '</pattern>' +
+        '</defs>';
 
-      const actual = fill.parse({type: 'pattern', pattern}, parent, uuid, {});
+      const actual = fill.parse({type: 'pattern', pattern}, defs, uuid, {});
 
       assert.equal(actual, `url(#${pattern.meta.ux.uid})`);
-      assert.equal(parent.end(), expected);
+      assert.equal(defs.end(), expected);
     });
   });
 
@@ -151,27 +152,14 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, `url(#${gradientRef})`);
     });
 
-    it('should append pattern element to parent and return ref to this pattern if type is pattern', () => {
+    it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
       const uuid = 'uuid';
-      const parent: any = builder.create('svg');
-      const pattern: Pattern = {
-        meta: {
-          ux: {
-            uid: 'uid',
-            scaleBehavior: 'fill',
-            hrefLastModifiedDate: 1,
-          },
-        },
-        href: 'href',
-        height: 1,
-        width: 1,
-      };
+      const defs: any = builder.create('svg');
+      pattern.meta.ux.scaleBehavior = 'fill';
 
-      const result = stroke.parse({type: 'pattern', pattern}, parent, uuid, {});
+      const result = stroke.parse({type: 'pattern', pattern}, defs, uuid, {});
 
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
-      assert.equal(parent.children.length, 1);
-      assert.equal(parent.children[0].name, 'pattern');
     });
 
     it('should add stroke width if it present', () => {
