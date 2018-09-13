@@ -13,6 +13,19 @@ import { Color, Pattern } from '../../../src/core/styles/models';
 import { stroke }         from '../../../src/core/styles/stroke';
 
 describe('Core > Styles parsers', () => {
+  const pattern: Pattern = {
+    height: 1,
+    href: 'href',
+    meta: {
+      ux: {
+        hrefLastModifiedDate: 1,
+        scaleBehavior: 'null',
+        uid: 'uid',
+      },
+    },
+    width: 1,
+  };
+
   describe(' > Fill', () => {
     it('should return none when type is none', () => {
       const type = 'none';
@@ -61,18 +74,7 @@ describe('Core > Styles parsers', () => {
     it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
       const uuid = 'uuid';
       const defs: any = builder.begin().ele('defs');
-      const pattern: Pattern = {
-        meta: {
-          ux: {
-            uid: 'uid',
-            scaleBehavior: 'fill',
-            hrefLastModifiedDate: 1,
-          },
-        },
-        href: 'href',
-        height: 1,
-        width: 1,
-      };
+      pattern.meta.ux.scaleBehavior = 'fill';
 
       const result = fill.parse({type: 'pattern', pattern}, defs, uuid, {});
 
@@ -90,18 +92,7 @@ describe('Core > Styles parsers', () => {
     it('should correctly parse pattern without scale', () => {
       const uuid = 'uuid';
       const defs: any = builder.begin().ele('defs');
-      const pattern: Pattern = {
-        meta: {
-          ux: {
-            uid: 'uid',
-            scaleBehavior: 'null',
-            hrefLastModifiedDate: 1,
-          },
-        },
-        href: 'href',
-        height: 1,
-        width: 1,
-      };
+      pattern.meta.ux.scaleBehavior = 'null';
 
       const expected = '<defs>' +
         '<pattern height="1" id="uid" width="1" x="0" y="0">' +
@@ -164,18 +155,7 @@ describe('Core > Styles parsers', () => {
     it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
       const uuid = 'uuid';
       const defs: any = builder.create('svg');
-      const pattern: Pattern = {
-        meta: {
-          ux: {
-            uid: 'uid',
-            scaleBehavior: 'fill',
-            hrefLastModifiedDate: 1,
-          },
-        },
-        href: 'href',
-        height: 1,
-        width: 1,
-      };
+      pattern.meta.ux.scaleBehavior = 'fill';
 
       const result = stroke.parse({type: 'pattern', pattern}, defs, uuid, {});
 

@@ -14,12 +14,10 @@ import { Artboard, ArtboardInfo, Line, Paragraph, Shape, Text } from './models';
 export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo): string[] {
   return artboardsRoot.children
     .map((imageRootObject: Artboard): string => {
-      const svg = builder.begin().element({
-        svg: {
-          '@enable-background': `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
-          '@id': `${imageRootObject.id}`,
-          '@viewBox': `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
-        },
+      const svg = builder.begin().element('svg', {
+        'enable-background': `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
+        'id': `${imageRootObject.id}`,
+        'viewBox': `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
       });
       if (artboardInfo.width) svg.attribute('width', `${artboardInfo.width}`);
       if (artboardInfo.height) svg.attribute('height', `${artboardInfo.height}`);
