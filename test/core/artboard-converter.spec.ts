@@ -33,6 +33,7 @@ describe('Core > Artboard converter', () => {
       '<svg enable-background="new 0 0 undefined undefined" id="undefined" viewBox="0 0 undefined undefined">' +
       '<title>some</title>' +
       '<rect height="undefined" style="" transform="translate(0 0)" width="undefined" x="0" y="0"/>' +
+      '<defs/>' +
       '</svg>',
     ];
 
@@ -51,7 +52,7 @@ describe('Core > Artboard converter', () => {
 
       createElem({
         children: [{type: 'unknownType'}],
-      } as any, null, null);
+      } as any, null, null, null);
     });
 
     it('should create text element', () => {
@@ -77,7 +78,7 @@ describe('Core > Artboard converter', () => {
         ],
       };
 
-      createElem(svgObjCollection, parent, null);
+      createElem(svgObjCollection, parent, null, null);
 
       assert.equal(parent.end(), '<text style=";display:  none;"><tspan>raw</tspan></text>');
     });
@@ -93,7 +94,7 @@ describe('Core > Artboard converter', () => {
 
       createElem({
         children: [{type: 'shape', shape: {type: 'unknownShape'}}],
-      } as any, builder.begin(), null);
+      } as any, builder.begin(), null, null);
     });
 
     it('should create compound element', () => {
@@ -110,7 +111,7 @@ describe('Core > Artboard converter', () => {
         }],
       };
 
-      createElem(svgObjCollection, parent, null);
+      createElem(svgObjCollection, parent, null, null);
 
       assert.equal(parent.end(), '<path d="abcdef"/>');
     });
@@ -128,7 +129,7 @@ describe('Core > Artboard converter', () => {
         }],
       };
 
-      createElem(svgObjCollection, parent, null);
+      createElem(svgObjCollection, parent, null, null);
 
       assert.equal(parent.end(), '<path d="abcdef"/>');
     });
@@ -150,7 +151,7 @@ describe('Core > Artboard converter', () => {
         }],
       };
 
-      createElem(svgObjCollection, parent, null);
+      createElem(svgObjCollection, parent, null, null);
 
       assert.equal(parent.end(), '<rect x="1" y="2" width="3" height="4" rx="5" ry="6"/>');
     });
@@ -170,7 +171,7 @@ describe('Core > Artboard converter', () => {
         }],
       };
 
-      createElem(svgObjCollection, parent, null);
+      createElem(svgObjCollection, parent, null, null);
 
       assert.equal(parent.end(), '<circle cx="1" cy="2" r="3"/>');
     });
@@ -191,7 +192,7 @@ describe('Core > Artboard converter', () => {
         }],
       };
 
-      createElem(svgObjCollection, parent, null);
+      createElem(svgObjCollection, parent, null, null);
 
       assert.equal(parent.end(), '<ellipse cx="1" cy="2" rx="3" ry="4"/>');
     });
@@ -212,7 +213,7 @@ describe('Core > Artboard converter', () => {
         }],
       };
 
-      createElem(svgObjCollection, parent, null);
+      createElem(svgObjCollection, parent, null, null);
 
       assert.equal(parent.end(), '<line x1="1" y1="3" x2="2" y2="4"/>');
     });

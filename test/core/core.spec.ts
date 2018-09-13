@@ -18,6 +18,7 @@ describe('Core > Inject resources into SVGs', () => {
 
   it('should inject resources in first SVG and return it when list length equal to 1', () => {
     const resources = {
+      defs: '<defs/>',
       rootHeight: 2,
       rootWidth: 1,
     };
@@ -30,6 +31,7 @@ describe('Core > Inject resources into SVGs', () => {
 
   it('should inject resources and all SVGs into new one and return it when list length 2 or more', () => {
     const resources = {
+      defs: '<defs/>',
       rootHeight: 2,
       rootId: 'test',
       rootWidth: 1,
@@ -50,6 +52,7 @@ describe('Core > Inject resources into SVGs', () => {
 
   it('shouldn\'t paste id in root svg if it is not exist', () => {
     const resources = {
+      defs: '<defs/>',
       rootHeight: 2,
       rootWidth: 1,
     };

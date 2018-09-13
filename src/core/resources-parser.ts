@@ -61,7 +61,7 @@ function buildElement({type, stops}, gradientId: string): void {
 function buildClipPaths(clipPaths: any): void {
   Object.keys(clipPaths).forEach((clipPathId: string) => {
     const clipPath = clipPaths[clipPathId];
-    const clipPathElement = createElem(clipPath, defs.element('clipPath'), null);
+    const clipPathElement = createElem(clipPath, defs.element('clipPath'), defs, null);
 
     clipPathElement.attribute('id', clipPathId);
   });

@@ -10,13 +10,8 @@ import * as assert     from 'assert';
 import * as builder    from 'xmlbuilder';
 import { filters }     from '../../../src/core/styles/filters';
 import { camelToDash } from '../../../src/core/utils/camel-to-dash';
-import { defs }        from '../../../src/core/utils/defs-list';
 
 describe('Core > Styles parsers > Filters', () => {
-  beforeEach(() => {
-    (defs as any).children = [];
-  });
-
   it('should skip invisible filter and return empty list', () => {
     const filtersSrc = [
       {
@@ -33,6 +28,7 @@ describe('Core > Styles parsers > Filters', () => {
   });
 
   it('should correctly parse blur filter', () => {
+    const defs = builder.begin().ele('defs');
     const blurFilter = {
       params: {
         blurAmount: 12,
@@ -48,13 +44,14 @@ describe('Core > Styles parsers > Filters', () => {
       '<feFlood flood-opacity="1" in="SourceGraphic"/>' +
       '</filter></defs>';
 
-    const result = filters.parse([blurFilter]);
+    const result = filters.parse([blurFilter], defs);
 
     assert.equal(result, `url(#blur-12-15)`);
     assert.equal(defs.end(), expectedOutput);
   });
 
   it('should correctly parse drop-shadow filter', () => {
+    const defs = builder.begin().ele('defs');
     const dropShadow = {
       type: 'dropShadow',
       params: {
@@ -84,13 +81,14 @@ describe('Core > Styles parsers > Filters', () => {
       '</filter>' +
       '</defs>';
 
-    const result = filters.parse([dropShadow]);
+    const result = filters.parse([dropShadow], defs);
 
     assert.equal(result, `url(#drop-shadow-0-3-3-RGB)`);
     assert.equal(defs.end(), expectedOutput);
   });
 
   it('should log to console when unknown filter', (done) => {
+    const defs = builder.begin().ele('defs');
     const filterName = 'unknownFilter';
     const log = console.log;
 
@@ -104,6 +102,6 @@ describe('Core > Styles parsers > Filters', () => {
       done();
     };
 
-    filters.parse(filterSrc);
+    filters.parse(filterSrc, defs);
   });
 });

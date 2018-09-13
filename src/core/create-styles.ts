@@ -9,7 +9,7 @@
 import { XMLElementOrXMLNode } from 'xmlbuilder';
 import parsers                 from './styles';
 
-export function createStyles(stylesSrc, parentElement: XMLElementOrXMLNode, uuid: string, resources: { [path: string]: string }): string {
+export function createStyles(stylesSrc, defs: XMLElementOrXMLNode, uuid: string, resources: { [path: string]: string }): string {
   let styleAttr: string = '';
 
   Object.getOwnPropertyNames(stylesSrc).map((styleName) => {
@@ -18,7 +18,7 @@ export function createStyles(stylesSrc, parentElement: XMLElementOrXMLNode, uuid
 
     if (parser) {
       const ruleName: string = parser.name ? `${parser.name}: ` : '';
-      const ruleValue: string = parser.parse(styleValue, parentElement, uuid, resources);
+      const ruleValue: string = parser.parse(styleValue, defs, uuid, resources);
 
       styleAttr += `;${ruleName} ${ruleValue};`;
     } else {

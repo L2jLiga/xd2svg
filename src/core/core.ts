@@ -15,6 +15,7 @@ import { svgo }                                          from './svgo';
 import { defs }                                          from './utils/defs-list';
 
 interface InjectableSvgData {
+  defs: string;
   rootWidth: number;
   rootHeight: number;
   rootId?: string;
@@ -31,7 +32,7 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
 
   const convertedArtboards: Dictionary<string> = {};
 
-  manifestInfo.artboards.map((artboardItem: any) => {
+  const artboards = manifestInfo.artboards.map((artboardItem: any) => {
     const json = readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
     const artboard: Artboard = JSON.parse(json);
@@ -47,19 +48,25 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
       return;
     }
 
-    convertedArtboards[artboardItem.name] = injectSvgResources(contentOfArtboard, {
-      rootHeight: artboardInfoDictionary[artboardItem.name].height,
-      rootWidth: artboardInfoDictionary[artboardItem.name].width,
-    });
+    return {artboardName: artboardItem.name, contentOfArtboard};
   });
+
+  const defsList = defs.end();
 
   if (single) {
     return injectSvgResources(Object.values(convertedArtboards), {
+      defs: defsList,
       rootHeight: dimensions.height,
       rootId: manifestInfo.id,
       rootWidth: dimensions.width,
     });
   }
+
+  artboards.forEach(({artboardName, contentOfArtboard}) => convertedArtboards[artboardName] = injectSvgResources(contentOfArtboard, {
+    defs: defsList,
+    rootHeight: artboardInfoDictionary[artboardName].height,
+    rootWidth: artboardInfoDictionary[artboardName].width,
+  }));
 
   return convertedArtboards;
 }
@@ -83,14 +90,14 @@ export function injectSvgResources(
       return '';
 
     case 1:
-      return svg[0].replace(/<svg([^>]*)>/, `<svg$1 ${commonSvgDefPart}>${defs.end()}`);
+      return svg[0].replace(/<svg([^>]*)>/, `<svg$1 ${commonSvgDefPart}>${data.defs}`);
 
     default:
       return `<svg ${commonSvgDefPart}
          width="${data.rootWidth}"
          height="${data.rootHeight}"
          ${data.rootId ? `id="${data.rootId}"` : ''}>
-      ${defs.end()}
+      ${data.defs}
       ${svg.join('\n')}
     </svg>`;
   }

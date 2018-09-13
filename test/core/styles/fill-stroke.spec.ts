@@ -11,13 +11,8 @@ import * as builder       from 'xmlbuilder';
 import { fill }           from '../../../src/core/styles/fill';
 import { Color, Pattern } from '../../../src/core/styles/models';
 import { stroke }         from '../../../src/core/styles/stroke';
-import { defs }           from '../../../src/core/utils/defs-list';
 
 describe('Core > Styles parsers', () => {
-  beforeEach(() => {
-    (defs as any).children = [];
-  });
-
   describe(' > Fill', () => {
     it('should return none when type is none', () => {
       const type = 'none';
@@ -63,9 +58,9 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, `url(#${gradientRef})`);
     });
 
-    it('should append pattern element to parent and return ref to this pattern if type is pattern', () => {
+    it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
       const uuid = 'uuid';
-      const parent: any = builder.create('svg');
+      const defs: any = builder.begin().ele('defs');
       const pattern: Pattern = {
         meta: {
           ux: {
@@ -79,7 +74,7 @@ describe('Core > Styles parsers', () => {
         width: 1,
       };
 
-      const result = fill.parse({type: 'pattern', pattern}, parent, uuid, {});
+      const result = fill.parse({type: 'pattern', pattern}, defs, uuid, {});
 
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
       assert.equal(
@@ -94,6 +89,7 @@ describe('Core > Styles parsers', () => {
 
     it('should correctly parse pattern without scale', () => {
       const uuid = 'uuid';
+      const defs: any = builder.begin().ele('defs');
       const pattern: Pattern = {
         meta: {
           ux: {
@@ -113,7 +109,7 @@ describe('Core > Styles parsers', () => {
         '</pattern>' +
         '</defs>';
 
-      const actual = fill.parse({type: 'pattern', pattern}, null, uuid, {});
+      const actual = fill.parse({type: 'pattern', pattern}, defs, uuid, {});
 
       assert.equal(actual, `url(#${pattern.meta.ux.uid})`);
       assert.equal(defs.end(), expected);
@@ -165,9 +161,9 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, `url(#${gradientRef})`);
     });
 
-    it('should append pattern element to parent and return ref to this pattern if type is pattern', () => {
+    it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
       const uuid = 'uuid';
-      const parent: any = builder.create('svg');
+      const defs: any = builder.create('svg');
       const pattern: Pattern = {
         meta: {
           ux: {
@@ -181,7 +177,7 @@ describe('Core > Styles parsers', () => {
         width: 1,
       };
 
-      const result = stroke.parse({type: 'pattern', pattern}, parent, uuid, {});
+      const result = stroke.parse({type: 'pattern', pattern}, defs, uuid, {});
 
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
     });
@@ -193,7 +189,6 @@ describe('Core > Styles parsers', () => {
       const result = stroke.parse({type, fill: {color}, width: 1});
 
       assert.equal(result, `#${color.value.toString(16)};stroke-width:1px`);
-      assert.equal(defs.end(), '<defs/>');
     });
   });
 });

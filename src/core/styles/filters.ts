@@ -6,17 +6,17 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { camelToDash }      from '../utils/camel-to-dash';
-import { colorTransformer } from '../utils/color-transformer';
-import { defs }             from '../utils/defs-list';
-import { Parser }           from './models';
+import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { camelToDash }         from '../utils/camel-to-dash';
+import { colorTransformer }    from '../utils/color-transformer';
+import { Parser }              from './models';
 
 export const filters: Parser = {
   name: 'filter',
   parse: filtersParser,
 };
 
-function filtersParser(src: any): string {
+function filtersParser(src: any, defs: XMLElementOrXMLNode): string {
   const filterList: string[] = [];
 
   src.forEach((filter) => {

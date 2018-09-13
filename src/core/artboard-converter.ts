@@ -35,16 +35,18 @@ export function artboardConverter(artboardsRoot: Artboard, artboardInfo: Artboar
         y: 0,
       });
 
-      return createElem(imageRootObject.artboard, svg, resources).end();
+      const defs = svg.element('defs');
+
+      return createElem(imageRootObject.artboard, svg, defs, resources).end();
     });
 }
 
-function createShape(srcObj: Shape, resources: ResourcesMap, parentElement: XMLElementOrXMLNode) {
+function createShape(srcObj: Shape, resources: ResourcesMap, parentElement: XMLElementOrXMLNode, defs: XMLElementOrXMLNode) {
   const object = parentElement.element(srcObj.type === 'compound' ? 'path' : srcObj.type);
 
   switch (srcObj.type) {
     case 'compound':
-      createElem(srcObj, object, resources);
+      createElem(srcObj, object, defs, resources);
 
     case 'path':
       object.attribute('d', srcObj.path);
@@ -119,14 +121,19 @@ function createTransforms(src): string {
   return `matrix(${src.a}, ${src.b}, ${src.c}, ${src.d}, ${src.tx}, ${src.ty})`;
 }
 
-export function createElem<T extends XMLElementOrXMLNode>(svgObjCollection: { children: Artboard[] }, parentElement: T, resources: ResourcesMap): T {
+export function createElem(
+  svgObjCollection: { children: Artboard[] },
+  parentElement: XMLElementOrXMLNode,
+  defs: XMLElementOrXMLNode,
+  resources: ResourcesMap,
+): XMLElementOrXMLNode {
   svgObjCollection.children
     .map((svgObject: Artboard): void => {
       let node: XMLElementOrXMLNode;
 
       switch (svgObject.type) {
         case 'shape':
-          node = createShape(svgObject.shape, resources, parentElement);
+          node = createShape(svgObject.shape, resources, parentElement, defs);
           break;
 
         case 'text':
@@ -135,7 +142,7 @@ export function createElem<T extends XMLElementOrXMLNode>(svgObjCollection: { ch
 
         case 'group':
           node = parentElement.element('g');
-          createElem(svgObject.group, node, resources);
+          createElem(svgObject.group, node, defs, resources);
           break;
 
         default:
@@ -156,7 +163,7 @@ export function createElem<T extends XMLElementOrXMLNode>(svgObjCollection: { ch
       }
 
       if (svgObject.style) {
-        node.attribute('style', createStyles(svgObject.style, parentElement, svgObject.id, resources));
+        node.attribute('style', createStyles(svgObject.style, defs, svgObject.id, resources));
       }
 
       if (svgObject.transform) {
