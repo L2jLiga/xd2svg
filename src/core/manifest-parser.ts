@@ -9,18 +9,22 @@
 import { readFileSync }                                       from 'fs';
 import { Directory, ManifestFile, RawResource, ResourcesMap } from './models';
 
+export const manifestInfo = {
+  artboards: [],
+  id: null,
+  name: null,
+  resources: null as ResourcesMap,
+  version: null,
+};
+
 export function manifestParser(directory: Directory) {
   const json: string = readFileSync(`${directory.name}/manifest`, 'utf-8');
 
   const manifest: ManifestFile = JSON.parse(json);
 
-  const manifestInfo = {
-    artboards: [],
-    id: manifest.id,
-    name: manifest.name,
-    resources: null as ResourcesMap,
-    version: manifest['uxdesign#version'],
-  };
+  manifestInfo.id = manifest.id;
+  manifestInfo.name = manifest.name;
+  manifestInfo.version = manifest['uxdesign#version'];
 
   manifest.children.forEach((child) => {
     if (child.name === 'artwork') manifestInfo.artboards.push(...child.children);

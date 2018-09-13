@@ -7,9 +7,11 @@
  */
 
 import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { manifestInfo }        from './manifest-parser';
 import parsers                 from './styles';
 
-export function createStyles(stylesSrc, defs: XMLElementOrXMLNode, uuid: string, resources: { [path: string]: string }): string {
+export function createStyles(stylesSrc, defs: XMLElementOrXMLNode, uuid: string): string {
+  const resources = manifestInfo.resources;
   let styleAttr: string = '';
 
   Object.getOwnPropertyNames(stylesSrc).map((styleName) => {

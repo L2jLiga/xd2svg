@@ -11,6 +11,7 @@ import * as extractZip  from 'extract-zip';
 import { readFileSync } from 'fs';
 import { dirSync }      from 'tmp';
 import { promisify }    from 'util';
+import { manifestInfo } from '../src/core/manifest-parser';
 import xd2svg           from '../src/xd2svg';
 
 const BlinkDiff = require('blink-diff');
@@ -22,6 +23,11 @@ describe('Complex test for xd2svg', () => {
     maxListeners = process.getMaxListeners();
 
     process.setMaxListeners(0);
+  });
+
+  beforeEach(() => {
+    manifestInfo.resources = null;
+    manifestInfo.artboards = [];
   });
 
   after(() => {

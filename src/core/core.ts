@@ -37,7 +37,7 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
 
     const artboard: Artboard = JSON.parse(json);
 
-    const contentOfArtboard: string[] = artboardConverter(artboard, artboardInfoDictionary[artboardItem.name], manifestInfo.resources);
+    const contentOfArtboard: string[] = artboardConverter(artboard, artboardInfoDictionary[artboardItem.name]);
 
     if (single) {
       convertedArtboards[artboardItem.name] = contentOfArtboard.join('\n');

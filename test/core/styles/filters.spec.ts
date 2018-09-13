@@ -41,12 +41,11 @@ describe('Core > Styles parsers > Filters', () => {
     const expectedOutput =
       '<defs><filter id="blur-12-15">' +
       '<feGaussianBlur in="SourceGraphic" stdDeviation="12"/>' +
-      '<feFlood flood-opacity="1" in="SourceGraphic"/>' +
       '</filter></defs>';
 
     const result = filters.parse([blurFilter], defs);
 
-    assert.equal(result, `url(#blur-12-15)`);
+    assert.equal(result, `url(#blur-12-15) ;fill-opacity: 1`);
     assert.equal(defs.end(), expectedOutput);
   });
 
