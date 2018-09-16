@@ -7,6 +7,7 @@
  */
 
 import { XMLElementOrXMLNode }   from 'xmlbuilder';
+import { manifestInfo }          from '../manifest-parser';
 import { colorTransformer }      from '../utils/color-transformer';
 import { Fill, Parser, Pattern } from './models';
 
@@ -15,14 +16,14 @@ export const fill: Parser = {
   parse: fillParser,
 };
 
-export function fillParser(src: Fill, defs: XMLElementOrXMLNode, uuid: string, resources): string {
+export function fillParser(src: Fill, defs: XMLElementOrXMLNode): string {
   switch (src.type) {
     case 'color':
       return colorTransformer(src.fill.color);
     case 'gradient':
       return `url(#${src.gradient.ref})`;
     case 'pattern':
-      createPattern(src.pattern, resources, defs);
+      createPattern(src.pattern, defs);
 
       return `url(#${src.pattern.meta.ux.uid})`;
     case 'none':
@@ -32,7 +33,8 @@ export function fillParser(src: Fill, defs: XMLElementOrXMLNode, uuid: string, r
   }
 }
 
-function createPattern(patternObject: Pattern, resources: any, defs: XMLElementOrXMLNode): void {
+function createPattern(patternObject: Pattern, defs: XMLElementOrXMLNode): void {
+  const resources = manifestInfo.resources;
   const pattern = defs.element('pattern', {
     height: '1',
     id: patternObject.meta.ux.uid,

@@ -19,7 +19,7 @@ describe('Core > Create styles', () => {
 
     const consoleSpy = stub(console, 'warn');
 
-    const result = createStyles(stylesSrc, null, null);
+    const result = createStyles(stylesSrc, null);
 
     assert.equal(result, '');
     assert.equal(consoleSpy.called, true);
@@ -35,7 +35,7 @@ describe('Core > Create styles', () => {
 
     const parsersSpy = spy(parsers.display, 'parse');
 
-    createStyles(stylesSrc, null, null);
+    createStyles(stylesSrc, null);
 
     if (parsersSpy.callCount) {
       done();

@@ -6,7 +6,9 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
+import { XMLElementOrXMLNode } from 'xmlbuilder';
+
 export interface Parser {
   name?: string;
-  parse: (...args) => string;
+  parse: (src: any, defs?: XMLElementOrXMLNode) => string;
 }
