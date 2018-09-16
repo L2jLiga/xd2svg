@@ -90,7 +90,7 @@ describe('Complex test for xd2svg', () => {
         })));
       })
       .then((images) => {
-        const diffs = keys.map((key: string, index: number) => runDiffFor(images[index], `test/expected/${key}`));
+        const diffs = keys.map((key: string, index: number) => runDiffFor(images[index], `test/expected/${key}.png`));
 
         return Promise.all(diffs);
       })
