@@ -10,7 +10,7 @@ export * from './artboard';
 export * from './artboard-info';
 export * from './dictionary';
 export * from './directory';
-export * from './manifest-parser';
+export * from './manifest-file';
 export * from './resources';
 export * from './shape';
 export * from './text';

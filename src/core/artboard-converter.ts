@@ -26,7 +26,7 @@ export function artboardConverter(artboardsRoot: Artboard, artboardInfo: Artboar
 
       svg.element('rect', {
         height: `${artboardInfo.height}`,
-        style: createStyles(imageRootObject.style, svg, imageRootObject.id),
+        style: createStyles(imageRootObject.style, svg),
         transform: `translate(${artboardInfo.x} ${artboardInfo.y})`,
         width: `${artboardInfo.width}`,
         x: 0,
@@ -163,7 +163,7 @@ function applyAttributes(node: XMLElementOrXMLNode, defs: XMLElementOrXMLNode, s
   }
 
   if (svgObject.style) {
-    node.attribute('style', createStyles(svgObject.style, defs, svgObject.id));
+    node.attribute('style', createStyles(svgObject.style, defs));
   }
 
   if (svgObject.transform) {

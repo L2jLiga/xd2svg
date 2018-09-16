@@ -7,11 +7,9 @@
  */
 
 import { XMLElementOrXMLNode } from 'xmlbuilder';
-import { manifestInfo }        from './manifest-parser';
 import parsers                 from './styles';
 
-export function createStyles(stylesSrc, defs: XMLElementOrXMLNode, uuid: string): string {
-  const resources = manifestInfo.resources;
+export function createStyles(stylesSrc, defs: XMLElementOrXMLNode): string {
   let styleAttr: string = '';
 
   Object.getOwnPropertyNames(stylesSrc).map((styleName) => {
@@ -20,7 +18,7 @@ export function createStyles(stylesSrc, defs: XMLElementOrXMLNode, uuid: string)
 
     if (parser) {
       const ruleName: string = parser.name ? `${parser.name}: ` : '';
-      const ruleValue: string = parser.parse(styleValue, defs, uuid, resources);
+      const ruleValue: string = parser.parse(styleValue, defs);
 
       styleAttr += `;${ruleName} ${ruleValue};`;
     } else {

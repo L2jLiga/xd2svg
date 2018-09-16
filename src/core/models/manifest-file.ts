@@ -16,7 +16,7 @@ export interface ManifestFile {
   'uxdesign#lowResPushed': boolean;
   children: Array<ArtworkRoot | RawResourceRoot>;
   'uxdesign#allowComments': boolean;
-  'uxdesign#version': boolean;
+  'uxdesign#version': string;
   'uxdesign#userDidSetPrototypeName': boolean;
   'uxdesign#userDidSetSpecName': boolean;
   'uxdesign#id': boolean;

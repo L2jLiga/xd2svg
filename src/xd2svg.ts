@@ -80,7 +80,7 @@ async function promiseAllObject(svg: Dictionary<string>): Promise<Dictionary<str
   const keys = Object.keys(svg);
   const values = await Promise.all(Object.values(svg).map((value: string) => optimizeSvg(value)));
 
-  return keys.reduce((obj, key, index) => {
+  return keys.reduce((obj: Dictionary<string>, key, index) => {
     obj[key] = values[index];
 
     return obj;

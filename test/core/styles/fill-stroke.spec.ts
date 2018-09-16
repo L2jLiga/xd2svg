@@ -72,11 +72,10 @@ describe('Core > Styles parsers', () => {
     });
 
     it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
-      const uuid = 'uuid';
       const defs: any = builder.begin().ele('defs');
       pattern.meta.ux.scaleBehavior = 'fill';
 
-      const result = fill.parse({type: 'pattern', pattern}, defs, uuid, {});
+      const result = fill.parse({type: 'pattern', pattern}, defs);
 
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
       assert.equal(
@@ -90,7 +89,6 @@ describe('Core > Styles parsers', () => {
     });
 
     it('should correctly parse pattern without scale', () => {
-      const uuid = 'uuid';
       const defs: any = builder.begin().ele('defs');
       pattern.meta.ux.scaleBehavior = 'null';
 
@@ -100,7 +98,7 @@ describe('Core > Styles parsers', () => {
         '</pattern>' +
         '</defs>';
 
-      const actual = fill.parse({type: 'pattern', pattern}, defs, uuid, {});
+      const actual = fill.parse({type: 'pattern', pattern}, defs);
 
       assert.equal(actual, `url(#${pattern.meta.ux.uid})`);
       assert.equal(defs.end(), expected);
@@ -153,11 +151,10 @@ describe('Core > Styles parsers', () => {
     });
 
     it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
-      const uuid = 'uuid';
       const defs: any = builder.create('svg');
       pattern.meta.ux.scaleBehavior = 'fill';
 
-      const result = stroke.parse({type: 'pattern', pattern}, defs, uuid, {});
+      const result = stroke.parse({type: 'pattern', pattern}, defs);
 
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
     });

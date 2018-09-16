@@ -6,15 +6,15 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { readFileSync }                                       from 'fs';
-import { Directory, ManifestFile, RawResource, ResourcesMap } from './models';
+import { readFileSync }                                                   from 'fs';
+import { Dictionary, Directory, ManifestFile, RawResource, ResourcesMap } from './models';
 
 export const manifestInfo = {
-  artboards: [],
-  id: null,
-  name: null,
-  resources: null as ResourcesMap,
-  version: null,
+  artboards: [] as any[],
+  id: '',
+  name: '',
+  resources: {} as ResourcesMap,
+  version: '',
 };
 
 export function manifestParser(directory: Directory) {
@@ -38,7 +38,7 @@ export function manifestParser(directory: Directory) {
 }
 
 function parseResources(dirName: string, resources: RawResource[] = []): ResourcesMap {
-  const resourcesObject = {};
+  const resourcesObject: Dictionary<string> = {};
 
   resources.forEach((res) => {
     const resourceSourcePath = dirName + '/resources/' + res.path;
