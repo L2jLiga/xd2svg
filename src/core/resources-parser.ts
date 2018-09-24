@@ -48,7 +48,7 @@ function buildGradients(gradients): void {
 }
 
 function buildElement({type, stops}, gradientId: string): void {
-  const gradient = defs.element(type === 'linear' ? 'lineargradient' : 'radialgradient', {id: gradientId});
+  const gradient = defs.element(type === 'linear' ? 'linearGradient' : 'radialGradient', {id: gradientId});
 
   stops.forEach((stop: { offset: string, color: Color }) => {
     gradient.element('stop', {

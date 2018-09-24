@@ -111,10 +111,10 @@ describe('Core > Resources parser', () => {
       defs.end(),
       '<defs>' +
       '<clipPath id="clipPathId"/>' +
-      '<lineargradient id="gradient1">' +
+      '<linearGradient id="gradient1">' +
       '<stop offset="0" stop-color="#fff"/>' +
-      '</lineargradient>' +
-      '<radialgradient id="gradient2"/>' +
+      '</linearGradient>' +
+      '<radialGradient id="gradient2"/>' +
       '</defs>',
     );
   });
