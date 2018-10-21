@@ -24,7 +24,7 @@ describe('Core > Styles parsers > Filters', () => {
 
     const result = filters.parse(filtersSrc, builder.create('svg'));
 
-    assert.equal(result, '');
+    assert.equal(result, null);
   });
 
   it('should correctly parse blur filter', () => {
@@ -39,13 +39,25 @@ describe('Core > Styles parsers > Filters', () => {
     };
 
     const expectedOutput =
-      '<defs><filter id="blur-12-15">' +
-      '<feGaussianBlur in="SourceGraphic" stdDeviation="12"/>' +
-      '</filter></defs>';
+      '<defs>' +
+      '<filter id="filter-1-blur-12-15">' +
+      '<feGaussianBlur in="SourceGraphic" result="blur-1-0" stdDeviation="12"/>' +
+      '<feComponentTransfer in="blur-1-0" result="blur-1-0">' +
+      '<feFuncR type="linear" slope="0.15"/>' +
+      '<feFuncG type="linear" slope="0.15"/>' +
+      '<feFuncB type="linear" slope="0.15"/>' +
+      '<feFuncA type="linear" slope="1"/>' +
+      '</feComponentTransfer>' +
+      '<feMerge>' +
+      '<feMergeNode in="blur-1-0"/>' +
+      '<feMergeNode in="SourceGraphic"/>' +
+      '</feMerge>' +
+      '</filter>' +
+      '</defs>';
 
     const result = filters.parse([blurFilter], defs);
 
-    assert.equal(result, `url(#blur-12-15) ;fill-opacity: 1`);
+    assert.equal(result, `url(#filter-1-blur-12-15)`);
     assert.equal(defs.end(), expectedOutput);
   });
 
@@ -75,14 +87,14 @@ describe('Core > Styles parsers > Filters', () => {
 
     const expectedOutput =
       '<defs>' +
-      '<filter id="drop-shadow-0-3-3-RGB">' +
-      '<feDropShadow dx="0" dy="3" flood-color="rgba(0,0,0,1)" stdDeviation="3"/>' +
+      '<filter id="filter-1-drop-shadow-0-3-3-RGB">' +
+      '<feDropShadow dx="0" dy="3" flood-color="rgba(0,0,0,1)" in="SourceGraphic" stdDeviation="3"/>' +
       '</filter>' +
       '</defs>';
 
     const result = filters.parse([dropShadow], defs);
 
-    assert.equal(result, `url(#drop-shadow-0-3-3-RGB)`);
+    assert.equal(result, `url(#filter-1-drop-shadow-0-3-3-RGB)`);
     assert.equal(defs.end(), expectedOutput);
   });
 

@@ -16,46 +16,55 @@ export const filters: Parser = {
   parse: filtersParser,
 };
 
-function filtersParser(src: any, defs: XMLElementOrXMLNode): string {
-  const filterList: string[] = [];
+function filtersParser(src: any[], defs: XMLElementOrXMLNode): string {
+  const filter = defs.element('filter');
+  const filterNo = ((defs as any).children as []).length;
+  let filterId: string = `filter-${filterNo}-`;
 
-  src.forEach((filter) => {
-    const filterName = filter.type.includes('#blur') ? 'blur' : camelToDash(filter.type);
-    const filterParams = filter.params && filter.params[filter.type + 's'] || filter.params || {};
+  src.reverse().forEach((filterDesc: any, index: number) => {
+    const filterName = filterDesc.type.includes('#blur') ? 'blur' : camelToDash(filterDesc.type);
+    const filterParams = filterDesc.params && filterDesc.params[filterDesc.type + 's'] || filterDesc.params || {};
 
-    if (filterParams.visible === false) return;
+    if (filterDesc.visible === false || filterParams.visible === false) return;
 
     switch (filterName) {
       case 'blur': {
-        const filterId: string = `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
+        filterId += `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
 
-        defs
-          .element('filter', {id: filterId})
+        filter
           .element('feGaussianBlur', {
-            in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',
+            in: 'SourceGraphic',
+            result: `blur-${filterNo}-${index}`,
             stdDeviation: filterParams.blurAmount,
-          });
+          }).up()
+          .element('feComponentTransfer', {in: `blur-${filterNo}-${index}`, result: `blur-${filterNo}-${index}`})
+          .element('feFuncR', {type: 'linear', slope: filterParams.brightnessAmount / 100}).up()
+          .element('feFuncG', {type: 'linear', slope: filterParams.brightnessAmount / 100}).up()
+          .element('feFuncB', {type: 'linear', slope: filterParams.brightnessAmount / 100}).up()
+          .element('feFuncA', {type: 'linear', slope: filterParams.fillOpacity}).up();
 
-        filterList.unshift(`url(#${filterId})`);
-        filterList.push(`;fill-opacity: ${filterParams.fillOpacity}`);
+        if (filterParams.fillOpacity !== 0) {
+          filter
+            .element('feMerge')
+            .element('feMergeNode', {in: `blur-${filterNo}-${index}`}).up()
+            .element('feMergeNode', {in: 'SourceGraphic'});
+        }
 
         break;
       }
 
       case 'drop-shadow': {
         for (const {dx, dy, r, color} of filterParams) {
-          const filterId: string = `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
+          filterId += `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
 
-          defs
-            .element('filter', {id: filterId})
+          filter
             .element('feDropShadow', {
               dx,
               dy,
               'flood-color': colorTransformer(color),
+              'in': 'SourceGraphic',
               'stdDeviation': r,
             });
-
-          filterList.unshift(`url(#${filterId})`);
         }
 
         break;
@@ -66,5 +75,13 @@ function filtersParser(src: any, defs: XMLElementOrXMLNode): string {
     }
   });
 
-  return `${filterList.join(' ')}`;
+  filter.attribute('id', filterId);
+
+  if (!(filter as any).children.length) {
+    filter.remove();
+
+    return null;
+  }
+
+  return `url(#${filterId})`;
 }

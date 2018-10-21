@@ -12,13 +12,15 @@ import parsers                 from './styles';
 export function createStyles(stylesSrc, defs: XMLElementOrXMLNode): string {
   let styleAttr: string = '';
 
-  Object.getOwnPropertyNames(stylesSrc).map((styleName) => {
+  Object.getOwnPropertyNames(stylesSrc).map((styleName: string) => {
     const parser = parsers[styleName];
     const styleValue = stylesSrc[styleName];
 
     if (parser) {
       const ruleName: string = parser.name ? `${parser.name}: ` : '';
       const ruleValue: string = parser.parse(styleValue, defs);
+
+      if (isValueEmpty(ruleValue)) return;
 
       styleAttr += `;${ruleName} ${ruleValue};`;
     } else {
@@ -27,4 +29,8 @@ export function createStyles(stylesSrc, defs: XMLElementOrXMLNode): string {
   });
 
   return styleAttr;
+}
+
+function isValueEmpty(value: any): boolean {
+  return value == null || value === '';
 }
