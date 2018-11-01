@@ -16,46 +16,36 @@ export const filters: Parser = {
   parse: filtersParser,
 };
 
-function filtersParser(src: any, defs: XMLElementOrXMLNode): string {
-  const filterList: string[] = [];
+function filtersParser(src: any[], defs: XMLElementOrXMLNode): string {
+  const filter = defs.element('filter');
+  const filterNo = elementChildrenCount(defs);
+  let filterId: string = `filter-${filterNo}-`;
 
-  src.forEach((filter) => {
-    const filterName = filter.type.includes('#blur') ? 'blur' : camelToDash(filter.type);
-    const filterParams = filter.params && filter.params[filter.type + 's'] || filter.params || {};
+  src.reverse().forEach((filterDesc: any, index: number) => {
+    const filterName = filterDesc.type.includes('#blur') ? 'blur' : camelToDash(filterDesc.type);
+    const filterParams = getFilterParams(filterDesc);
 
-    if (filterParams.visible === false) return;
+    if (filterInvisible(filterDesc)) return;
 
     switch (filterName) {
       case 'blur': {
-        const filterId: string = `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
+        filterId += `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
 
-        defs
-          .element('filter', {id: filterId})
-          .element('feGaussianBlur', {
-            in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',
-            stdDeviation: filterParams.blurAmount,
-          });
-
-        filterList.unshift(`url(#${filterId})`);
-        filterList.push(`;fill-opacity: ${filterParams.fillOpacity}`);
-
-        break;
+        return makeBlurFilter(filter, filterParams, `${filterNo}-${index}`);
       }
 
       case 'drop-shadow': {
         for (const {dx, dy, r, color} of filterParams) {
-          const filterId: string = `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
+          filterId += `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
 
-          defs
-            .element('filter', {id: filterId})
+          filter
             .element('feDropShadow', {
               dx,
               dy,
               'flood-color': colorTransformer(color),
+              'in': 'SourceGraphic',
               'stdDeviation': r,
             });
-
-          filterList.unshift(`url(#${filterId})`);
         }
 
         break;
@@ -66,5 +56,47 @@ function filtersParser(src: any, defs: XMLElementOrXMLNode): string {
     }
   });
 
-  return `${filterList.join(' ')}`;
+  if (!elementChildrenCount(filter)) {
+    filter.remove();
+
+    return null;
+  }
+
+  filter.attribute('id', filterId);
+
+  return `url(#${filterId})`;
+}
+
+function elementChildrenCount(ele: any): number {
+  return ele.children.length;
+}
+
+function getFilterParams(filterDesc: any): any {
+  return filterDesc.params && filterDesc.params[filterDesc.type + 's'] || filterDesc.params || {};
+}
+
+function filterInvisible(filterDesc: any): boolean {
+  return filterDesc.visible === false || filterDesc.params && filterDesc.params.visible === false;
+}
+
+// TODO: Still work not so fine as I expect
+function makeBlurFilter(filter: XMLElementOrXMLNode, filterParams: any, filterPostfix: string): void {
+  filter
+    .element('feGaussianBlur', {
+      in: 'SourceGraphic',
+      result: `blur-${filterPostfix}`,
+      stdDeviation: filterParams.blurAmount,
+    }).up()
+    .element('feComponentTransfer', {in: `blur-${filterPostfix}`, result: `blur-${filterPostfix}`})
+    .element('feFuncR', {type: 'linear', slope: filterParams.brightnessAmount / 100}).up()
+    .element('feFuncG', {type: 'linear', slope: filterParams.brightnessAmount / 100}).up()
+    .element('feFuncB', {type: 'linear', slope: filterParams.brightnessAmount / 100}).up()
+    .element('feFuncA', {type: 'linear', slope: filterParams.fillOpacity}).up();
+
+  if (filterParams.fillOpacity !== 0) {
+    filter
+      .element('feMerge')
+      .element('feMergeNode', {in: `blur-${filterPostfix}`}).up()
+      .element('feMergeNode', {in: 'SourceGraphic'});
+  }
 }
