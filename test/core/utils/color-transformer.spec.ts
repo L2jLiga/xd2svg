@@ -29,9 +29,9 @@ describe('Core > Utils > Color Transformer: ', () => {
     const color: Color = {
       mode: 'RGB',
       value: {
-        r: 1,
-        g: 2,
         b: 3,
+        g: 2,
+        r: 1,
       },
     };
 
@@ -45,9 +45,9 @@ describe('Core > Utils > Color Transformer: ', () => {
       alpha: .4,
       mode: 'RGB',
       value: {
-        r: 1,
-        g: 2,
         b: 3,
+        g: 2,
+        r: 1,
       },
     };
 
@@ -56,13 +56,29 @@ describe('Core > Utils > Color Transformer: ', () => {
     assert.equal(result, 'rgba(1,2,3,0.4)');
   });
 
+  it('should correctly parse color also if alpha equal to 0', () => {
+    const color: Color = {
+      alpha: 0,
+      mode: 'RGB',
+      value: {
+        b: 0,
+        g: 0,
+        r: 0,
+      },
+    };
+
+    const result = colorTransformer(color);
+
+    assert.equal(result, 'rgba(0,0,0,0)');
+  });
+
   it('should return hsl value', () => {
     const color: Color = {
       mode: 'HSL',
       value: {
         h: 1,
-        s: 2,
         l: 3,
+        s: 2,
       },
     };
 
@@ -77,8 +93,8 @@ describe('Core > Utils > Color Transformer: ', () => {
       mode: 'HSL',
       value: {
         h: 1,
-        s: 2,
         l: 3,
+        s: 2,
       },
     };
 
