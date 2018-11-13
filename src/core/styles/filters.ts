@@ -7,9 +7,9 @@
  */
 
 import { XMLElementOrXMLNode } from 'xmlbuilder';
-import { camelToDash } from '../utils/camel-to-dash';
-import { colorTransformer } from '../utils/color-transformer';
-import { Parser } from './models';
+import { camelToDash }         from '../utils/camel-to-dash';
+import { colorTransformer }    from '../utils/color-transformer';
+import { Parser }              from './models';
 
 export const filters: Parser = {
   name: 'filter',

@@ -107,15 +107,6 @@ describe('Core > Resources parser', () => {
 
     resourcesParser({name: ''} as any);
 
-    assert.equal(
-      defs.end(),
-      '<defs>' +
-      '<clipPath id="clipPathId"/>' +
-      '<linearGradient id="gradient1">' +
-      '<stop offset="0" stop-color="#fff"/>' +
-      '</linearGradient>' +
-      '<radialGradient id="gradient2"/>' +
-      '</defs>',
-    );
+    assert.equal(defs.end(), '<defs><clipPath id="clipPathId"/></defs>');
   });
 });
