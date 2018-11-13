@@ -20,7 +20,7 @@ export function parseParams(): CliOptions {
 
   const options: CliOptions = {
     output: inputName.join('.'),
-    single: true,
+    single: false,
   };
 
   for (let argIdx = 2; argIdx++; argIdx < process.argv.length) {
