@@ -42,17 +42,14 @@ describe('Core > Styles parsers > Filters', () => {
       '<defs>' +
       '<filter id="filter-1-blur-12-15">' +
       '<feGaussianBlur in="SourceGraphic" result="blur-1-0" stdDeviation="12"/>' +
-      '<feComponentTransfer in="blur-1-0" result="blur-1-0">' +
-      '<feFuncR type="linear" slope="0.15"/>' +
-      '<feFuncG type="linear" slope="0.15"/>' +
-      '<feFuncB type="linear" slope="0.15"/>' +
+      '<feComponentTransfer in="SourceGraphic" result="transfer-1-0">' +
+      '<feFuncR type="linear" slope="0.325"/>' +
+      '<feFuncG type="linear" slope="0.325"/>' +
+      '<feFuncB type="linear" slope="0.325"/>' +
       '<feFuncA type="linear" slope="1"/>' +
       '</feComponentTransfer>' +
-      '<feMerge>' +
-      '<feMergeNode in="blur-1-0"/>' +
-      '<feMergeNode in="SourceGraphic"/>' +
-      '</feMerge>' +
-      '</filter>' +
+      '<feComposite in="blur-1-0" in2="transfer-1-0" operator="in" result="composite-1-0"/>' +
+      '<feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="composite-1-0"/></feMerge></filter>' +
       '</defs>';
 
     const result = filters.parse([blurFilter], defs);
@@ -64,25 +61,25 @@ describe('Core > Styles parsers > Filters', () => {
   it('should correctly parse drop-shadow filter', () => {
     const defs = builder.begin().ele('defs');
     const dropShadow = {
-      type: 'dropShadow',
       params: {
         dropShadows: [
           {
+            color: {
+              alpha: 1,
+              mode: 'RGB',
+              value: {
+                b: 0,
+                g: 0,
+                r: 0,
+              },
+            },
             dx: 0,
             dy: 3,
             r: 3,
-            color: {
-              mode: 'RGB',
-              value: {
-                r: 0,
-                g: 0,
-                b: 0,
-              },
-              alpha: 1,
-            },
           },
         ],
       },
+      type: 'dropShadow',
     };
 
     const expectedOutput =

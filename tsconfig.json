@@ -14,7 +14,7 @@
     "types": [
       "node"
     ],
-    "target": "es2017",
+    "target": "es2018",
     "typeRoots": [
       "node_modules/@types"
     ]

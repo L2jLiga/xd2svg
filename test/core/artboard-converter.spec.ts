@@ -141,7 +141,6 @@ describe('Core > Artboard converter', () => {
         children: [{
           shape: {
             height: 4,
-            r: [5, 6],
             type: 'rect',
             width: 3,
             x: 1,
@@ -153,7 +152,51 @@ describe('Core > Artboard converter', () => {
 
       createElem(svgObjCollection, parent, null);
 
-      assert.equal(parent.end(), '<rect x="1" y="2" width="3" height="4" rx="5" ry="6"/>');
+      assert.equal(parent.end(), '<rect x="1" y="2" width="3" height="4"/>');
+    });
+
+    it('should create rectangle element with border radius', () => {
+      const parent = builder.begin();
+
+      const svgObjCollection: any = {
+        children: [{
+          shape: {
+            height: 15,
+            r: [5, 6, 5, 6],
+            type: 'rect',
+            width: 15,
+            x: 1,
+            y: 2,
+          },
+          type: 'shape',
+        }],
+      };
+
+      createElem(svgObjCollection, parent, null);
+
+      assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="15" rx="5" ry="6"/>');
+    });
+
+    it('should create rectangle element with border radius not bigger than half of smaller side', () => {
+      const parent = builder.begin();
+
+      const svgObjCollection: any = {
+        children: [{
+          shape: {
+            height: 10,
+            r: [44, 44, 44, 44],
+            type: 'rect',
+            width: 15,
+            x: 1,
+            y: 2,
+          },
+          type: 'shape',
+        }],
+      };
+
+      createElem(svgObjCollection, parent, null);
+
+      assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="10" rx="5" ry="5"/>');
     });
 
     it('should create circle element', () => {

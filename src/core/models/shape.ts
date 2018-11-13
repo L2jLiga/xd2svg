@@ -20,11 +20,11 @@ interface CompoundPath {
 
 interface Rectangle {
   type: 'rect';
-  x: string;
-  y: string;
-  r: string;
-  width: string;
-  height: string;
+  x: number;
+  y: number;
+  r: number[];
+  width: number;
+  height: number;
 }
 
 interface Circle {

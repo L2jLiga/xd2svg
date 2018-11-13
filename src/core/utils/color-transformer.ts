@@ -13,7 +13,7 @@ export function colorTransformer(color: Color = {}): string {
     case 'RGB':
       const rgb = `${color.value.r},${color.value.g},${color.value.b}`;
 
-      if (color.alpha) {
+      if (color.alpha != null) {
         return `rgba(${rgb},${color.alpha})`;
       } else {
         return `rgb(${rgb})`;
@@ -21,7 +21,7 @@ export function colorTransformer(color: Color = {}): string {
     case 'HSL':
       const hsl = `${color.value.h},${color.value.s},${color.value.l}`;
 
-      if (color.alpha) {
+      if (color.alpha != null) {
         return `hsla(${hsl},${color.alpha})`;
       } else {
         return `hsl(${hsl})`;

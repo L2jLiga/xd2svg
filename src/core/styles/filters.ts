@@ -7,9 +7,9 @@
  */
 
 import { XMLElementOrXMLNode } from 'xmlbuilder';
-import { camelToDash }         from '../utils/camel-to-dash';
-import { colorTransformer }    from '../utils/color-transformer';
-import { Parser }              from './models';
+import { camelToDash } from '../utils/camel-to-dash';
+import { colorTransformer } from '../utils/color-transformer';
+import { Parser } from './models';
 
 export const filters: Parser = {
   name: 'filter',
@@ -81,22 +81,48 @@ function filterInvisible(filterDesc: any): boolean {
 
 // TODO: Still work not so fine as I expect
 function makeBlurFilter(filter: XMLElementOrXMLNode, filterParams: any, filterPostfix: string): void {
-  filter
-    .element('feGaussianBlur', {
-      in: 'SourceGraphic',
-      result: `blur-${filterPostfix}`,
-      stdDeviation: filterParams.blurAmount,
-    }).up()
-    .element('feComponentTransfer', {in: `blur-${filterPostfix}`, result: `blur-${filterPostfix}`})
-    .element('feFuncR', {type: 'linear', slope: filterParams.brightnessAmount / 100}).up()
-    .element('feFuncG', {type: 'linear', slope: filterParams.brightnessAmount / 100}).up()
-    .element('feFuncB', {type: 'linear', slope: filterParams.brightnessAmount / 100}).up()
-    .element('feFuncA', {type: 'linear', slope: filterParams.fillOpacity}).up();
+  makeFeGaussianBlur(filter, filterPostfix, filterParams);
+  makeFeComponentTransfer(filter, filterPostfix, filterParams);
+  makeFeComposite(filter, filterPostfix);
 
   if (filterParams.fillOpacity !== 0) {
     filter
       .element('feMerge')
-      .element('feMergeNode', {in: `blur-${filterPostfix}`}).up()
-      .element('feMergeNode', {in: 'SourceGraphic'});
+      .element('feMergeNode', {in: 'SourceGraphic'}).up()
+      .element('feMergeNode', {in: `composite-${filterPostfix}`});
   }
+}
+
+function makeFeGaussianBlur(parent: XMLElementOrXMLNode, filterPostfix: string, filterParams) {
+  parent
+    .element('feGaussianBlur', {
+      in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',
+      result: `blur-${filterPostfix}`,
+      stdDeviation: filterParams.blurAmount,
+    });
+}
+
+function makeFeComponentTransfer(parent: XMLElementOrXMLNode, filterPostfix: string, filterParams): void {
+  parent
+    .element('feComponentTransfer', {
+      in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',
+      result: `transfer-${filterPostfix}`,
+    })
+    .element('feFuncR', {type: 'linear', slope: brigtnessToSlope(filterParams.brightnessAmount)}).up()
+    .element('feFuncG', {type: 'linear', slope: brigtnessToSlope(filterParams.brightnessAmount)}).up()
+    .element('feFuncB', {type: 'linear', slope: brigtnessToSlope(filterParams.brightnessAmount)}).up()
+    .element('feFuncA', {type: 'linear', slope: filterParams.fillOpacity});
+}
+
+function makeFeComposite(parent: XMLElementOrXMLNode, filterPostfix: string): void {
+  parent.element('feComposite', {
+    in: `blur-${filterPostfix}`,
+    in2: `transfer-${filterPostfix}`,
+    operator: 'in',
+    result: `composite-${filterPostfix}`,
+  });
+}
+
+function brigtnessToSlope(brightness: number): number {
+  return (brightness + 50) / 200;
 }

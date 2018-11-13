@@ -75,6 +75,9 @@ For the versions available, see the [releases](https://github.com/L2jLiga/xd2svg
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 For the versions changelog, see the [CHANGELOG.md](CHANGELOG.md)
 
+## Known issues
+Blur filters work incorrectly for some cases
+
 ## Authors
 * **Andrey Chalkin** - *Initial work* - [L2jLiga](https://github.com/L2jLiga)
 
