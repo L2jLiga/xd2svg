@@ -26,17 +26,17 @@ export function parseParams(): CliOptions {
   for (let argIdx = 2; argIdx++; argIdx < process.argv.length) {
     if (process.argv[argIdx] === undefined) break;
 
-    const arg = process.argv[argIdx].split('=');
-    switch (arg[0]) {
+    const [key, value] = process.argv[argIdx].split('=');
+    switch (key) {
       case '-o':
       case '--output':
-        options.output = arg[1];
+        options.output = value;
         customOutput = true;
         break;
 
       case '-s':
       case '--single':
-        options.single = /^true$/i.test(arg[1]);
+        options.single = !/^f/i.test(value);
     }
   }
 
