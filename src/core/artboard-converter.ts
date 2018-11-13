@@ -57,8 +57,10 @@ function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XM
       shape.attribute('height', srcObj.height);
 
       if (srcObj.r) {
-        shape.attribute('rx', srcObj.r[0]);
-        shape.attribute('ry', srcObj.r[1]);
+        const maxBR = Math.min(srcObj.width, srcObj.height) / 2;
+
+        shape.attribute('rx', Math.min(srcObj.r[0], maxBR));
+        shape.attribute('ry', Math.min(srcObj.r[1], maxBR));
       }
       break;
 
