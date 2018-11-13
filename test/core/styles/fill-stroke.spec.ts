@@ -6,11 +6,12 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert        from 'assert';
-import * as builder       from 'xmlbuilder';
-import { fill }           from '../../../src/core/styles/fill';
-import { Color, Pattern } from '../../../src/core/styles/models';
-import { stroke }         from '../../../src/core/styles/stroke';
+import * as assert              from 'assert';
+import * as builder             from 'xmlbuilder';
+import { fill }                 from '../../../src/core/styles/fill';
+import { Color, Fill, Pattern } from '../../../src/core/styles/models';
+import { stroke }               from '../../../src/core/styles/stroke';
+import { gradients }            from '../../../src/core/utils';
 
 describe('Core > Styles parsers', () => {
   const pattern: Pattern = {
@@ -64,11 +65,20 @@ describe('Core > Styles parsers', () => {
     });
 
     it('should return ref to gradient when type is gradient', () => {
-      const gradientRef = 'test-ref';
+      const defs = builder.begin();
+      const gradientInfo: Fill['gradient'] = {
+        ref: 'ref',
+        units: 'objectBoundingBox',
+        x1: 1,
+        x2: 3,
+        y1: 2,
+        y2: 4,
+      };
+      gradients[gradientInfo.ref] = builder.begin().element('gradient');
 
-      const result = fill.parse({type: 'gradient', gradient: {ref: gradientRef}});
+      const result = fill.parse({type: 'gradient', gradient: gradientInfo}, defs);
 
-      assert.equal(result, `url(#${gradientRef})`);
+      assert.equal(result, `url(#gradient-${Object.values(gradientInfo).join('-')})`);
     });
 
     it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
@@ -143,11 +153,20 @@ describe('Core > Styles parsers', () => {
     });
 
     it('should return ref to gradient when type is gradient', () => {
-      const gradientRef = 'test-ref';
+      const defs = builder.begin();
+      const gradientInfo: Fill['gradient'] = {
+        ref: 'ref',
+        units: 'objectBoundingBox',
+        x1: 1,
+        x2: 3,
+        y1: 2,
+        y2: 4,
+      };
+      gradients[gradientInfo.ref] = builder.begin().element('gradient');
 
-      const result = stroke.parse({type: 'gradient', gradient: {ref: gradientRef}});
+      const result = stroke.parse({type: 'gradient', gradient: gradientInfo}, defs);
 
-      assert.equal(result, `url(#${gradientRef})`);
+      assert.equal(result, `url(#gradient-${Object.values(gradientInfo).join('-')})`);
     });
 
     it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {

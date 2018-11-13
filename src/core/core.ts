@@ -12,7 +12,7 @@ import { manifestParser }                                from './manifest-parser
 import { Artboard, ArtboardInfo, Dictionary, Directory } from './models';
 import { resourcesParser }                               from './resources-parser';
 import { svgo }                                          from './svgo';
-import { defs }                                          from './utils/defs-list';
+import { defs }                                          from './utils';
 
 interface InjectableSvgData {
   defs: string;

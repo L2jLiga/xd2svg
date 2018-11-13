@@ -15,7 +15,20 @@ export interface Fill {
     color: Color;
   };
   gradient?: {
+    // Common gradients
+    units: 'objectBoundingBox' | 'userSpaceOnUse';
     ref: string;
+
+    // Linear gradients
+    x1?: number;
+    y1?: number;
+    x2?: number;
+    y2?: number;
+
+    // Radial gradients
+    cx?: number;
+    cy?: number;
+    r?: number;
   };
   pattern?: Pattern;
   color?: Color;

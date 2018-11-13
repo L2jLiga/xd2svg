@@ -7,11 +7,11 @@
  */
 
 import { readFileSync }                        from 'fs';
+import * as builder                            from 'xmlbuilder';
 import { createElem }                          from './artboard-converter';
 import { ArtboardInfo, Dictionary, Directory } from './models';
 import { Color }                               from './styles/models';
-import { colorTransformer }                    from './utils/color-transformer';
-import { defs }                                from './utils/defs-list';
+import { colorTransformer, defs, gradients }   from './utils';
 
 export function resourcesParser(directory: Directory): Dictionary<ArtboardInfo> {
   const json = readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');
@@ -41,14 +41,13 @@ function buildArtboardsInfo(artboards: { [id: string]: any }): Dictionary<Artboa
   return artboardsInfoList;
 }
 
-function buildGradients(gradients): void {
-  Object
-    .keys(gradients)
-    .forEach((gradientId: string) => buildElement(gradients[gradientId], gradientId));
+function buildGradients(list: Dictionary<{ type, stops }>): void {
+  Object.entries(list).forEach(([gradientId, gradient]) => buildElement(gradient, gradientId));
 }
 
 function buildElement({type, stops}, gradientId: string): void {
-  const gradient = defs.element(type === 'linear' ? 'linearGradient' : 'radialGradient', {id: gradientId});
+  const gradient = builder.begin().element(type === 'linear' ? 'linearGradient' : 'radialGradient', {id: gradientId});
+  gradients[gradientId] = gradient;
 
   stops.forEach((stop: { offset: string, color: Color }) => {
     gradient.element('stop', {
