@@ -6,13 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed:
+- Multiple output format as default
 - Remove empty style rules while converting
 - Remove empty filters while converting
 - Updated all dependencies to their latest version
 
 ### Fixed
+- Color alpha doesn't applied if it equals to 0
 - Linear/Radial gradients
-- Filters support (**need much more testing...**)
+- Filters support (blur filter still doesn't work properly)
 
 ## [1.0.0-3]
 ### Changed
