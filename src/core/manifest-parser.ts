@@ -6,11 +6,11 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { readFileSync }                                                   from 'fs';
-import { Dictionary, Directory, ManifestFile, RawResource, ResourcesMap } from './models';
+import { readFileSync }                                                             from 'fs';
+import { Dictionary, Directory, Manifest, ManifestFile, RawResource, ResourcesMap } from './models';
 
-export const manifestInfo = {
-  artboards: [] as any[],
+export const manifestInfo: Manifest = {
+  artboards: [],
   id: '',
   name: '',
   resources: {} as ResourcesMap,

@@ -101,12 +101,12 @@ describe('Complex test for xd2svg', () => {
 
 function runDiffFor(actual: Buffer, expected: string): Promise<void> {
   const diff = new BlinkDiff({
-    delta: 50,
+    delta: 40,
     hideShift: true,
     imageAPath: expected,
     imageB: actual,
 
-    threshold: .1,
+    threshold: .05,
     thresholdType: BlinkDiff.THRESHOLD_PERCENT,
   });
 
@@ -117,7 +117,7 @@ function runDiffFor(actual: Buffer, expected: string): Promise<void> {
       }
 
       if (!diff.hasPassed(result.code)) {
-        return reject('Too much difference!');
+        return reject(result);
       }
 
       return resolve();

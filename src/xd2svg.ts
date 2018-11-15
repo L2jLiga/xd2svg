@@ -11,8 +11,9 @@ import { existsSync, lstatSync, writeFileSync } from 'fs';
 import { dirSync, SynchrounousResult }          from 'tmp';
 import { promisify }                            from 'util';
 import { CliOptions, OutputFormat }             from './cli/models';
-import { optimizeSvg, proceedFile }             from './core';
+import { proceedFile }                          from './core';
 import { Dictionary, Directory }                from './core/models';
+import { svgo }                                 from './core/svgo';
 import * as logger                              from './utils/logger';
 
 const extract = promisify(extractZip);
@@ -74,6 +75,12 @@ async function openMockup(inputFile: string | Buffer): Promise<Directory> {
   if (tmpInputFile) tmpInputFile.removeCallback();
 
   return directory;
+}
+
+async function optimizeSvg(svgImage: string): Promise<string> {
+  const optimizedSvg = await svgo.optimize(svgImage);
+
+  return optimizedSvg.data;
 }
 
 async function promiseAllObject(svg: Dictionary<string>): Promise<Dictionary<string>> {
