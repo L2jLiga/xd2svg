@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLElementOrXMLNode }         from 'xmlbuilder';
-import { manifestInfo }                from '../manifest-parser';
-import { colorTransformer, gradients } from '../utils';
-import { Fill, Parser, Pattern }       from './models';
+import { XMLElementOrXMLNode }                          from 'xmlbuilder';
+import { manifestInfo }                                 from '../manifest-parser';
+import { applyIfPossible, colorTransformer, gradients } from '../utils';
+import { Fill, Parser, Pattern }                        from './models';
 
 export const fill: Parser = {
   name: 'fill',
@@ -53,12 +53,6 @@ function makeGradient(gradientInfo: Fill['gradient'], defs: XMLElementOrXMLNode)
   defs.importDocument(gradient);
 
   return gradientId;
-}
-
-function applyIfPossible(ele: XMLElementOrXMLNode, name: string, value: any): void {
-  if (value) {
-    ele.att(name, value);
-  }
 }
 
 function createPattern(patternObject: Pattern, defs: XMLElementOrXMLNode): void {

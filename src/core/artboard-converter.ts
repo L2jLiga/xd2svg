@@ -10,6 +10,7 @@ import * as builder                                             from 'xmlbuilder
 import { XMLElementOrXMLNode }                                  from 'xmlbuilder';
 import { createStyles }                                         from './create-styles';
 import { Artboard, ArtboardInfo, Line, Paragraph, Shape, Text } from './models';
+import { applyIfPossible }                                      from './utils';
 
 export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo): string[] {
   return artboardsRoot.children
@@ -19,8 +20,8 @@ export function artboardConverter(artboardsRoot: Artboard, artboardInfo: Artboar
         'id': `${imageRootObject.id}`,
         'viewBox': `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
       });
-      if (artboardInfo.width) svg.attribute('width', `${artboardInfo.width}`);
-      if (artboardInfo.height) svg.attribute('height', `${artboardInfo.height}`);
+      applyIfPossible(svg, 'width', artboardInfo.width);
+      applyIfPossible(svg, 'height', artboardInfo.height);
 
       svg.element('title', {}, artboardInfo.name);
 
@@ -103,13 +104,8 @@ function createText(srcObj: Text, parentElement: XMLElementOrXMLNode) {
           {},
           rawText.substring(linePart.from, linePart.to));
 
-        if (linePart.x !== undefined) {
-          element.attribute('x', `${linePart.x || 0}`);
-        }
-
-        if (linePart.y !== undefined) {
-          element.attribute('y', `${linePart.y || 0}`);
-        }
+        applyIfPossible(element, 'x', linePart.x);
+        applyIfPossible(element, 'y', linePart.y);
       });
     });
   });
@@ -152,13 +148,8 @@ export function createElem(svgObjCollection: { children: Artboard[] }, parentEle
 }
 
 function applyAttributes(node: XMLElementOrXMLNode, defs: XMLElementOrXMLNode, svgObject: Artboard) {
-  if (svgObject.id) {
-    node.attribute('id', svgObject.id);
-  }
-
-  if (svgObject.name) {
-    node.attribute('name', svgObject.name);
-  }
+  applyIfPossible(node, 'id', svgObject.id);
+  applyIfPossible(node, 'name', svgObject.name);
 
   if (svgObject.visible === false) {
     svgObject.style ? svgObject.style.display = 'none' : svgObject.style = {display: 'none'};

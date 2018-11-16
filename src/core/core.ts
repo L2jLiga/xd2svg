@@ -6,13 +6,12 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { readFileSync }                                  from 'fs';
-import { artboardConverter }                             from './artboard-converter';
-import { manifestParser }                                from './manifest-parser';
-import { Artboard, ArtboardInfo, Dictionary, Directory } from './models';
-import { resourcesParser }                               from './resources-parser';
-import { svgo }                                          from './svgo';
-import { defs }                                          from './utils';
+import { readFileSync }                                                      from 'fs';
+import { artboardConverter }                                                 from './artboard-converter';
+import { manifestParser }                                                    from './manifest-parser';
+import { Artboard, ArtboardDefinition, ArtboardInfo, Dictionary, Directory } from './models';
+import { resourcesParser }                                                   from './resources-parser';
+import { defs }                                                              from './utils';
 
 interface InjectableSvgData {
   defs: string;
@@ -21,60 +20,65 @@ interface InjectableSvgData {
   rootId?: string;
 }
 
+let dimensions: { width: number, height: number };
+let convertedArtboards: Dictionary<string>;
+
 export function proceedFile(directory: Directory, single: true): string;
 export function proceedFile(directory: Directory, single: false): Dictionary<string>;
 export function proceedFile(directory: Directory, single: boolean): string | Dictionary<string>;
 export function proceedFile(directory: Directory, single: boolean): string | Dictionary<string> {
-  const dimensions: { width: number, height: number } = {width: 0, height: 0};
+  dimensions = {width: 0, height: 0};
+  convertedArtboards = {};
 
-  const manifestInfo = manifestParser(directory);
-  const artboardInfoDictionary: Dictionary<ArtboardInfo> = resourcesParser(directory);
+  const manifest = manifestParser(directory);
+  const artboardsInfo: Dictionary<ArtboardInfo> = resourcesParser(directory);
 
-  const convertedArtboards: Dictionary<string> = {};
-
-  const artboards = manifestInfo.artboards.map((artboardItem: any) => {
-    const json = readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
-
-    const artboard: Artboard = JSON.parse(json);
-
-    const contentOfArtboard: string[] = artboardConverter(artboard, artboardInfoDictionary[artboardItem.name]);
-
-    if (single) {
-      convertedArtboards[artboardItem.name] = contentOfArtboard.join('\n');
-
-      dimensions.width = Math.max(dimensions.width, artboardInfoDictionary[artboardItem.name].width);
-      dimensions.height = Math.max(dimensions.height, artboardInfoDictionary[artboardItem.name].height);
-
-      return;
-    }
-
-    return {artboardName: artboardItem.name, contentOfArtboard};
-  });
-
-  const defsList = defs.end();
+  const artboards = manifest.artboards.map(toArtboard(directory, artboardsInfo, single));
 
   if (single) {
     return injectSvgResources(Object.values(convertedArtboards), {
-      defs: defsList,
+      defs: defs.end(),
       rootHeight: dimensions.height,
-      rootId: manifestInfo.id,
+      rootId: manifest.id,
       rootWidth: dimensions.width,
     });
   }
 
-  artboards.forEach(({artboardName, contentOfArtboard}) => convertedArtboards[artboardName] = injectSvgResources(contentOfArtboard, {
-    defs: defsList,
-    rootHeight: artboardInfoDictionary[artboardName].height,
-    rootWidth: artboardInfoDictionary[artboardName].width,
-  }));
+  artboards.forEach(compileArtboards(artboardsInfo));
 
   return convertedArtboards;
 }
 
-export async function optimizeSvg(svgImage: string): Promise<string> {
-  const optimizedSvg = await svgo.optimize(svgImage);
+function toArtboard(directory: Directory, artboardsInfo: Dictionary<ArtboardInfo>, single: boolean) {
+  return (artboardItem: ArtboardDefinition) => {
+    const json = readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
-  return optimizedSvg.data;
+    const artboard: Artboard = JSON.parse(json);
+
+    const artboardContent: string[] = artboardConverter(artboard, artboardsInfo[artboardItem.name]);
+
+    if (single) {
+      convertedArtboards[artboardItem.name] = artboardContent.join('\n');
+      const artboardDimensions = artboardsInfo[artboardItem.name];
+
+      dimensions.width = Math.max(dimensions.width, artboardDimensions.width);
+      dimensions.height = Math.max(dimensions.height, artboardDimensions.height);
+
+      return;
+    }
+
+    return {artboardName: artboardItem.name, contentOfArtboard: artboardContent};
+  };
+}
+
+function compileArtboards(artboardsInfo: Dictionary<ArtboardInfo>) {
+  const defsList = defs.end();
+
+  return ({artboardName, contentOfArtboard}) => convertedArtboards[artboardName] = injectSvgResources(contentOfArtboard, {
+    defs: defsList,
+    rootHeight: artboardsInfo[artboardName].height,
+    rootWidth: artboardsInfo[artboardName].width,
+  });
 }
 
 export function injectSvgResources(

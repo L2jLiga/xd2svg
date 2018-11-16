@@ -9,7 +9,7 @@
 import { Shape } from './shape';
 import { Text }  from './text';
 
-export interface CommonArtboard {
+interface CommonArtboard {
   id?: string;
   name?: string;
   type?: string;
@@ -20,17 +20,17 @@ export interface CommonArtboard {
   transform: { [transform: string]: any };
 }
 
-export interface ShapeArtboard extends CommonArtboard {
+interface ShapeArtboard extends CommonArtboard {
   type: 'shape';
   shape: Shape;
 }
 
-export interface TextArtboard extends CommonArtboard {
+interface TextArtboard extends CommonArtboard {
   type: 'text';
   text: Text;
 }
 
-export interface GroupArtboard extends CommonArtboard {
+interface GroupArtboard extends CommonArtboard {
   type: 'group';
   group: Artboard;
 }
