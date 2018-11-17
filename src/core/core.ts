@@ -15,16 +15,21 @@ import { defs }                                                              fro
 
 interface InjectableSvgData {
   defs: string;
-  rootWidth: number;
-  rootHeight: number;
+  rootWidth?: number;
+  rootHeight?: number;
   rootId?: string;
+}
+
+interface ConvertedArtboard {
+  artboardName: string;
+  contentOfArtboard: string[];
 }
 
 let dimensions: { width: number, height: number };
 let convertedArtboards: Dictionary<string>;
 
 export function proceedFile(directory: Directory, single: true): string;
-export function proceedFile(directory: Directory, single: false): Dictionary<string>;
+export function proceedFile(directory: Directory, single?: false): Dictionary<string>;
 export function proceedFile(directory: Directory, single: boolean): string | Dictionary<string>;
 export function proceedFile(directory: Directory, single: boolean): string | Dictionary<string> {
   dimensions = {width: 0, height: 0};
@@ -33,10 +38,14 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
   const manifest = manifestParser(directory);
   const artboardsInfo: Dictionary<ArtboardInfo> = resourcesParser(directory);
 
-  const artboards = manifest.artboards.map(toArtboard(directory, artboardsInfo, single));
+  const artboards: ConvertedArtboard[] = manifest.artboards.map(toArtboard(directory, artboardsInfo, single));
 
   if (single) {
-    return injectSvgResources(Object.values(convertedArtboards), {
+    artboards.forEach((artboard: ConvertedArtboard) => {
+      convertedArtboards[artboard.artboardName] = artboard.contentOfArtboard.join('\n');
+    });
+
+    return injectResources(Object.values(convertedArtboards), {
       defs: defs.end(),
       rootHeight: dimensions.height,
       rootId: manifest.id,
@@ -44,44 +53,45 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
     });
   }
 
-  artboards.forEach(compileArtboards(artboardsInfo));
+  artboards.forEach(toConvertedArtboard(artboardsInfo));
 
   return convertedArtboards;
 }
 
-function toArtboard(directory: Directory, artboardsInfo: Dictionary<ArtboardInfo>, single: boolean) {
-  return (artboardItem: ArtboardDefinition) => {
-    const json = readFileSync(`${directory.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
+function toArtboard(dir: Directory, artboardsInfo: Dictionary<ArtboardInfo>, single: boolean) {
+  return (artboardItem: ArtboardDefinition): ConvertedArtboard => {
+    const json = readFileSync(`${dir.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
     const artboard: Artboard = JSON.parse(json);
 
     const artboardContent: string[] = artboardConverter(artboard, artboardsInfo[artboardItem.name]);
 
     if (single) {
-      convertedArtboards[artboardItem.name] = artboardContent.join('\n');
       const artboardDimensions = artboardsInfo[artboardItem.name];
 
       dimensions.width = Math.max(dimensions.width, artboardDimensions.width);
       dimensions.height = Math.max(dimensions.height, artboardDimensions.height);
-
-      return;
     }
 
     return {artboardName: artboardItem.name, contentOfArtboard: artboardContent};
   };
 }
 
-function compileArtboards(artboardsInfo: Dictionary<ArtboardInfo>) {
+function toConvertedArtboard(artboardsInfo: Dictionary<ArtboardInfo>) {
   const defsList = defs.end();
 
-  return ({artboardName, contentOfArtboard}) => convertedArtboards[artboardName] = injectSvgResources(contentOfArtboard, {
-    defs: defsList,
-    rootHeight: artboardsInfo[artboardName].height,
-    rootWidth: artboardsInfo[artboardName].width,
-  });
+  return (data: ConvertedArtboard): void => {
+    const {artboardName, contentOfArtboard} = data;
+
+    convertedArtboards[artboardName] = injectResources(contentOfArtboard, {
+      defs: defsList,
+      rootHeight: artboardsInfo[artboardName].height,
+      rootWidth: artboardsInfo[artboardName].width,
+    });
+  };
 }
 
-export function injectSvgResources(
+export function injectResources(
   svg: string[],
   data: InjectableSvgData,
 ): string {

@@ -9,12 +9,22 @@
 import { Color }   from './color';
 import { Pattern } from './pattern';
 
-export interface Fill {
-  type: string;
-  fill?: {
+export interface ColorFill {
+  type: 'color';
+  fill: {
     color: Color;
   };
-  gradient?: {
+}
+
+export interface SolidFill {
+  type: 'solid';
+  color: Color;
+}
+
+export interface GradientFill {
+  type: 'gradient';
+
+  gradient: {
     // Common gradients
     units: 'objectBoundingBox' | 'userSpaceOnUse';
     ref: string;
@@ -30,6 +40,15 @@ export interface Fill {
     cy?: number;
     r?: number;
   };
-  pattern?: Pattern;
-  color?: Color;
 }
+
+export interface PatternFill {
+  type: 'pattern';
+  pattern: Pattern;
+}
+
+export interface NoneFill {
+  type: 'none';
+}
+
+export type Fill = ColorFill | SolidFill | GradientFill | PatternFill | NoneFill;

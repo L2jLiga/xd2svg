@@ -9,7 +9,7 @@
 import { Font, Parser } from './models';
 
 // tslint:disable:object-literal-sort-keys
-const fontWeightVariants = {
+const fontWeightVariants: any = {
   Light: 300,
   Regular: 400,
   Medium: 500,

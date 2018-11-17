@@ -6,12 +6,12 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert            from 'assert';
-import { injectSvgResources } from '../../src/core';
+import * as assert         from 'assert';
+import { injectResources } from '../../src/core';
 
 describe('Core > Inject resources into SVGs', () => {
   it('should return empty string when empty SVGs list provided', () => {
-    const result = injectSvgResources([], null);
+    const result = injectResources([], null);
 
     assert.equal(result, '');
   });
@@ -23,7 +23,7 @@ describe('Core > Inject resources into SVGs', () => {
       rootWidth: 1,
     };
 
-    const actual = injectSvgResources(['<svg></svg>'], resources);
+    const actual = injectResources(['<svg></svg>'], resources);
     const expected = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><defs/></svg>';
 
     assert.equal(actual, expected);
@@ -37,7 +37,7 @@ describe('Core > Inject resources into SVGs', () => {
       rootWidth: 1,
     };
 
-    const actual = injectSvgResources(['<svg id="g1"></svg>', '<svg id="g2"></svg>'], resources);
+    const actual = injectResources(['<svg id="g1"></svg>', '<svg id="g2"></svg>'], resources);
     const expected = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
          width="1"
          height="2"
@@ -57,7 +57,7 @@ describe('Core > Inject resources into SVGs', () => {
       rootWidth: 1,
     };
 
-    const actual = injectSvgResources(['<svg id="g1"></svg>', '<svg id="g2"></svg>'], resources);
+    const actual = injectResources(['<svg id="g1"></svg>', '<svg id="g2"></svg>'], resources);
     const expected = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
          width="1"
          height="2"

@@ -35,19 +35,19 @@ describe('Complex test for xd2svg', () => {
   });
 
   it('should throw an error when file does not exist', (done) => {
-    xd2svg('test/path/to/not/existed/file.xd', {})
+    xd2svg('test/path/to/not/existed/file.xd')
       .then(() => done('Something went wrong'))
       .catch(() => done());
   });
 
   it('should throw an error when file is invalid', (done) => {
-    xd2svg('test/invalid-mockup.xd', {})
+    xd2svg('test/invalid-mockup.xd')
       .then(() => done('Something went wrong'))
       .catch(() => done());
   });
 
   it('should throw an error when invalid buffer provided', (done) => {
-    xd2svg(Buffer.from([1, 2, 3]), {})
+    xd2svg(Buffer.from([1, 2, 3]))
       .then(() => done('Something went wrong'))
       .catch(() => done());
   });
@@ -79,7 +79,7 @@ describe('Complex test for xd2svg', () => {
     let keys: string[];
 
     promisify(extractZip)('test/multi.xd', {dir: tmpDir.name})
-      .then(() => xd2svg(tmpDir.name, {single: false}))
+      .then(() => xd2svg(tmpDir.name))
       .then((SVGs) => {
         keys = Object.keys(SVGs);
         return Promise.all(Object.values(SVGs).map((SVG) => convert(SVG, {

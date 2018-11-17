@@ -6,10 +6,9 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLElementOrXMLNode } from 'xmlbuilder';
-import { camelToDash }         from '../utils/camel-to-dash';
-import { colorTransformer }    from '../utils/color-transformer';
-import { Parser }              from './models';
+import { XMLElementOrXMLNode }           from 'xmlbuilder';
+import { camelToDash, colorTransformer } from '../utils';
+import { Parser }                        from './models';
 
 export const filters: Parser = {
   name: 'filter',
@@ -59,7 +58,7 @@ function filtersParser(src: any[], defs: XMLElementOrXMLNode): string {
   if (!elementChildrenCount(filter)) {
     filter.remove();
 
-    return null;
+    return '';
   }
 
   filter.attribute('id', filterId);
@@ -93,7 +92,7 @@ function makeBlurFilter(filter: XMLElementOrXMLNode, filterParams: any, filterPo
   }
 }
 
-function makeFeGaussianBlur(parent: XMLElementOrXMLNode, filterPostfix: string, filterParams) {
+function makeFeGaussianBlur(parent: XMLElementOrXMLNode, filterPostfix: string, filterParams: any) {
   parent
     .element('feGaussianBlur', {
       in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',
@@ -102,7 +101,7 @@ function makeFeGaussianBlur(parent: XMLElementOrXMLNode, filterPostfix: string, 
     });
 }
 
-function makeFeComponentTransfer(parent: XMLElementOrXMLNode, filterPostfix: string, filterParams): void {
+function makeFeComponentTransfer(parent: XMLElementOrXMLNode, filterPostfix: string, filterParams: any): void {
   parent
     .element('feComponentTransfer', {
       in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',

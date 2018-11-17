@@ -27,9 +27,9 @@ interface MultipleOutput extends CliOptions {
 }
 
 export default async function xd2svg(input: string | Buffer, options: SingleOutput): Promise<string>;
-export default async function xd2svg(input: string | Buffer, options: MultipleOutput): Promise<Dictionary<string>>;
+export default async function xd2svg(input: string | Buffer, options?: MultipleOutput): Promise<Dictionary<string>>;
 export default async function xd2svg(input: string | Buffer, options: CliOptions): Promise<OutputFormat>;
-export default async function xd2svg(input: string | Buffer, options: CliOptions): Promise<OutputFormat> {
+export default async function xd2svg(input: string | Buffer, options: CliOptions = {}): Promise<OutputFormat> {
   const directory: Directory = await openMockup(input);
   const svg: string | Dictionary<string> = proceedFile(directory, options.single);
 

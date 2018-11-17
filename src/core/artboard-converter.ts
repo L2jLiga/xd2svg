@@ -8,36 +8,40 @@
 
 import * as builder                                             from 'xmlbuilder';
 import { XMLElementOrXMLNode }                                  from 'xmlbuilder';
+import { bold, red }                                            from '../utils';
 import { createStyles }                                         from './create-styles';
 import { Artboard, ArtboardInfo, Line, Paragraph, Shape, Text } from './models';
 import { applyIfPossible }                                      from './utils';
 
 export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo): string[] {
-  return artboardsRoot.children
-    .map((imageRootObject: Artboard): string => {
-      const svg = builder.begin().element('svg', {
-        'enable-background': `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
-        'id': `${imageRootObject.id}`,
-        'viewBox': `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
-      });
-      applyIfPossible(svg, 'width', artboardInfo.width);
-      applyIfPossible(svg, 'height', artboardInfo.height);
+  return artboardsRoot.children.map(toArtboards(artboardInfo));
+}
 
-      svg.element('title', {}, artboardInfo.name);
-
-      svg.element('rect', {
-        height: `${artboardInfo.height}`,
-        style: createStyles(imageRootObject.style, svg),
-        transform: `translate(${artboardInfo.x} ${artboardInfo.y})`,
-        width: `${artboardInfo.width}`,
-        x: 0,
-        y: 0,
-      });
-
-      const defs = svg.element('defs');
-
-      return createElem(imageRootObject.artboard, svg, defs).end();
+function toArtboards(artboardInfo: ArtboardInfo) {
+  return (imageRootObject: Artboard): string => {
+    const svg = builder.begin().element('svg', {
+      'enable-background': `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
+      'id': `${imageRootObject.id}`,
+      'viewBox': `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
     });
+    applyIfPossible(svg, 'width', artboardInfo.width);
+    applyIfPossible(svg, 'height', artboardInfo.height);
+
+    svg.element('title', {}, artboardInfo.name);
+
+    svg.element('rect', {
+      height: `${artboardInfo.height}`,
+      style: createStyles(imageRootObject.style, svg),
+      transform: `translate(${artboardInfo.x} ${artboardInfo.y})`,
+      width: `${artboardInfo.width}`,
+      x: 0,
+      y: 0,
+    });
+
+    const defs = svg.element('defs');
+
+    return createElem(imageRootObject.artboard, svg, defs).end();
+  };
 }
 
 function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XMLElementOrXMLNode) {
@@ -86,7 +90,7 @@ function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XM
       break;
 
     default:
-      console.warn('Currently unsupported shape type:\n\n%O', srcObj);
+      console.warn(`${bold(red('Shape converter:'))} unknown shape given: %j`, srcObj);
   }
 
   return shape;

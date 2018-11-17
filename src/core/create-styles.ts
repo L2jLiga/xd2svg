@@ -7,9 +7,10 @@
  */
 
 import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { Dictionary }          from './models';
 import parsers                 from './styles';
 
-export function createStyles(stylesSrc, defs: XMLElementOrXMLNode): string {
+export function createStyles(stylesSrc: Dictionary<any>, defs: XMLElementOrXMLNode): string {
   let styleAttr: string = '';
 
   Object.getOwnPropertyNames(stylesSrc).map((styleName: string) => {
