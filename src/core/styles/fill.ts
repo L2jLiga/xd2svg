@@ -7,9 +7,10 @@
  */
 
 import { XMLElementOrXMLNode }                          from 'xmlbuilder';
+import * as logger                                      from '../../utils/logger';
 import { manifestInfo }                                 from '../manifest-parser';
 import { applyIfPossible, colorTransformer, gradients } from '../utils';
-import { Fill, Parser, Pattern }                        from './models';
+import { Fill, GradientFill, Parser, Pattern }          from './models';
 
 export const fill: Parser = {
   name: 'fill',
@@ -21,6 +22,8 @@ export function fillParser(src: Fill, defs: XMLElementOrXMLNode): string {
   switch (src.type) {
     case 'color':
       return colorTransformer(src.fill.color);
+    case 'solid':
+      return colorTransformer(src.color);
     case 'gradient':
       const gradientId: string = makeGradient(src.gradient, defs);
 
@@ -32,11 +35,13 @@ export function fillParser(src: Fill, defs: XMLElementOrXMLNode): string {
     case 'none':
       return 'none';
     default:
-      return colorTransformer(src.color);
+      console.warn(`${logger.bold(logger.red('Fill/Stroke parser:'))} unknown property: %j`, src);
+
+      return '';
   }
 }
 
-function makeGradient(gradientInfo: Fill['gradient'], defs: XMLElementOrXMLNode) {
+function makeGradient(gradientInfo: GradientFill['gradient'], defs: XMLElementOrXMLNode) {
   const gradient: XMLElementOrXMLNode = gradients[gradientInfo.ref].clone();
   const gradientId = 'gradient-' + Object.values(gradientInfo).join('-');
 

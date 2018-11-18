@@ -6,8 +6,22 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Fill } from './fill';
+import * as fill from './fill';
 
-export interface Stroke extends Fill {
+interface PatternStroke extends fill.PatternFill {
   width: number;
 }
+
+interface GradientStroke extends fill.GradientFill {
+  width: number;
+}
+
+interface ColorStroke extends fill.ColorFill {
+  width: number;
+}
+
+interface NoneStroke extends fill.NoneFill {
+  width: number;
+}
+
+export type Stroke = PatternStroke | GradientStroke | ColorStroke | NoneStroke;

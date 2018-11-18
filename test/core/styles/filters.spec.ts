@@ -9,10 +9,10 @@
 import * as assert     from 'assert';
 import * as builder    from 'xmlbuilder';
 import { filters }     from '../../../src/core/styles/filters';
-import { camelToDash } from '../../../src/core/utils/camel-to-dash';
+import { camelToDash } from '../../../src/core/utils';
 
 describe('Core > Styles parsers > Filters', () => {
-  it('should skip invisible filter and return empty list', () => {
+  it('should skip invisible filter and return empty string', () => {
     const filtersSrc = [
       {
         params: {
@@ -24,7 +24,7 @@ describe('Core > Styles parsers > Filters', () => {
 
     const result = filters.parse(filtersSrc, builder.create('svg'));
 
-    assert.equal(result, null);
+    assert.equal(result, '');
   });
 
   it('should correctly parse blur filter', () => {

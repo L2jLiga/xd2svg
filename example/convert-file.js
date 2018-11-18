@@ -3,7 +3,8 @@ const xd2svg = require('xd2svg');
 
 const inputFileName = 'myFile.xd';
 const options = {
-  single: true
+  single: true,
+  svgo: false
 };
 
 xd2svg(inputFileName, options)

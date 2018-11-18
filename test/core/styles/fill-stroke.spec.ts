@@ -6,14 +6,14 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert              from 'assert';
-import * as builder             from 'xmlbuilder';
-import { fill }                 from '../../../src/core/styles/fill';
-import { Color, Fill, Pattern } from '../../../src/core/styles/models';
-import { stroke }               from '../../../src/core/styles/stroke';
-import { gradients }            from '../../../src/core/utils';
+import * as assert                      from 'assert';
+import * as builder                     from 'xmlbuilder';
+import { fill }                         from '../../../src/core/styles/fill';
+import { Color, GradientFill, Pattern } from '../../../src/core/styles/models';
+import { stroke }                       from '../../../src/core/styles/stroke';
+import { gradients }                    from '../../../src/core/utils';
 
-describe('Core > Styles parsers', () => {
+describe(`Core > Styles parsers`, () => {
   const pattern: Pattern = {
     height: 1,
     href: 'href',
@@ -27,8 +27,8 @@ describe('Core > Styles parsers', () => {
     width: 1,
   };
 
-  describe(' > Fill', () => {
-    it('should return none when type is none', () => {
+  describe(` > Fill`, () => {
+    it(`should return none when type is none`, () => {
       const type = 'none';
 
       const result = fill.parse({type});
@@ -36,7 +36,7 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, type);
     });
 
-    it('should return color when type is color', () => {
+    it(`should return color when type is color`, () => {
       const type = 'color';
       const color: Color = {value: 123456};
 
@@ -45,28 +45,25 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, `#${color.value.toString(16)}`);
     });
 
-    it('should try to transform color when type isn\'t specified', () => {
-      const cases = [
-        {
-          expect: '#fff',
-          fill: {},
-        },
-        {
-          expect: 'rgb(1,2,3)',
-          fill: {color: {mode: 'RGB', value: {r: 1, g: 2, b: 3}}},
-        },
-      ];
+    it(`should return color when type is solid`, () => {
+      const type = 'solid';
+      const color: Color = {value: 123456};
 
-      cases.forEach((testCase) => {
-        const result = fill.parse(testCase.fill);
+      const result = fill.parse({type, color});
 
-        assert.equal(result, testCase.expect);
-      });
+      assert.equal(result, `#${color.value.toString(16)}`);
     });
 
-    it('should return ref to gradient when type is gradient', () => {
+    it(`should return empty string when type is unknown`, () => {
+      const fillSrc = {};
+      const result = fill.parse(fillSrc);
+
+      assert.equal(result, '');
+    });
+
+    it(`should return ref to gradient when type is gradient`, () => {
       const defs = builder.begin();
-      const gradientInfo: Fill['gradient'] = {
+      const gradientInfo: GradientFill['gradient'] = {
         ref: 'ref',
         units: 'objectBoundingBox',
         x1: 1,
@@ -81,7 +78,7 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, `url(#gradient-${Object.values(gradientInfo).join('-')})`);
     });
 
-    it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
+    it(`should append pattern element to defs and return ref to this pattern if type is pattern`, () => {
       const defs: any = builder.begin().ele('defs');
       pattern.meta.ux.scaleBehavior = 'fill';
 
@@ -98,7 +95,7 @@ describe('Core > Styles parsers', () => {
       );
     });
 
-    it('should correctly parse pattern without scale', () => {
+    it(`should correctly parse pattern without scale`, () => {
       const defs: any = builder.begin().ele('defs');
       pattern.meta.ux.scaleBehavior = 'null';
 
@@ -115,8 +112,8 @@ describe('Core > Styles parsers', () => {
     });
   });
 
-  describe(' > Stroke', () => {
-    it('should return none when type is none', () => {
+  describe(` > Stroke`, () => {
+    it(`should return none when type is none`, () => {
       const type = 'none';
 
       const result = stroke.parse({type});
@@ -124,7 +121,7 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, type);
     });
 
-    it('should return color when type is color', () => {
+    it(`should return color when type is color`, () => {
       const type = 'color';
       const color: Color = {value: 123456};
 
@@ -133,28 +130,25 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, `#${color.value.toString(16)}`);
     });
 
-    it('should try to transform color when type isn\'t specified', () => {
-      const cases = [
-        {
-          expect: '#fff',
-          stroke: {},
-        },
-        {
-          expect: 'rgb(1,2,3)',
-          stroke: {color: {mode: 'RGB', value: {r: 1, g: 2, b: 3}}},
-        },
-      ];
+    it(`should return color when type is solid`, () => {
+      const type = 'solid';
+      const color: Color = {value: 123456};
 
-      cases.forEach((testCase) => {
-        const result = stroke.parse(testCase.stroke);
+      const result = stroke.parse({type, color});
 
-        assert.equal(result, testCase.expect);
-      });
+      assert.equal(result, `#${color.value.toString(16)}`);
     });
 
-    it('should return ref to gradient when type is gradient', () => {
+    it(`should return empty string when type is unknown`, () => {
+      const fillSrc = {};
+      const result = stroke.parse(fillSrc);
+
+      assert.equal(result, '');
+    });
+
+    it(`should return ref to gradient when type is gradient`, () => {
       const defs = builder.begin();
-      const gradientInfo: Fill['gradient'] = {
+      const gradientInfo: GradientFill['gradient'] = {
         ref: 'ref',
         units: 'objectBoundingBox',
         x1: 1,
@@ -169,7 +163,7 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, `url(#gradient-${Object.values(gradientInfo).join('-')})`);
     });
 
-    it('should append pattern element to defs and return ref to this pattern if type is pattern', () => {
+    it(`should append pattern element to defs and return ref to this pattern if type is pattern`, () => {
       const defs: any = builder.create('svg');
       pattern.meta.ux.scaleBehavior = 'fill';
 
@@ -178,7 +172,7 @@ describe('Core > Styles parsers', () => {
       assert.equal(result, `url(#${pattern.meta.ux.uid})`);
     });
 
-    it('should add stroke width if it present', () => {
+    it(`should add stroke width if it present`, () => {
       const type = 'color';
       const color: Color = {value: 123456};
 

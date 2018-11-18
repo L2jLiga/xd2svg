@@ -6,12 +6,13 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { readFileSync }                        from 'fs';
-import * as builder                            from 'xmlbuilder';
-import { createElem }                          from './artboard-converter';
-import { ArtboardInfo, Dictionary, Directory } from './models';
-import { Color }                               from './styles/models';
-import { colorTransformer, defs, gradients }   from './utils';
+import { readFileSync }                      from 'fs';
+import * as builder                          from 'xmlbuilder';
+import { Dictionary, Directory }             from '../common';
+import { createElem }                        from './artboard-converter';
+import { ArtboardInfo }                      from './models';
+import { Color }                             from './styles/models';
+import { colorTransformer, defs, gradients } from './utils';
 
 export function resourcesParser(directory: Directory): Dictionary<ArtboardInfo> {
   const json = readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');

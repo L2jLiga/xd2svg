@@ -12,8 +12,9 @@ export function checkArgv(): void {
 
   console.log(`${logger.bold('Usage:')} xd2svg-cli InputFile.xd [options]
   ${logger.bold('options:')}
-  ${logger.bold('-o, --output')} - specify output path (default FileName directory or FileName.svg)
-  ${logger.bold('-s, --single')} - specify does output should be single file with all artboards or directory with separated each other (default: true)
+  ${logger.bold('-o, --output')}       - specify output path (default FileName directory or FileName.svg)
+  ${logger.bold('-s, --single')}       - specify does output should be single file with all artboards or directory with separated each other (default: true)
+  ${logger.bold('-d, --disable-svgo')} - option to disable SVGO optimizations
 
   For additional information: man xd2svg-cli`);
 

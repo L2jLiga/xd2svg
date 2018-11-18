@@ -7,9 +7,10 @@
  */
 
 import { existsSync, mkdirSync, writeFile } from 'fs';
+import { OutputFormat }                     from '../common';
 import * as logger                          from '../utils/logger';
 import xd2svg                               from '../xd2svg';
-import { CliOptions, OutputFormat }         from './models';
+import { CliOptions }                       from './models';
 
 const sanitize = require('sanitize-filename');
 

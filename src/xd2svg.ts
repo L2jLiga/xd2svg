@@ -6,38 +6,51 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as extractZip                          from 'extract-zip';
-import { existsSync, lstatSync, writeFileSync } from 'fs';
-import { dirSync, SynchrounousResult }          from 'tmp';
-import { promisify }                            from 'util';
-import { CliOptions, OutputFormat }             from './cli/models';
-import { proceedFile }                          from './core';
-import { Dictionary, Directory }                from './core/models';
-import { svgo }                                 from './core/svgo';
-import * as logger                              from './utils/logger';
+import * as extractZip                                                  from 'extract-zip';
+import { existsSync, lstatSync, writeFileSync }                         from 'fs';
+import { dirSync, SynchrounousResult }                                  from 'tmp';
+import { promisify }                                                    from 'util';
+import { defaultOptions, Dictionary, Directory, Options, OutputFormat } from './common';
+import { proceedFile }                                                  from './core';
+import { svgo }                                                         from './core/svgo';
+import * as logger                                                      from './utils/logger';
 
 const extract = promisify(extractZip);
 
-interface SingleOutput extends CliOptions {
+interface Xd2svgOptions {
+  single?: boolean;
+  svgo?: boolean;
+}
+
+interface SingleOutput extends Xd2svgOptions {
   single: true;
 }
 
-interface MultipleOutput extends CliOptions {
+interface MultipleOutput extends Xd2svgOptions {
   single: false;
 }
 
 export default async function xd2svg(input: string | Buffer, options: SingleOutput): Promise<string>;
-export default async function xd2svg(input: string | Buffer, options: MultipleOutput): Promise<Dictionary<string>>;
-export default async function xd2svg(input: string | Buffer, options: CliOptions): Promise<OutputFormat>;
-export default async function xd2svg(input: string | Buffer, options: CliOptions): Promise<OutputFormat> {
+export default async function xd2svg(input: string | Buffer, options?: MultipleOutput): Promise<Dictionary<string>>;
+export default async function xd2svg(input: string | Buffer, options: Xd2svgOptions): Promise<OutputFormat>;
+export default async function xd2svg(input: string | Buffer, options: Xd2svgOptions = defaultOptions): Promise<OutputFormat> {
+  const opts: Options = {
+    ...defaultOptions,
+    ...options,
+  };
+
   const directory: Directory = await openMockup(input);
-  const svg: string | Dictionary<string> = proceedFile(directory, options.single);
+  const svg: string | Dictionary<string> = proceedFile(directory, opts.single);
 
   if (directory.removeCallback) directory.removeCallback();
 
-  return typeof svg === 'string'
-    ? await optimizeSvg(svg)
-    : await promiseAllObject(svg);
+  if (opts.svgo) {
+    return typeof svg === 'string'
+      ? await optimizeSvg(svg)
+      : await promiseAllObject(svg);
+  }
+
+  return svg;
 }
 
 async function openMockup(inputFile: string | Buffer): Promise<Directory> {
@@ -60,7 +73,7 @@ async function openMockup(inputFile: string | Buffer): Promise<Directory> {
   if (lstatSync(inputFile).isDirectory()) {
     return {
       name: inputFile,
-    };
+    } as Directory;
   }
 
   const directory: SynchrounousResult = dirSync({unsafeCleanup: true, postfix: `_${Date.now()}`});

@@ -53,8 +53,9 @@ You can use utility from CLI
    xd2svg-cli InputFile.xd [options]
    
      options:
-       -o, --output - specify output path (default FileName directory or FileName.svg)
-       -s, --single - specify does output should be single file with all artboards or directory with separated each other (default: true)
+       -o, --output       - specify output path (default FileName directory or FileName.svg)
+       -s, --single       - specify does output should be single file with all artboards or directory with separated each other (default: true)
+       -d, --disable-svgo - option to disable SVGO optimizations
    ```
 
 Or [import package into your project](example)
