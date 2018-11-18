@@ -7,7 +7,7 @@
  */
 
 import { XMLElementOrXMLNode } from 'xmlbuilder';
-import { Dictionary }          from './models';
+import { Dictionary }          from '../common';
 import parsers                 from './styles';
 
 export function createStyles(stylesSrc: Dictionary<any>, defs: XMLElementOrXMLNode): string {

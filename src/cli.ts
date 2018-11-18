@@ -16,7 +16,7 @@ checkArgv();
 
 const options: CliOptions = parseParams();
 
-console.log(logger.blue(logger.bold('XD2SVG starts their work, given input:')) +
+console.log(logger.blue(logger.bold('XD2SVG starts their work\n')) +
   logger.blue('filename: ') + '%s\n' +
   logger.blue('output type: ') + '%s\n' +
   logger.blue('output path: ') + '%s',

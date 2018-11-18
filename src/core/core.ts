@@ -6,12 +6,13 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { readFileSync }                                                      from 'fs';
-import { artboardConverter }                                                 from './artboard-converter';
-import { manifestParser }                                                    from './manifest-parser';
-import { Artboard, ArtboardDefinition, ArtboardInfo, Dictionary, Directory } from './models';
-import { resourcesParser }                                                   from './resources-parser';
-import { defs }                                                              from './utils';
+import { readFileSync }                               from 'fs';
+import { Dictionary, Directory }                      from '../common';
+import { artboardConverter }                          from './artboard-converter';
+import { manifestParser }                             from './manifest-parser';
+import { Artboard, ArtboardDefinition, ArtboardInfo } from './models';
+import { resourcesParser }                            from './resources-parser';
+import { defs }                                       from './utils';
 
 interface InjectableSvgData {
   defs: string;
@@ -21,8 +22,8 @@ interface InjectableSvgData {
 }
 
 interface ConvertedArtboard {
-  artboardName: string;
-  contentOfArtboard: string[];
+  name: string;
+  content: string[];
 }
 
 let dimensions: { width: number, height: number };
@@ -42,7 +43,7 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
 
   if (single) {
     artboards.forEach((artboard: ConvertedArtboard) => {
-      convertedArtboards[artboard.artboardName] = artboard.contentOfArtboard.join('\n');
+      convertedArtboards[artboard.name] = artboard.content.join('\n');
     });
 
     return injectResources(Object.values(convertedArtboards), {
@@ -73,7 +74,7 @@ function toArtboard(dir: Directory, artboardsInfo: Dictionary<ArtboardInfo>, sin
       dimensions.height = Math.max(dimensions.height, artboardDimensions.height);
     }
 
-    return {artboardName: artboardItem.name, contentOfArtboard: artboardContent};
+    return {name: artboardItem.name, content: artboardContent};
   };
 }
 
@@ -81,12 +82,12 @@ function toConvertedArtboard(artboardsInfo: Dictionary<ArtboardInfo>) {
   const defsList = defs.end();
 
   return (data: ConvertedArtboard): void => {
-    const {artboardName, contentOfArtboard} = data;
+    const {name, content} = data;
 
-    convertedArtboards[artboardName] = injectResources(contentOfArtboard, {
+    convertedArtboards[name] = injectResources(content, {
       defs: defsList,
-      rootHeight: artboardsInfo[artboardName].height,
-      rootWidth: artboardsInfo[artboardName].width,
+      rootHeight: artboardsInfo[name].height,
+      rootWidth: artboardsInfo[name].width,
     });
   };
 }

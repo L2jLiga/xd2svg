@@ -8,8 +8,6 @@
 
 export { Artboard }                     from './artboard';
 export { ArtboardInfo }                 from './artboard-info';
-export { Dictionary }                   from './dictionary';
-export { Directory }                    from './directory';
 export { Manifest, ArtboardDefinition } from './manifest';
 export { ManifestFile }                 from './manifest-file';
 export { RawResource, ResourcesMap }    from './resources';

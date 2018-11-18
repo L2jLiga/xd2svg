@@ -6,7 +6,8 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { CliOptions, defaultOptions } from './models';
+import { defaultOptions } from '../common';
+import { CliOptions }     from './models';
 
 export function parseParams(): CliOptions {
   const inputFileName: string = process.argv[2];

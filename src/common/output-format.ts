@@ -6,6 +6,6 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Dictionary } from '../../core/models';
+import { Dictionary } from './dictionary';
 
 export type OutputFormat = string | Dictionary<string>;
