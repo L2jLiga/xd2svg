@@ -17,24 +17,34 @@ import * as logger                                                      from './
 
 const extract = promisify(extractZip);
 
-interface SingleOutput extends Options {
+interface Xd2svgOptions {
+  single?: boolean;
+  svgo?: boolean;
+}
+
+interface SingleOutput extends Xd2svgOptions {
   single: true;
 }
 
-interface MultipleOutput extends Options {
+interface MultipleOutput extends Xd2svgOptions {
   single: false;
 }
 
 export default async function xd2svg(input: string | Buffer, options: SingleOutput): Promise<string>;
 export default async function xd2svg(input: string | Buffer, options?: MultipleOutput): Promise<Dictionary<string>>;
-export default async function xd2svg(input: string | Buffer, options: Options): Promise<OutputFormat>;
-export default async function xd2svg(input: string | Buffer, options: Options = defaultOptions): Promise<OutputFormat> {
+export default async function xd2svg(input: string | Buffer, options: Xd2svgOptions): Promise<OutputFormat>;
+export default async function xd2svg(input: string | Buffer, options: Xd2svgOptions = defaultOptions): Promise<OutputFormat> {
+  const opts: Options = {
+    ...defaultOptions,
+    ...options,
+  };
+
   const directory: Directory = await openMockup(input);
-  const svg: string | Dictionary<string> = proceedFile(directory, options.single);
+  const svg: string | Dictionary<string> = proceedFile(directory, opts.single);
 
   if (directory.removeCallback) directory.removeCallback();
 
-  if (options.svgo) {
+  if (opts.svgo) {
     return typeof svg === 'string'
       ? await optimizeSvg(svg)
       : await promiseAllObject(svg);
