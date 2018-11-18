@@ -6,15 +6,15 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as extractZip                          from 'extract-zip';
-import { existsSync, lstatSync, writeFileSync } from 'fs';
-import { dirSync, SynchrounousResult }          from 'tmp';
-import { promisify }                            from 'util';
-import { CliOptions, OutputFormat }             from './cli/models';
-import { proceedFile }                          from './core';
-import { Dictionary, Directory }                from './core/models';
-import { svgo }                                 from './core/svgo';
-import * as logger                              from './utils/logger';
+import * as extractZip                              from 'extract-zip';
+import { existsSync, lstatSync, writeFileSync }     from 'fs';
+import { dirSync, SynchrounousResult }              from 'tmp';
+import { promisify }                                from 'util';
+import { CliOptions, defaultOptions, OutputFormat } from './cli/models';
+import { proceedFile }                              from './core';
+import { Dictionary, Directory }                    from './core/models';
+import { svgo }                                     from './core/svgo';
+import * as logger                                  from './utils/logger';
 
 const extract = promisify(extractZip);
 
@@ -29,15 +29,19 @@ interface MultipleOutput extends CliOptions {
 export default async function xd2svg(input: string | Buffer, options: SingleOutput): Promise<string>;
 export default async function xd2svg(input: string | Buffer, options?: MultipleOutput): Promise<Dictionary<string>>;
 export default async function xd2svg(input: string | Buffer, options: CliOptions): Promise<OutputFormat>;
-export default async function xd2svg(input: string | Buffer, options: CliOptions = {}): Promise<OutputFormat> {
+export default async function xd2svg(input: string | Buffer, options: CliOptions = defaultOptions): Promise<OutputFormat> {
   const directory: Directory = await openMockup(input);
   const svg: string | Dictionary<string> = proceedFile(directory, options.single);
 
   if (directory.removeCallback) directory.removeCallback();
 
-  return typeof svg === 'string'
-    ? await optimizeSvg(svg)
-    : await promiseAllObject(svg);
+  if (options.svgo) {
+    return typeof svg === 'string'
+      ? await optimizeSvg(svg)
+      : await promiseAllObject(svg);
+  }
+
+  return svg;
 }
 
 async function openMockup(inputFile: string | Buffer): Promise<Directory> {

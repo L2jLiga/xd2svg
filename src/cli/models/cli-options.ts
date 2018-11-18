@@ -8,5 +8,11 @@
 
 export interface CliOptions {
   output?: string;
-  single?: boolean;
+  single: boolean;
+  svgo: boolean;
 }
+
+export const defaultOptions: CliOptions = {
+  single: false,
+  svgo: true,
+};

@@ -55,7 +55,7 @@ describe('Complex test for xd2svg', () => {
   it('should correctly convert when buffer provided', (done) => {
     const inputBuffer: Buffer = Buffer.from(readFileSync('test/single.xd'));
 
-    xd2svg(inputBuffer, {single: true})
+    xd2svg(inputBuffer, {single: true, svgo: false})
       .then((svgImage: string) => convert(svgImage, {puppeteer: {args: ['--no-sandbox']}}) as Promise<Buffer>)
       .then((actual) => runDiffFor(actual, 'test/expected/single.png'))
       .then(done)
@@ -63,7 +63,7 @@ describe('Complex test for xd2svg', () => {
   });
 
   it('should correctly convert when provided path to file', (done) => {
-    xd2svg('test/single.xd', {single: true})
+    xd2svg('test/single.xd', {single: true, svgo: true})
       .then((svgImage: string) => convert(svgImage, {puppeteer: {args: ['--no-sandbox']}}) as Promise<Buffer>)
       .then((actual) => runDiffFor(actual, 'test/expected/single.png'))
       .then(done)

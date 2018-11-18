@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { CliOptions } from './models';
+import { CliOptions, defaultOptions } from './models';
 
 export function parseParams(): CliOptions {
   const inputFileName: string = process.argv[2];
@@ -19,8 +19,8 @@ export function parseParams(): CliOptions {
   }
 
   const options: CliOptions = {
+    ...defaultOptions,
     output: inputName.join('.'),
-    single: false,
   };
 
   for (let argIdx = 2; argIdx++; argIdx < process.argv.length) {
@@ -32,6 +32,11 @@ export function parseParams(): CliOptions {
       case '--output':
         options.output = value;
         customOutput = true;
+        break;
+
+      case '-d':
+      case '--disable-svgo':
+        options.svgo = false;
         break;
 
       case '-s':
