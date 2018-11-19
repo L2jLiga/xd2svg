@@ -12,7 +12,7 @@ export interface Pattern {
   meta: {
     ux: {
       uid: string;
-      scaleBehavior: string;
+      scaleBehavior: 'fill' | 'cover';
       hrefLastModifiedDate: number;
     };
   };

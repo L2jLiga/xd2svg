@@ -5,9 +5,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [1.0.1]
+### Added
+- Warning message when unknown fill/stroke/shape property given
+- Support for specific border for each rectangle side
+
+### Changed
+- Reduced possible threshold in tests
+- Performance improvements
+- Typing improvements
+
+### Fixed
+- Raster graphic had incorrect size
+- Incorrect empty space in text elements
+- Typos in logger
+
+### Removed
+- SVGO optimizations
+
 ## [1.0.0]
 ### Fix
-- gradients may start from incorrect place
+- Gradients may start from incorrect place
 
 ## [1.0.0-4]
 ### Changed:
@@ -311,7 +329,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add Artboard parser
 
-[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/L2jLiga/xd2svg/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/L2jLiga/xd2svg/compare/v1.0.0-4...v1.0.0
 [1.0.0-4]: https://github.com/L2jLiga/xd2svg/compare/v1.0.0-3...v1.0.0-4
 [1.0.0-3]: https://github.com/L2jLiga/xd2svg/compare/v1.0.0-2...v1.0.0-3

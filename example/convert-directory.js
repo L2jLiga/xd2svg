@@ -12,8 +12,7 @@ async function prepareSvg(inputFileName) {
   await promisify(extract)(inputFileName, {dir});
 
   const preparedSvgs = xd2svg(dir, {
-    single: false,
-    svgo: true
+    single: false
   });
 
   Object

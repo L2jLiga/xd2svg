@@ -12,6 +12,7 @@ import { bold, red }                                            from '../utils';
 import { createStyles }                                         from './create-styles';
 import { Artboard, ArtboardInfo, Line, Paragraph, Shape, Text } from './models';
 import { applyIfPossible }                                      from './utils';
+import { svgRectToClipPath }                                    from './utils/svg-rect-to-clip-path';
 
 export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo): string[] {
   return artboardsRoot.children.map(toArtboards(artboardInfo));
@@ -44,7 +45,7 @@ function toArtboards(artboardInfo: ArtboardInfo) {
   };
 }
 
-function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XMLElementOrXMLNode) {
+function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XMLElementOrXMLNode, svgObject: any) {
   const shape = parentElement.element(srcObj.type === 'compound' ? 'path' : srcObj.type);
 
   switch (srcObj.type) {
@@ -64,8 +65,24 @@ function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XM
       if (srcObj.r) {
         const maxBR = Math.min(srcObj.width, srcObj.height) / 2;
 
-        shape.attribute('rx', Math.min(srcObj.r[0], maxBR));
-        shape.attribute('ry', Math.min(srcObj.r[1], maxBR));
+        const clipPath = svgRectToClipPath({
+          height: srcObj.height,
+          r: [
+            Math.min(srcObj.r[0], maxBR),
+            Math.min(srcObj.r[1], maxBR),
+            Math.min(srcObj.r[2], maxBR),
+            Math.min(srcObj.r[3], maxBR),
+          ],
+          width: srcObj.width,
+        }, defs);
+
+        clipPath.attribute('id', `clip-path-${srcObj.width}-${srcObj.height}-${srcObj.r.join('-')}`);
+
+        svgObject.style = svgObject.style || {};
+
+        svgObject.style.clipPath = {
+          ref: `clip-path-${srcObj.width}-${srcObj.height}-${srcObj.r.join('-')}`,
+        };
       }
       break;
 
@@ -103,10 +120,9 @@ function createText(srcObj: Text, parentElement: XMLElementOrXMLNode) {
   srcObj.paragraphs.map((paragraph: Paragraph) => {
     paragraph.lines.map((line: Line[]) => {
       line.map((linePart: Line) => {
-        const element: XMLElementOrXMLNode = svgTextElement.element(
-          'tspan',
-          {},
-          rawText.substring(linePart.from, linePart.to));
+        const element: XMLElementOrXMLNode = svgTextElement
+          .element('tspan')
+          .raw(rawText.substring(linePart.from, linePart.to).replace(/ /g, '\u00A0'));
 
         applyIfPossible(element, 'x', linePart.x);
         applyIfPossible(element, 'y', linePart.y);
@@ -128,7 +144,7 @@ export function createElem(svgObjCollection: { children: Artboard[] }, parentEle
 
       switch (svgObject.type) {
         case 'shape':
-          node = createShape(svgObject.shape, parentElement, defs);
+          node = createShape(svgObject.shape, parentElement, defs, svgObject);
           break;
 
         case 'text':

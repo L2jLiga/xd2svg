@@ -35,11 +35,6 @@ export function parseParams(): CliOptions {
         customOutput = true;
         break;
 
-      case '-d':
-      case '--disable-svgo':
-        options.svgo = false;
-        break;
-
       case '-s':
       case '--single':
         options.single = !/^f/i.test(value);
