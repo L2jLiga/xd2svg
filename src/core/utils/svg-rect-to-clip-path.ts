@@ -38,7 +38,7 @@ export function svgRectToPath(attributes: SvgRectToClipPath) {
     'h' +
     (width - leftTopCorner - rightTopCorner) +
     // upper right corner
-    (rightTopCorner || rightBottomCorner ? 'a ' + rightTopCorner + ' ' + rightBottomCorner + ' 0 0 1 ' + rightTopCorner + ' ' + rightBottomCorner : '') +
+    (rightTopCorner ? 'a ' + rightTopCorner + ' ' + rightBottomCorner + ' 0 0 1 ' + rightTopCorner + ' ' + rightBottomCorner : '') +
     // Draw right side
     'v' +
     (height - rightTopCorner - rightBottomCorner) +
