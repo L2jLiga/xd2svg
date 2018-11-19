@@ -20,7 +20,7 @@ describe(`Core > Styles parsers`, () => {
     meta: {
       ux: {
         hrefLastModifiedDate: 1,
-        scaleBehavior: 'null',
+        scaleBehavior: 'fill',
         uid: 'uid',
       },
     },
@@ -78,7 +78,7 @@ describe(`Core > Styles parsers`, () => {
       assert.equal(result, `url(#gradient-${Object.values(gradientInfo).join('-')})`);
     });
 
-    it(`should append pattern element to defs and return ref to this pattern if type is pattern`, () => {
+    it(`should create pattern element when scale behavior is fill`, () => {
       const defs: any = builder.begin().ele('defs');
       pattern.meta.ux.scaleBehavior = 'fill';
 
@@ -88,22 +88,35 @@ describe(`Core > Styles parsers`, () => {
       assert.equal(
         defs.end(),
         '<defs>' +
-        '<pattern height="1" id="uid" width="1" x="0" y="0" patternContentUnits="objectBoundingBox">' +
-        '<image xlink:href="undefined" preserveAspectRatio="none" width="1" height="1"/>' +
+        '<pattern height="100%" id="uid" viewBox="0 0 1 1" width="100%">' +
+        '<image height="1" width="1" xlink:href="undefined"/>' +
         '</pattern>' +
         '</defs>',
       );
     });
 
-    it(`should correctly parse pattern without scale`, () => {
+    it(`should create pattern element when scale behavior is cover`, () => {
       const defs: any = builder.begin().ele('defs');
-      pattern.meta.ux.scaleBehavior = 'null';
+      pattern.meta.ux.scaleBehavior = 'cover';
 
-      const expected = '<defs>' +
-        '<pattern height="1" id="uid" width="1" x="0" y="0">' +
-        '<image xlink:href="undefined" width="1" height="1"/>' +
+      const result = fill.parse({type: 'pattern', pattern}, defs);
+
+      assert.equal(result, `url(#${pattern.meta.ux.uid})`);
+      assert.equal(
+        defs.end(),
+        '<defs>' +
+        '<pattern height="100%" id="uid" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1 1" width="100%">' +
+        '<image height="1" width="1" xlink:href="undefined"/>' +
         '</pattern>' +
-        '</defs>';
+        '</defs>',
+      );
+    });
+
+    it(`shouldn't create pattern when scale behavior is unknown`, () => {
+      const defs: any = builder.begin().ele('defs');
+      pattern.meta.ux.scaleBehavior = 'null' as any;
+
+      const expected = '<defs/>';
 
       const actual = fill.parse({type: 'pattern', pattern}, defs);
 

@@ -62,22 +62,44 @@ function makeGradient(gradientInfo: GradientFill['gradient'], defs: XMLElementOr
 
 function createPattern(patternObject: Pattern, defs: XMLElementOrXMLNode): void {
   const resources = manifestInfo.resources;
-  const pattern = defs.element('pattern', {
-    height: '1',
-    id: patternObject.meta.ux.uid,
-    width: '1',
-    x: '0',
-    y: '0',
-  });
-  const image = pattern.element('image', {'xlink:href': `${resources[patternObject.meta.ux.uid]}`});
 
-  if (patternObject.meta.ux.scaleBehavior === 'cover' || patternObject.meta.ux.scaleBehavior === 'fill') {
-    pattern.attribute('patternContentUnits', 'objectBoundingBox');
-    image.attribute('preserveAspectRatio', 'none');
-    image.attribute('width', '1');
-    image.attribute('height', '1');
-  } else {
-    image.attribute('width', `${patternObject.width}`);
-    image.attribute('height', `${patternObject.height}`);
+  const {width, height, meta: {ux: {uid, scaleBehavior}}} = patternObject;
+
+  switch (scaleBehavior) {
+    case 'fill':
+      defs
+        .element('pattern', {
+          height: '100%',
+          id: uid,
+          viewBox: `0 0 ${width} ${height}`,
+          width: '100%',
+        })
+        .element('image', {
+          height,
+          width,
+          'xlink:href': `${resources[uid]}`,
+        });
+
+      break;
+
+    case 'cover':
+      defs
+        .element('pattern', {
+          height: '100%',
+          id: uid,
+          preserveAspectRatio: 'xMidYMid slice',
+          viewBox: `0 0 ${width} ${height}`,
+          width: '100%',
+        })
+        .element('image', {
+          height,
+          width,
+          'xlink:href': `${resources[uid]}`,
+        });
+
+      break;
+
+    default:
+      console.warn(`${logger.bold(logger.red('Fill/Stroke parser:'))} unknown property: %j`, patternObject);
   }
 }
