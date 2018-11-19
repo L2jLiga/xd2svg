@@ -12,14 +12,12 @@ import { dirSync, SynchrounousResult }                                  from 'tm
 import { promisify }                                                    from 'util';
 import { defaultOptions, Dictionary, Directory, Options, OutputFormat } from './common';
 import { proceedFile }                                                  from './core';
-import { svgo }                                                         from './core/svgo';
 import * as logger                                                      from './utils/logger';
 
 const extract = promisify(extractZip);
 
 interface Xd2svgOptions {
   single?: boolean;
-  svgo?: boolean;
 }
 
 interface SingleOutput extends Xd2svgOptions {
@@ -43,12 +41,6 @@ export default async function xd2svg(input: string | Buffer, options: Xd2svgOpti
   const svg: string | Dictionary<string> = proceedFile(directory, opts.single);
 
   if (directory.removeCallback) directory.removeCallback();
-
-  if (opts.svgo) {
-    return typeof svg === 'string'
-      ? await optimizeSvg(svg)
-      : await promiseAllObject(svg);
-  }
 
   return svg;
 }
@@ -88,21 +80,4 @@ async function openMockup(inputFile: string | Buffer): Promise<Directory> {
   if (tmpInputFile) tmpInputFile.removeCallback();
 
   return directory;
-}
-
-async function optimizeSvg(svgImage: string): Promise<string> {
-  const optimizedSvg = await svgo.optimize(svgImage);
-
-  return optimizedSvg.data;
-}
-
-async function promiseAllObject(svg: Dictionary<string>): Promise<Dictionary<string>> {
-  const keys = Object.keys(svg);
-  const values = await Promise.all(Object.values(svg).map((value: string) => optimizeSvg(value)));
-
-  return keys.reduce((obj: Dictionary<string>, key, index) => {
-    obj[key] = values[index];
-
-    return obj;
-  }, {});
 }

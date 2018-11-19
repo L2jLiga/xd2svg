@@ -103,10 +103,9 @@ function createText(srcObj: Text, parentElement: XMLElementOrXMLNode) {
   srcObj.paragraphs.map((paragraph: Paragraph) => {
     paragraph.lines.map((line: Line[]) => {
       line.map((linePart: Line) => {
-        const element: XMLElementOrXMLNode = svgTextElement.element(
-          'tspan',
-          {},
-          rawText.substring(linePart.from, linePart.to));
+        const element: XMLElementOrXMLNode = svgTextElement
+          .element('tspan')
+          .raw(rawText.substring(linePart.from, linePart.to).replace(/ /g, '\u00A0'));
 
         applyIfPossible(element, 'x', linePart.x);
         applyIfPossible(element, 'y', linePart.y);

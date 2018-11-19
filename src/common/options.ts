@@ -8,10 +8,8 @@
 
 export interface Options {
   single: boolean;
-  svgo: boolean;
 }
 
 export const defaultOptions = {
   single: false,
-  svgo: true,
 };
