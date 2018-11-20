@@ -80,7 +80,7 @@ describe('Core > Artboard converter', () => {
 
       createElem(svgObjCollection, parent, null);
 
-      assert.equal(parent.end(), '<text style=";display:  none;"><tspan>raw</tspan></text>');
+      assert.equal(parent.end(), '<text style="display: none"><tspan>raw</tspan></text>');
     });
 
     it('should warn when unsupported shape', (done) => {
@@ -174,7 +174,7 @@ describe('Core > Artboard converter', () => {
 
       createElem(svgObjCollection, parent, builder.begin());
 
-      assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="15" style=";clip-path:  url(#clip-path-15-15-5-6-5-6);"/>');
+      assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="15" style="clip-path: url(#clip-path-15-15-5-6-5-6)"/>');
     });
 
     it('should create rectangle element with border radius not bigger than half of smaller side', () => {
@@ -196,7 +196,7 @@ describe('Core > Artboard converter', () => {
 
       createElem(svgObjCollection, parent, builder.begin());
 
-      assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="10" style=";clip-path:  url(#clip-path-15-10-44-44-44-44);"/>');
+      assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="10" style="clip-path: url(#clip-path-15-10-44-44-44-44)"/>');
     });
 
     it('should create circle element', () => {

@@ -62,44 +62,29 @@ function makeGradient(gradientInfo: GradientFill['gradient'], defs: XMLElementOr
 
 function createPattern(patternObject: Pattern, defs: XMLElementOrXMLNode): void {
   const resources = manifestInfo.resources;
+  const scaleBehaviors = ['fill', 'cover'];
 
   const {width, height, meta: {ux: {uid, scaleBehavior}}} = patternObject;
 
-  switch (scaleBehavior) {
-    case 'fill':
-      defs
-        .element('pattern', {
-          height: '100%',
-          id: uid,
-          viewBox: `0 0 ${width} ${height}`,
-          width: '100%',
-        })
-        .element('image', {
-          height,
-          width,
-          'xlink:href': `${resources[uid]}`,
-        });
-
-      break;
-
-    case 'cover':
-      defs
-        .element('pattern', {
-          height: '100%',
-          id: uid,
-          preserveAspectRatio: 'xMidYMid slice',
-          viewBox: `0 0 ${width} ${height}`,
-          width: '100%',
-        })
-        .element('image', {
-          height,
-          width,
-          'xlink:href': `${resources[uid]}`,
-        });
-
-      break;
-
-    default:
-      console.warn(`${logger.bold(logger.red('Fill/Stroke parser:'))} unknown property: %j`, patternObject);
+  if (!scaleBehaviors.includes(scaleBehavior )) {
+    return console.warn(`${logger.bold(logger.red('Fill/Stroke parser:'))} unknown property: %j`, patternObject);
   }
+
+  const pattern = defs
+    .element('pattern', {
+      height: '100%',
+      id: uid,
+      viewBox: `0 0 ${width} ${height}`,
+      width: '100%',
+    });
+
+  if (scaleBehavior === 'cover') {
+    pattern.attribute('preserveAspectRatio', 'xMidYMid slice');
+  }
+
+  pattern.element('image', {
+    height,
+    width,
+    'xlink:href': `${resources[uid]}`,
+  });
 }

@@ -10,5 +10,5 @@ import { Parser } from './models';
 
 export const display: Parser = {
   name: 'display',
-  parse: (src) => src,
+  parse: (src) => `${src}`,
 };

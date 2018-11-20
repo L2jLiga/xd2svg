@@ -17,8 +17,6 @@ export function svgRectToClipPath(attributes: SvgRectToClipPath, defs: XMLElemen
 }
 
 export function svgRectToPath(attributes: SvgRectToClipPath) {
-  const x = 0;
-  const y = 0;
   const width = attributes.width;
   const height = attributes.height;
 
@@ -28,33 +26,23 @@ export function svgRectToPath(attributes: SvgRectToClipPath) {
   const leftBottomCorner = attributes.r[3];
 
   return (
-    '' +
     // start at the left corner
-    'M' +
-    (x + leftTopCorner) +
-    ' ' +
-    y +
-    // top line
-    'h' +
-    (width - leftTopCorner - rightTopCorner) +
-    // upper right corner
+    'M' + leftTopCorner + ' 0' +
+    // top side
+    'h' + (width - leftTopCorner - rightTopCorner) +
+    // top-right corner
     (rightTopCorner ? 'a ' + rightTopCorner + ' ' + rightBottomCorner + ' 0 0 1 ' + rightTopCorner + ' ' + rightBottomCorner : '') +
-    // Draw right side
-    'v' +
-    (height - rightTopCorner - rightBottomCorner) +
-    // Draw bottom right corner
+    // right side
+    'v' + (height - rightTopCorner - rightBottomCorner) +
+    // bottom-right corner
     (rightBottomCorner ? 'a ' + rightTopCorner + ' ' + rightBottomCorner + ' 0 0 1 ' + rightTopCorner * -1 + ' ' + rightBottomCorner : '') +
-    // Down the down side
-    'h' +
-    (width - rightBottomCorner - leftBottomCorner) * -1 +
-    // Draw bottom left corner
-    (leftBottomCorner
-      ? 'a ' + rightBottomCorner + ' ' + leftBottomCorner + ' 0 0 1 ' + rightBottomCorner * -1 + ' ' + leftBottomCorner * -1
-      : '') +
-    // Down the left side
-    'v' +
-    (height - leftBottomCorner - leftTopCorner) * -1 +
-    // Draw top left corner
+    // down side
+    'h' + (width - rightBottomCorner - leftBottomCorner) * -1 +
+    // bottom-left corner
+    (leftBottomCorner ? 'a ' + rightBottomCorner + ' ' + leftBottomCorner + ' 0 0 1 ' + rightBottomCorner * -1 + ' ' + leftBottomCorner * -1 : '') +
+    // left side
+    'v' + (height - leftBottomCorner - leftTopCorner) * -1 +
+    // top-left corner
     (leftTopCorner ? 'a ' + leftBottomCorner + ' ' + leftTopCorner + ' 0 0 1 ' + leftBottomCorner + ' ' + leftTopCorner * -1 : '') +
     // Close path
     'z'

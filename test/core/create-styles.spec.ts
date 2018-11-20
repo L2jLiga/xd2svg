@@ -6,43 +6,35 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert      from 'assert';
-import { spy, stub }    from 'sinon';
+import { equal }        from 'assert';
 import { createStyles } from '../../src/core/create-styles';
-import parsers          from '../../src/core/styles';
 
 describe('Core > Create styles', () => {
-  it('should warn if unsupported style', () => {
+  it('should return empty string when no one parsers is known', () => {
     const stylesSrc = {
       unknownStyle: {},
     };
 
-    const consoleSpy = stub(console, 'warn');
-
     const result = createStyles(stylesSrc, null);
 
-    assert.equal(result, '');
-    assert.equal(consoleSpy.called, true);
-    assert.equal(consoleSpy.callCount, 1);
-
-    consoleSpy.restore();
+    equal(result, '');
   });
 
-  it('should use parser if it present for current style', (done) => {
+  it('should use parser for known properties, filter empty and return formatted string', () => {
     const stylesSrc = {
-      display: {},
+      display: '',
+      font: {
+        family: 'Arial',
+        postscriptName: 'Arial-Bold',
+        size: 15,
+        style: 'Bold',
+      },
+      opacity: 0.4,
+      unknownProperty: null,
     };
 
-    const parsersSpy = spy(parsers.display, 'parse');
+    const styles = createStyles(stylesSrc, null);
 
-    createStyles(stylesSrc, null);
-
-    if (parsersSpy.callCount) {
-      done();
-
-      return;
-    }
-
-    done('Test failed: parser wasn\'t used');
+    equal(styles, `font-family: Arial-Bold, Arial; font-weight: 700; font-size: 15px; opacity: 0.4`);
   });
 });
