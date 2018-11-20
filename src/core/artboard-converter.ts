@@ -12,7 +12,7 @@ import { bold, red }                                            from '../utils';
 import { createStyles }                                         from './create-styles';
 import { Artboard, ArtboardInfo, Line, Paragraph, Shape, Text } from './models';
 import { applyIfPossible }                                      from './utils';
-import { svgRectToClipPath }                                    from './utils/svg-rect-to-clip-path';
+import { SvgRectToClipPath, svgRectToClipPath }                 from './utils/svg-rect-to-clip-path';
 
 export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo): string[] {
   return artboardsRoot.children.map(toArtboards(artboardInfo));
@@ -45,7 +45,7 @@ function toArtboards(artboardInfo: ArtboardInfo) {
   };
 }
 
-function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XMLElementOrXMLNode, svgObject: any) {
+function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XMLElementOrXMLNode) {
   const shape = parentElement.element(srcObj.type === 'compound' ? 'path' : srcObj.type);
 
   switch (srcObj.type) {
@@ -61,29 +61,6 @@ function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XM
       shape.attribute('y', srcObj.y);
       shape.attribute('width', srcObj.width);
       shape.attribute('height', srcObj.height);
-
-      if (srcObj.r) {
-        const maxBR = Math.min(srcObj.width, srcObj.height) / 2;
-
-        const clipPath = svgRectToClipPath({
-          height: srcObj.height,
-          r: [
-            Math.min(srcObj.r[0], maxBR),
-            Math.min(srcObj.r[1], maxBR),
-            Math.min(srcObj.r[2], maxBR),
-            Math.min(srcObj.r[3], maxBR),
-          ],
-          width: srcObj.width,
-        }, defs);
-
-        clipPath.attribute('id', `clip-path-${srcObj.width}-${srcObj.height}-${srcObj.r.join('-')}`);
-
-        svgObject.style = svgObject.style || {};
-
-        svgObject.style.clipPath = {
-          ref: `clip-path-${srcObj.width}-${srcObj.height}-${srcObj.r.join('-')}`,
-        };
-      }
       break;
 
     case 'circle':
@@ -115,14 +92,14 @@ function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XM
 
 function createText(srcObj: Text, parentElement: XMLElementOrXMLNode) {
   const svgTextElement = parentElement.element('text');
-  const rawText = srcObj.rawText;
+  const rawText = srcObj.rawText.replace(/ /g, '\u00A0');
 
   srcObj.paragraphs.map((paragraph: Paragraph) => {
     paragraph.lines.map((line: Line[]) => {
       line.map((linePart: Line) => {
         const element: XMLElementOrXMLNode = svgTextElement
           .element('tspan')
-          .raw(rawText.substring(linePart.from, linePart.to).replace(/ /g, '\u00A0'));
+          .raw(rawText.substring(linePart.from, linePart.to));
 
         applyIfPossible(element, 'x', linePart.x);
         applyIfPossible(element, 'y', linePart.y);
@@ -144,7 +121,9 @@ export function createElem(svgObjCollection: { children: Artboard[] }, parentEle
 
       switch (svgObject.type) {
         case 'shape':
-          node = createShape(svgObject.shape, parentElement, defs, svgObject);
+          const shape = svgObject.shape;
+          node = createShape(svgObject.shape, parentElement, defs);
+          applyBorderRadius(svgObject, shape, defs);
           break;
 
         case 'text':
@@ -165,6 +144,36 @@ export function createElem(svgObjCollection: { children: Artboard[] }, parentEle
     });
 
   return parentElement;
+}
+
+function applyBorderRadius(svgObject: Artboard, shape: Shape, defs: XMLElementOrXMLNode) {
+  if (shape.type === 'rect' && shape.r) {
+    const {width, height, r} = shape;
+    const ref = `clip-path-${width}-${height}-${r.join('-')}`;
+
+    createClipPath({width, height, r}, ref, defs);
+
+    svgObject.style = svgObject.style || {};
+    svgObject.style.clipPath = {ref};
+  }
+}
+
+function createClipPath(data: SvgRectToClipPath, id: string, defs: XMLElementOrXMLNode) {
+  const {width, height, r} = data;
+  const maxBR = Math.min(width, height) / 2;
+
+  const clipPath = svgRectToClipPath({
+    height,
+    r: [
+      Math.min(r[0], maxBR),
+      Math.min(r[1], maxBR),
+      Math.min(r[2], maxBR),
+      Math.min(r[3], maxBR),
+    ],
+    width,
+  }, defs);
+
+  clipPath.attribute('id', id);
 }
 
 function applyAttributes(node: XMLElementOrXMLNode, defs: XMLElementOrXMLNode, svgObject: Artboard) {

@@ -16,6 +16,10 @@ export const stroke: Parser = {
 };
 
 function strokeParser(src: Stroke, parentElement: XMLElementOrXMLNode) {
-  const strokeStyle = fillParser(src, parentElement);
-  return strokeStyle + (src.width ? `;stroke-width:${src.width}px` : '');
+  const styles: string[] = [];
+  styles.push(fillParser(src, parentElement));
+
+  if (src.width) styles.push(`stroke-width:${src.width}px`);
+
+  return styles.filter(Boolean).join(';');
 }

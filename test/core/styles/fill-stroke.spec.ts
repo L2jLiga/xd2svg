@@ -105,7 +105,7 @@ describe(`Core > Styles parsers`, () => {
       assert.equal(
         defs.end(),
         '<defs>' +
-        '<pattern height="100%" id="uid" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1 1" width="100%">' +
+        '<pattern height="100%" id="uid" viewBox="0 0 1 1" width="100%" preserveAspectRatio="xMidYMid slice">' +
         '<image height="1" width="1" xlink:href="undefined"/>' +
         '</pattern>' +
         '</defs>',

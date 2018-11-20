@@ -10,5 +10,5 @@ import { Parser } from './models';
 
 export const opacity: Parser = {
   name: 'opacity',
-  parse: (src) => src,
+  parse: (src) => `${src}`,
 };

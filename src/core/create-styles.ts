@@ -8,30 +8,30 @@
 
 import { XMLElementOrXMLNode } from 'xmlbuilder';
 import { Dictionary }          from '../common';
+import { bold, red } from '../utils';
 import parsers                 from './styles';
 
 export function createStyles(stylesSrc: Dictionary<any>, defs: XMLElementOrXMLNode): string {
-  let styleAttr: string = '';
+  const styleAttr: string[] = [];
 
   Object.getOwnPropertyNames(stylesSrc).map((styleName: string) => {
     const parser = parsers[styleName];
-    const styleValue = stylesSrc[styleName];
 
-    if (parser) {
-      const ruleName: string = parser.name ? `${parser.name}: ` : '';
-      const ruleValue: string = parser.parse(styleValue, defs);
+    if (!parser) return console.warn(`${bold(red('Styles converter:'))} unknown style given: %j`, stylesSrc[styleName]);
 
-      if (isValueEmpty(ruleValue)) return;
+    const rule: string[] = [];
 
-      styleAttr += `;${ruleName} ${ruleValue};`;
-    } else {
-      console.warn('Unsupported style %s:\n\n%O', styleName, styleValue);
-    }
+    const parserResult: string[] = parser.parse(stylesSrc[styleName], defs).split(';');
+
+    if (!parserResult[0].length) return;
+    if (parser.name) rule.push(parser.name);
+    rule.push(parserResult.shift().trim());
+
+    styleAttr.push(rule.join(': '));
+    styleAttr.push(
+      ...parserResult.map((result: string) => result.split(':').map((val: string) => val.trim()).join(': ')),
+    );
   });
 
-  return styleAttr;
-}
-
-function isValueEmpty(value: any): boolean {
-  return value == null || value === '';
+  return styleAttr.join('; ');
 }
