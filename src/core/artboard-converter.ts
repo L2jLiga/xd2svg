@@ -6,13 +6,13 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as builder                                             from 'xmlbuilder';
-import { XMLElementOrXMLNode }                                  from 'xmlbuilder';
-import { bold, red }                                            from '../utils';
-import { createStyles }                                         from './create-styles';
-import { Artboard, ArtboardInfo, Line, Paragraph, Shape, Text } from './models';
-import { applyIfPossible }                                      from './utils';
-import { SvgRectToClipPath, svgRectToClipPath }                 from './utils/svg-rect-to-clip-path';
+import * as builder                             from 'xmlbuilder';
+import { XMLElementOrXMLNode }                  from 'xmlbuilder';
+import { createShape, createText }              from './converters';
+import { createStyles }                         from './create-styles';
+import { Artboard, ArtboardInfo, Shape }        from './models';
+import { applyIfPossible }                      from './utils';
+import { SvgRectToClipPath, svgRectToClipPath } from './utils/svg-rect-to-clip-path';
 
 export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo): string[] {
   return artboardsRoot.children.map(toArtboards(artboardInfo));
@@ -43,71 +43,6 @@ function toArtboards(artboardInfo: ArtboardInfo) {
 
     return createElem(imageRootObject.artboard, svg, defs).end();
   };
-}
-
-function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XMLElementOrXMLNode) {
-  const shape = parentElement.element(srcObj.type === 'compound' ? 'path' : srcObj.type);
-
-  switch (srcObj.type) {
-    case 'compound':
-      createElem(srcObj, shape, defs);
-
-    case 'path':
-      shape.attribute('d', srcObj.path);
-      break;
-
-    case 'rect':
-      shape.attribute('x', srcObj.x);
-      shape.attribute('y', srcObj.y);
-      shape.attribute('width', srcObj.width);
-      shape.attribute('height', srcObj.height);
-      break;
-
-    case 'circle':
-      shape.attribute('cx', srcObj.cx);
-      shape.attribute('cy', srcObj.cy);
-      shape.attribute('r', srcObj.r);
-      break;
-
-    case 'ellipse':
-      shape.attribute('cx', srcObj.cx);
-      shape.attribute('cy', srcObj.cy);
-      shape.attribute('rx', srcObj.rx);
-      shape.attribute('ry', srcObj.ry);
-      break;
-
-    case 'line':
-      shape.attribute('x1', srcObj.x1);
-      shape.attribute('y1', srcObj.y1);
-      shape.attribute('x2', srcObj.x2);
-      shape.attribute('y2', srcObj.y2);
-      break;
-
-    default:
-      console.warn(`${bold(red('Shape converter:'))} unknown shape given: %j`, srcObj);
-  }
-
-  return shape;
-}
-
-function createText(srcObj: Text, parentElement: XMLElementOrXMLNode) {
-  const svgTextElement = parentElement.element('text');
-  const rawText = srcObj.rawText.replace(/ /g, '\u00A0');
-
-  srcObj.paragraphs.map((paragraph: Paragraph) => {
-    paragraph.lines.map((line: Line[]) => {
-      line.map((linePart: Line) => {
-        const element: XMLElementOrXMLNode = svgTextElement
-          .element('tspan')
-          .raw(rawText.substring(linePart.from, linePart.to));
-
-        applyIfPossible(element, 'x', linePart.x);
-        applyIfPossible(element, 'y', linePart.y);
-      });
-    });
-  });
-
-  return svgTextElement;
 }
 
 function createTransforms(src): string {
