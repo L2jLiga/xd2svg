@@ -8,17 +8,14 @@
 
 import { XMLElementOrXMLNode } from 'xmlbuilder';
 import { bold, red }           from '../../utils';
-import { createElem }          from '../artboard-converter';
 import { Shape }               from '../models';
 
-export function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode, defs: XMLElementOrXMLNode) {
+export function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode) {
   const shape = parentElement.element(srcObj.type === 'compound' ? 'path' : srcObj.type);
 
   switch (srcObj.type) {
-    case 'compound':
-      createElem(srcObj, shape, defs);
-
     case 'path':
+    case 'compound':
       shape.attribute('d', srcObj.path);
       break;
 

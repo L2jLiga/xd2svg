@@ -22,32 +22,32 @@ interface Rectangle {
   type: 'rect';
   x: number;
   y: number;
-  r: number[];
+  r?: number[];
   width: number;
   height: number;
 }
 
 interface Circle {
   type: 'circle';
-  cx: string;
-  cy: string;
-  r: string;
+  cx: number;
+  cy: number;
+  r: number;
 }
 
 interface Ellipse {
   type: 'ellipse';
-  cx: string;
-  cy: string;
-  rx: string;
-  ry: string;
+  cx: number;
+  cy: number;
+  rx: number;
+  ry: number;
 }
 
 interface Line {
   type: 'line';
-  x1: string;
-  y1: string;
-  x2: string;
-  y2: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
 }
 
 export type Shape = Path | CompoundPath | Rectangle | Circle | Ellipse | Line;

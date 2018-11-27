@@ -12,7 +12,7 @@ import { bold, red }           from '../utils';
 import parsers                 from './styles';
 import { Parser }              from './styles/models';
 
-export function createStyles(stylesSrc: Dictionary<any>, defs: XMLElementOrXMLNode): string {
+export function createStyles(stylesSrc: Dictionary<any> = {}, defs: XMLElementOrXMLNode): string {
   const styleAttr: string[] = [];
 
   Object.getOwnPropertyNames(stylesSrc).map((styleName: string) => {

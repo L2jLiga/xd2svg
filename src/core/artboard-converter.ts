@@ -8,6 +8,7 @@
 
 import * as builder                             from 'xmlbuilder';
 import { XMLElementOrXMLNode }                  from 'xmlbuilder';
+import * as logger                              from '../utils/logger';
 import { createShape, createText }              from './converters';
 import { createStyles }                         from './create-styles';
 import { Artboard, ArtboardInfo, Shape }        from './models';
@@ -19,10 +20,10 @@ export function artboardConverter(artboardsRoot: Artboard, artboardInfo: Artboar
 }
 
 function toArtboards(artboardInfo: ArtboardInfo) {
-  return (imageRootObject: Artboard): string => {
+  return (root: Artboard): string => {
     const svg = builder.begin().element('svg', {
       'enable-background': `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
-      'id': `${imageRootObject.id}`,
+      'id': `${root.id}`,
       'viewBox': `${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
     });
     applyIfPossible(svg, 'width', artboardInfo.width);
@@ -32,7 +33,7 @@ function toArtboards(artboardInfo: ArtboardInfo) {
 
     svg.element('rect', {
       height: `${artboardInfo.height}`,
-      style: createStyles(imageRootObject.style, svg),
+      style: createStyles(root.style, svg),
       transform: `translate(${artboardInfo.x} ${artboardInfo.y})`,
       width: `${artboardInfo.width}`,
       x: 0,
@@ -41,7 +42,7 @@ function toArtboards(artboardInfo: ArtboardInfo) {
 
     const defs = svg.element('defs');
 
-    return createElem(imageRootObject.artboard, svg, defs).end();
+    return createElem(root.artboard, svg, defs).end();
   };
 }
 
@@ -49,7 +50,7 @@ function createTransforms(src): string {
   return `matrix(${src.a}, ${src.b}, ${src.c}, ${src.d}, ${src.tx}, ${src.ty})`;
 }
 
-export function createElem(svgObjCollection: { children: Artboard[] }, parentElement: XMLElementOrXMLNode, defs: XMLElementOrXMLNode): XMLElementOrXMLNode {
+export function createElem(svgObjCollection: Artboard, parentElement: XMLElementOrXMLNode, defs: XMLElementOrXMLNode): XMLElementOrXMLNode {
   svgObjCollection.children
     .map((svgObject: Artboard): void => {
       let node: XMLElementOrXMLNode;
@@ -57,7 +58,7 @@ export function createElem(svgObjCollection: { children: Artboard[] }, parentEle
       switch (svgObject.type) {
         case 'shape':
           const shape = svgObject.shape;
-          node = createShape(svgObject.shape, parentElement, defs);
+          node = createShape(svgObject.shape, parentElement);
           applyBorderRadius(svgObject, shape, defs);
           break;
 
@@ -71,7 +72,7 @@ export function createElem(svgObjCollection: { children: Artboard[] }, parentEle
           break;
 
         default:
-          console.warn(`%cWarning: %cUnsupported type: %O`, 'color: darkorange;', 'color: orange', svgObject);
+          console.warn(`${logger.bold(logger.red('Create element:'))} unknown type: %j`, svgObject);
           return;
       }
 
