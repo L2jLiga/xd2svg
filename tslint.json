@@ -2,7 +2,6 @@
   "linterOptions": {
     "exclude": [
       "*.d.ts",
-      "*.spec.ts",
       "*.js"
     ]
   },

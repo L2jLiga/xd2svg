@@ -44,11 +44,13 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "clean": "rm -Rf lib",
-    "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts'",
+    "lint": "yarn lint:src && yarn lint:spec",
+    "lint:src": "tslint -c tslint.json -p tsconfig.json",
+    "lint:spec": "tslint -c tslint.json -p test/tsconfig.json",
     "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json mocha",
     "test:coverage": "cross-env TS_NODE_PROJECT=test/tsconfig.json nyc mocha",
     "test:watch": "yarn test --watch-extensions ts --watch",
-    "prepublish": "yarn run lint && yarn run clean && yarn run build"
+    "prepublish": "yarn lint && yarn clean && yarn build"
   },
   "dependencies": {
     "extract-zip": "1.6.7",
