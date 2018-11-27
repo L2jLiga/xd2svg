@@ -9,7 +9,7 @@
 import * as builder                             from 'xmlbuilder';
 import { XMLElementOrXMLNode }                  from 'xmlbuilder';
 import * as logger                              from '../utils/logger';
-import { createShape, createText }              from './converters';
+import { createShape, TextConverter }           from './converters';
 import { createStyles }                         from './create-styles';
 import { Artboard, ArtboardInfo, Shape }        from './models';
 import { applyIfPossible }                      from './utils';
@@ -63,7 +63,7 @@ export function createElem(svgObjCollection: Artboard, parentElement: XMLElement
           break;
 
         case 'text':
-          node = createText(svgObject.text, parentElement);
+          node = TextConverter.createText(svgObject.text, parentElement).result;
           break;
 
         case 'group':
