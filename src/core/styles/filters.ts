@@ -18,19 +18,34 @@ export const filters: Parser = {
 function filtersParser(src: any[], defs: XMLElementOrXMLNode): string {
   const filter = defs.element('filter');
   const filterNo = elementChildrenCount(defs);
-  let filterId: string = `filter-${filterNo}-`;
 
-  src.reverse().forEach((filterDesc: any, index: number) => {
+  const filterId = src.reduceRight(makeReduceFn(filter, filterNo), `filter-${filterNo}-`);
+
+  if (!elementChildrenCount(filter)) {
+    filter.remove();
+
+    return '';
+  }
+
+  filter.attribute('id', filterId);
+
+  return `url(#${filterId})`;
+}
+
+function makeReduceFn(filter: XMLElementOrXMLNode, filterNo: number) {
+  return (filterId: string, filterDesc: any, index: number): string => {
     const filterName = filterDesc.type.includes('#blur') ? 'blur' : camelToDash(filterDesc.type);
     const filterParams = getFilterParams(filterDesc);
 
-    if (filterInvisible(filterDesc)) return;
+    if (filterInvisible(filterDesc)) return filterId;
 
     switch (filterName) {
       case 'blur': {
         filterId += `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
 
-        return makeBlurFilter(filter, filterParams, `${filterNo}-${index}`);
+        makeBlurFilter(filter, filterParams, `${filterNo}-${index}`);
+
+        break;
       }
 
       case 'drop-shadow': {
@@ -53,21 +68,9 @@ function filtersParser(src: any[], defs: XMLElementOrXMLNode): string {
       default:
         console.log(`Currently unsupported filter: ${filterName}`);
     }
-  });
 
-  if (!elementChildrenCount(filter)) {
-    filter.remove();
-
-    return '';
-  }
-
-  filter.attribute('id', filterId);
-
-  return `url(#${filterId})`;
-}
-
-function elementChildrenCount(ele: any): number {
-  return ele.children.length;
+    return filterId;
+  };
 }
 
 function getFilterParams(filterDesc: any): any {
@@ -124,4 +127,8 @@ function makeFeComposite(parent: XMLElementOrXMLNode, filterPostfix: string): vo
 
 function brigtnessToSlope(brightness: number): number {
   return (brightness + 50) / 200;
+}
+
+function elementChildrenCount(ele: any): number {
+  return ele.children.length;
 }
