@@ -8,8 +8,9 @@
 
 import { XMLElementOrXMLNode } from 'xmlbuilder';
 import { Dictionary }          from '../common';
-import { bold, red } from '../utils';
+import { bold, red }           from '../utils';
 import parsers                 from './styles';
+import { Parser }              from './styles/models';
 
 export function createStyles(stylesSrc: Dictionary<any>, defs: XMLElementOrXMLNode): string {
   const styleAttr: string[] = [];
@@ -19,19 +20,23 @@ export function createStyles(stylesSrc: Dictionary<any>, defs: XMLElementOrXMLNo
 
     if (!parser) return console.warn(`${bold(red('Styles converter:'))} unknown style given: %j`, stylesSrc[styleName]);
 
-    const rule: string[] = [];
-
-    const parserResult: string[] = parser.parse(stylesSrc[styleName], defs).split(';');
-
-    if (!parserResult[0].length) return;
-    if (parser.name) rule.push(parser.name);
-    rule.push(parserResult.shift().trim());
-
-    styleAttr.push(rule.join(': '));
-    styleAttr.push(
-      ...parserResult.map((result: string) => result.split(':').map((val: string) => val.trim()).join(': ')),
-    );
+    styleAttr.push(...createStyle(parser, stylesSrc[styleName], defs));
   });
 
   return styleAttr.join('; ');
+}
+
+const toFormatted = (rule: string): string => rule.split(':').map((val: string) => val.trim()).join(': ');
+
+function createStyle(parser: Parser, rawStyle: any, defs: XMLElementOrXMLNode): string[] {
+  const rule: string[] = [];
+
+  const parserResult: string[] = parser.parse(rawStyle, defs).split(';');
+
+  if (!parserResult[0].length) return [];
+
+  if (parser.name) rule.push(parser.name);
+  rule.push(parserResult.shift().trim());
+
+  return [rule.join(': '), ...parserResult.map(toFormatted)];
 }
