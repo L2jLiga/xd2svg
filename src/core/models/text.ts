@@ -10,6 +10,6 @@ export interface Paragraph {
 export interface Line {
   from: number;
   to: number;
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
 }

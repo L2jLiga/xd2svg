@@ -12,62 +12,88 @@ import { Parser }                        from './models';
 
 export const filters: Parser = {
   name: 'filter',
-  parse: filtersParser,
+  parse: (src: any[], defs: XMLElementOrXMLNode) => Filters.createFilters(src, defs).result,
 };
 
-function filtersParser(src: any[], defs: XMLElementOrXMLNode): string {
-  const filter = defs.element('filter');
-  const filterNo = elementChildrenCount(defs);
-  let filterId: string = `filter-${filterNo}-`;
+const supportedTypes = ['blur', 'drop-shadow'];
 
-  src.reverse().forEach((filterDesc: any, index: number) => {
-    const filterName = filterDesc.type.includes('#blur') ? 'blur' : camelToDash(filterDesc.type);
-    const filterParams = getFilterParams(filterDesc);
-
-    if (filterInvisible(filterDesc)) return;
-
-    switch (filterName) {
-      case 'blur': {
-        filterId += `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
-
-        return makeBlurFilter(filter, filterParams, `${filterNo}-${index}`);
-      }
-
-      case 'drop-shadow': {
-        for (const {dx, dy, r, color} of filterParams) {
-          filterId += `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
-
-          filter
-            .element('feDropShadow', {
-              dx,
-              dy,
-              'flood-color': colorTransformer(color),
-              'in': 'SourceGraphic',
-              'stdDeviation': r,
-            });
-        }
-
-        break;
-      }
-
-      default:
-        console.log(`Currently unsupported filter: ${filterName}`);
-    }
-  });
-
-  if (!elementChildrenCount(filter)) {
-    filter.remove();
-
-    return '';
+class Filters {
+  public static createFilters(src: any[], defs: XMLElementOrXMLNode): Filters {
+    return new Filters(src, defs);
   }
 
-  filter.attribute('id', filterId);
+  public result: string = '';
+  private filter: XMLElementOrXMLNode;
+  private defs: XMLElementOrXMLNode;
 
-  return `url(#${filterId})`;
-}
+  private get filterNo() {
+    return elementChildrenCount(this.defs);
+  }
 
-function elementChildrenCount(ele: any): number {
-  return ele.children.length;
+  constructor(src: any[], defs: XMLElementOrXMLNode) {
+    this.defs = defs;
+    this.filter = defs.element('filter');
+
+    const filterId = src.reduceRight(this.filtersReducer, `filter-${this.filterNo}-`);
+
+    if (this.checkWhetherFilterIsEmpty()) return;
+
+    this.filter.attribute('id', filterId);
+
+    this.result = `url(#${filterId})`;
+  }
+
+  private filtersReducer = (filterId: string, filterDesc: any, index: number): string => {
+    const type = filterDesc.type.includes('#blur') ? 'blur' : camelToDash(filterDesc.type);
+    const filterParams = getFilterParams(filterDesc);
+
+    if (!supportedTypes.includes(type)) {
+      console.log(`Currently unsupported filter: ${type}`);
+
+      return filterId;
+    }
+
+    if (filterInvisible(filterDesc)) return filterId;
+
+    filterId += type === 'blur'
+      ? this.externIdWithBlur(filterParams, index)
+      : this.externIdWithShadow(filterParams);
+
+    return filterId;
+  }
+
+  private externIdWithBlur(filterParams: any, index: number): string {
+    makeBlurFilter(this.filter, filterParams, `${this.filterNo}-${index}`);
+
+    return `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
+  }
+
+  private externIdWithShadow(filterParams: any) {
+    let addition = '';
+
+    for (const {dx, dy, r, color} of filterParams) {
+      addition += `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
+
+      this.filter
+        .element('feDropShadow', {
+          dx,
+          dy,
+          'flood-color': colorTransformer(color),
+          'in': 'SourceGraphic',
+          'stdDeviation': r,
+        });
+    }
+
+    return addition;
+  }
+
+  private checkWhetherFilterIsEmpty(): boolean {
+    if (elementChildrenCount(this.filter)) return false;
+
+    this.filter.remove();
+
+    return true;
+  }
 }
 
 function getFilterParams(filterDesc: any): any {
@@ -124,4 +150,8 @@ function makeFeComposite(parent: XMLElementOrXMLNode, filterPostfix: string): vo
 
 function brigtnessToSlope(brightness: number): number {
   return (brightness + 50) / 200;
+}
+
+function elementChildrenCount(ele: any): number {
+  return ele.children.length;
 }

@@ -18,7 +18,6 @@ describe('Core > Artboard converter', () => {
         artboard: {
           children: [],
         },
-        style: {},
       }],
     } as any;
 
@@ -97,66 +96,9 @@ describe('Core > Artboard converter', () => {
       } as any, builder.begin(), null);
     });
 
-    it('should create compound element', () => {
+    it('should create clipPath element when rectangle element has border radius property', () => {
       const parent = builder.begin();
-
-      const svgObjCollection: any = {
-        children: [{
-          shape: {
-            children: [],
-            path: 'abcdef',
-            type: 'compound',
-          },
-          type: 'shape',
-        }],
-      };
-
-      createElem(svgObjCollection, parent, null);
-
-      assert.equal(parent.end(), '<path d="abcdef"/>');
-    });
-
-    it('should create path element', () => {
-      const parent = builder.begin();
-
-      const svgObjCollection: any = {
-        children: [{
-          shape: {
-            path: 'abcdef',
-            type: 'path',
-          },
-          type: 'shape',
-        }],
-      };
-
-      createElem(svgObjCollection, parent, null);
-
-      assert.equal(parent.end(), '<path d="abcdef"/>');
-    });
-
-    it('should create rectangle element', () => {
-      const parent = builder.begin();
-
-      const svgObjCollection: any = {
-        children: [{
-          shape: {
-            height: 4,
-            type: 'rect',
-            width: 3,
-            x: 1,
-            y: 2,
-          },
-          type: 'shape',
-        }],
-      };
-
-      createElem(svgObjCollection, parent, null);
-
-      assert.equal(parent.end(), '<rect x="1" y="2" width="3" height="4"/>');
-    });
-
-    it('should create rectangle element with border radius', () => {
-      const parent = builder.begin();
+      const defs = builder.begin();
 
       const svgObjCollection: any = {
         children: [{
@@ -172,93 +114,14 @@ describe('Core > Artboard converter', () => {
         }],
       };
 
-      createElem(svgObjCollection, parent, builder.begin());
+      createElem(svgObjCollection, parent, defs);
 
+      const clipPath = '<clipPath id="clip-path-15-15-5-6-5-6">' +
+        '<path d="M5 0h4a 6 5 0 0 1 6 5v4a 6 5 0 0 1 -6 5h-4a 5 6 0 0 1 -5 -6v-4a 6 5 0 0 1 6 -5z"/>' +
+        '</clipPath>';
+
+      assert.equal(defs.end(), clipPath);
       assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="15" style="clip-path: url(#clip-path-15-15-5-6-5-6)"/>');
-    });
-
-    it('should create rectangle element with border radius not bigger than half of smaller side', () => {
-      const parent = builder.begin();
-
-      const svgObjCollection: any = {
-        children: [{
-          shape: {
-            height: 10,
-            r: [44, 44, 44, 44],
-            type: 'rect',
-            width: 15,
-            x: 1,
-            y: 2,
-          },
-          type: 'shape',
-        }],
-      };
-
-      createElem(svgObjCollection, parent, builder.begin());
-
-      assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="10" style="clip-path: url(#clip-path-15-10-44-44-44-44)"/>');
-    });
-
-    it('should create circle element', () => {
-      const parent = builder.begin();
-
-      const svgObjCollection: any = {
-        children: [{
-          shape: {
-            cx: 1,
-            cy: 2,
-            r: 3,
-            type: 'circle',
-          },
-          type: 'shape',
-        }],
-      };
-
-      createElem(svgObjCollection, parent, null);
-
-      assert.equal(parent.end(), '<circle cx="1" cy="2" r="3"/>');
-    });
-
-    it('should create ellipse element', () => {
-      const parent = builder.begin();
-
-      const svgObjCollection: any = {
-        children: [{
-          shape: {
-            cx: 1,
-            cy: 2,
-            rx: 3,
-            ry: 4,
-            type: 'ellipse',
-          },
-          type: 'shape',
-        }],
-      };
-
-      createElem(svgObjCollection, parent, null);
-
-      assert.equal(parent.end(), '<ellipse cx="1" cy="2" rx="3" ry="4"/>');
-    });
-
-    it('should create line element', () => {
-      const parent = builder.begin();
-
-      const svgObjCollection: any = {
-        children: [{
-          shape: {
-            type: 'line',
-            x1: 1,
-            x2: 2,
-            y1: 3,
-            y2: 4,
-          },
-          type: 'shape',
-        }],
-      };
-
-      createElem(svgObjCollection, parent, null);
-
-      assert.equal(parent.end(), '<line x1="1" y1="3" x2="2" y2="4"/>');
     });
   });
 });

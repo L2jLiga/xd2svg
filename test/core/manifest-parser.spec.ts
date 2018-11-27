@@ -25,7 +25,7 @@ describe('Core > Manifest parser', () => {
   it('should parse manifest and filter manifest to find out all artboards', () => {
     const manifest = {
       children: [{
-        children: [{child: 1, 'uxdesign#bounds': true}, {child: 2, 'uxdesign#bounds': true}],
+        children: [{'child': 1, 'uxdesign#bounds': true}, {'child': 2, 'uxdesign#bounds': true}],
         name: 'artwork',
       }, {
         id: 2,

@@ -7,4 +7,5 @@ const options = {
 };
 
 xd2svg(inputFileName, options)
-.then((result) => fs.writeFile('outputFile.svg', result));
+  .then((result) => fs.writeFile('outputFile.svg', result))
+  .catch(console.error);

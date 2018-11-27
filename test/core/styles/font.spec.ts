@@ -14,34 +14,34 @@ describe('Core > Styles parsers > Font', () => {
     const testCases = [
       {
         given: {postscriptName: 'test'},
-        expected: 'font-family: test',
+        result: 'font-family: test',
       },
       {
         given: {family: 'test'},
-        expected: 'font-family: test',
+        result: 'font-family: test',
       },
       {
         given: {postscriptName: 'demo', family: 'test'},
-        expected: 'font-family: demo, test',
+        result: 'font-family: demo, test',
       },
       {
         given: {style: 'Bold'},
-        expected: 'font-weight: 700',
+        result: 'font-weight: 700',
       },
       {
         given: {size: 16},
-        expected: 'font-size: 16px',
+        result: 'font-size: 16px',
       },
       {
         given: {style: 'Medium', size: 22},
-        expected: 'font-weight: 500;font-size: 22px',
+        result: 'font-weight: 500;font-size: 22px',
       },
     ];
 
     testCases.forEach((testCase) => {
       const result = font.parse(testCase.given);
 
-      assert.equal(result, testCase.expected);
+      assert.equal(result, testCase.result);
     });
   });
 });

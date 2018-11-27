@@ -45,32 +45,28 @@ export default async function xd2svg(input: string | Buffer, options: Xd2svgOpti
   return svg;
 }
 
-async function openMockup(inputFile: string | Buffer): Promise<Directory> {
+async function openMockup(input: string | Buffer): Promise<Directory> {
   let tmpInputFile: SynchrounousResult;
 
-  if (Buffer.isBuffer(inputFile)) {
+  if (Buffer.isBuffer(input)) {
     tmpInputFile = dirSync({unsafeCleanup: true, postfix: `_input_${Date.now()}`});
-    const buffer = inputFile;
-    inputFile = tmpInputFile.name + '/tmp.xd';
+    const buffer = input;
+    input = tmpInputFile.name + '/tmp.xd';
 
-    writeFileSync(inputFile, buffer);
+    writeFileSync(input, buffer);
   }
 
-  if (!existsSync(inputFile)) {
-    logger.error(`No such file or directory: ${inputFile}, please make sure that path is correct`);
+  throwIfPathDoesNotExist(input);
 
-    throw null;
-  }
-
-  if (lstatSync(inputFile).isDirectory()) {
+  if (lstatSync(input).isDirectory()) {
     return {
-      name: inputFile,
+      name: input,
     } as Directory;
   }
 
   const directory: SynchrounousResult = dirSync({unsafeCleanup: true, postfix: `_${Date.now()}`});
 
-  await extract(inputFile, {dir: directory.name})
+  await extract(input, {dir: directory.name})
     .catch((error) => {
       logger.error(`Unable to unpack XD, please make sure that provided file is correct`);
 
@@ -80,4 +76,12 @@ async function openMockup(inputFile: string | Buffer): Promise<Directory> {
   if (tmpInputFile) tmpInputFile.removeCallback();
 
   return directory;
+}
+
+function throwIfPathDoesNotExist(path: string) {
+  if (!existsSync(path)) {
+    logger.error(`No such file or directory: ${path}, please make sure that path is correct`);
+
+    throw null;
+  }
 }
