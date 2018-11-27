@@ -62,7 +62,7 @@
     "@types/extract-zip": "1.6.2",
     "@types/mocha": "5.2.5",
     "@types/node": "8.10.37",
-    "@types/sinon": "5.0.5",
+    "@types/sinon": "5.0.7",
     "@types/tmp": "0.0.33",
     "@types/xmlbuilder": "0.0.34",
     "blink-diff": "1.0.13",
