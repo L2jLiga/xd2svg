@@ -7,9 +7,11 @@
  */
 
 export interface Options {
-  single: boolean;
+  single?: boolean;
+  prettyPrint?: boolean;
 }
 
-export const defaultOptions = {
+export const defaultOptions: Options = {
+  prettyPrint: false,
   single: false,
 };

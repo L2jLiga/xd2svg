@@ -16,29 +16,25 @@ import * as logger                                                      from './
 
 const extract = promisify(extractZip);
 
-interface Xd2svgOptions {
-  single?: boolean;
-}
-
-interface SingleOutput extends Xd2svgOptions {
+interface SingleOutput extends Options {
   single: true;
 }
 
-interface MultipleOutput extends Xd2svgOptions {
+interface MultipleOutput extends Options {
   single: false;
 }
 
 export default async function xd2svg(input: string | Buffer, options: SingleOutput): Promise<string>;
 export default async function xd2svg(input: string | Buffer, options?: MultipleOutput): Promise<Dictionary<string>>;
-export default async function xd2svg(input: string | Buffer, options: Xd2svgOptions): Promise<OutputFormat>;
-export default async function xd2svg(input: string | Buffer, options: Xd2svgOptions = defaultOptions): Promise<OutputFormat> {
+export default async function xd2svg(input: string | Buffer, options: Options): Promise<OutputFormat>;
+export default async function xd2svg(input: string | Buffer, options: Options = defaultOptions): Promise<OutputFormat> {
   const opts: Options = {
     ...defaultOptions,
     ...options,
   };
 
   const directory: Directory = await openMockup(input);
-  const svg: string | Dictionary<string> = proceedFile(directory, opts.single);
+  const svg: string | Dictionary<string> = proceedFile(directory, opts.single, opts.prettyPrint);
 
   if (directory.removeCallback) directory.removeCallback();
 

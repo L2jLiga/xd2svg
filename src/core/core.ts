@@ -7,7 +7,7 @@
  */
 
 import { readFileSync }                               from 'fs';
-import { Dictionary, Directory }                      from '../common';
+import { Dictionary, Directory, Options }             from '../common';
 import { artboardConverter }                          from './artboard-converter';
 import { manifestParser }                             from './manifest-parser';
 import { Artboard, ArtboardDefinition, ArtboardInfo } from './models';
@@ -31,15 +31,15 @@ let convertedArtboards: Dictionary<string>;
 
 export function proceedFile(directory: Directory, single: true): string;
 export function proceedFile(directory: Directory, single?: false): Dictionary<string>;
-export function proceedFile(directory: Directory, single: boolean): string | Dictionary<string>;
-export function proceedFile(directory: Directory, single: boolean): string | Dictionary<string> {
+export function proceedFile(directory: Directory, single: boolean, prettyPrint?: boolean): string | Dictionary<string>;
+export function proceedFile(directory: Directory, single: boolean, prettyPrint?: boolean): string | Dictionary<string> {
   dimensions = {width: 0, height: 0};
   convertedArtboards = {};
 
   const manifest = manifestParser(directory);
   const artboardsInfo: Dictionary<ArtboardInfo> = resourcesParser(directory);
 
-  const artboards: ConvertedArtboard[] = manifest.artboards.map(toArtboard(directory, artboardsInfo, single));
+  const artboards: ConvertedArtboard[] = manifest.artboards.map(toArtboard(directory, artboardsInfo, {single, prettyPrint}));
 
   if (single) {
     artboards.forEach((artboard: ConvertedArtboard) => {
@@ -47,27 +47,27 @@ export function proceedFile(directory: Directory, single: boolean): string | Dic
     });
 
     return injectResources(Object.values(convertedArtboards), {
-      defs: defs.end(),
+      defs: defs.end({pretty: prettyPrint}),
       rootHeight: dimensions.height,
       rootId: manifest.id,
       rootWidth: dimensions.width,
     });
   }
 
-  artboards.forEach(toConvertedArtboard(artboardsInfo));
+  artboards.forEach(toConvertedArtboard(artboardsInfo, prettyPrint));
 
   return convertedArtboards;
 }
 
-function toArtboard(dir: Directory, artboardsInfo: Dictionary<ArtboardInfo>, single: boolean) {
+function toArtboard(dir: Directory, artboardsInfo: Dictionary<ArtboardInfo>, options: Options) {
   return (artboardItem: ArtboardDefinition): ConvertedArtboard => {
     const json = readFileSync(`${dir.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
     const artboard: Artboard = JSON.parse(json);
 
-    const artboardContent: string[] = artboardConverter(artboard, artboardsInfo[artboardItem.name]);
+    const artboardContent: string[] = artboardConverter(artboard, artboardsInfo[artboardItem.name], options.prettyPrint);
 
-    if (single) {
+    if (options.single) {
       const artboardDimensions = artboardsInfo[artboardItem.name];
 
       dimensions.width = Math.max(dimensions.width, artboardDimensions.width);
@@ -78,8 +78,8 @@ function toArtboard(dir: Directory, artboardsInfo: Dictionary<ArtboardInfo>, sin
   };
 }
 
-function toConvertedArtboard(artboardsInfo: Dictionary<ArtboardInfo>) {
-  const defsList = defs.end();
+function toConvertedArtboard(artboardsInfo: Dictionary<ArtboardInfo>, prettyPrint: boolean) {
+  const defsList = defs.end({pretty: prettyPrint});
 
   return (data: ConvertedArtboard): void => {
     const {name, content} = data;

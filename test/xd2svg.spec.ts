@@ -79,7 +79,7 @@ describe('Complex test for xd2svg', () => {
     let keys: string[];
 
     promisify(extractZip)('test/multi.xd', {dir: tmpDir.name})
-      .then(() => xd2svg(tmpDir.name))
+      .then(() => xd2svg(tmpDir.name, {prettyPrint: true}))
       .then((SVGs) => {
         keys = Object.keys(SVGs);
         return Promise.all(Object.values(SVGs).map((SVG) => convert(SVG, {

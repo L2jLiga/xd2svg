@@ -35,9 +35,15 @@ export function parseParams(): CliOptions {
         customOutput = true;
         break;
 
+      case '-p':
+      case '--pretty-pring':
+        options.prettyPrint = !/^f/i.test(value);
+        break;
+
       case '-s':
       case '--single':
         options.single = !/^f/i.test(value);
+        break;
     }
   }
 

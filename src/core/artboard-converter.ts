@@ -15,11 +15,11 @@ import { Artboard, ArtboardInfo, Shape }        from './models';
 import { applyIfPossible }                      from './utils';
 import { SvgRectToClipPath, svgRectToClipPath } from './utils/svg-rect-to-clip-path';
 
-export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo): string[] {
-  return artboardsRoot.children.map(toArtboards(artboardInfo));
+export function artboardConverter(artboardsRoot: Artboard, artboardInfo: ArtboardInfo, prettyPrint?: boolean): string[] {
+  return artboardsRoot.children.map(toArtboards(artboardInfo, prettyPrint));
 }
 
-function toArtboards(artboardInfo: ArtboardInfo) {
+function toArtboards(artboardInfo: ArtboardInfo, pretty: boolean) {
   return (root: Artboard): string => {
     const svg = builder.begin().element('svg', {
       'enable-background': `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
@@ -42,7 +42,7 @@ function toArtboards(artboardInfo: ArtboardInfo) {
 
     const defs = svg.element('defs');
 
-    return createElem(root.artboard, svg, defs).end();
+    return createElem(root.artboard, svg, defs).end({pretty});
   };
 }
 
