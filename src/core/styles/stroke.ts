@@ -20,6 +20,9 @@ function strokeParser(src: Stroke, parentElement: XMLElementOrXMLNode) {
   styles.push(fillParser(src, parentElement));
 
   if (src.width) styles.push(`stroke-width:${src.width}px`);
+  if (src.dash) styles.push(`stroke-dasharray:${src.dash.join(' ')}`);
+  if (src.cap) styles.push(`stroke-linecap: ${src.cap}`);
+  if (src.join) styles.push(`stroke-linejoin: ${src.join}`);
 
   return styles.filter(Boolean).join(';');
 }
