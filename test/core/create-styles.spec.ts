@@ -35,6 +35,6 @@ describe('Core > Create styles', () => {
 
     const styles = createStyles(stylesSrc, null);
 
-    equal(styles, `font-family: Arial-Bold, Arial; font-weight: 700; font-size: 15px; opacity: 0.4`);
+    equal(styles, `font-family: Arial-Bold, Arial; font-size: 15px; font-weight: 700; opacity: 0.4`);
   });
 });
