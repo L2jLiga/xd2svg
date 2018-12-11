@@ -35,6 +35,7 @@
     "./man/cli.1"
   ],
   "bin": {
+    "xd2svg": "bin/xd2svg-cli",
     "xd2svg-cli": "bin/xd2svg-cli"
   },
   "repository": {

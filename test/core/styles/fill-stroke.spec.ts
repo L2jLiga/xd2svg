@@ -193,5 +193,23 @@ describe(`Core > Styles parsers`, () => {
 
       assert.equal(result, `#${color.value.toString(16)};stroke-width:1px`);
     });
+
+    it('should add stroke-dasharray style property if dash array is present', () => {
+      const result = stroke.parse({type: 'none', dash: [10, 20]});
+
+      assert.equal(result, 'none;stroke-dasharray:10 20');
+    });
+
+    it('should add stroke-linecap style property if stroke cap is present', () => {
+      const result = stroke.parse({type: 'none', cap: 'square'});
+
+      assert.equal(result, 'none;stroke-linecap: square');
+    });
+
+    it('should add stroke-linecap style property if stroke cap is present', () => {
+      const result = stroke.parse({type: 'none', join: 'bevel'});
+
+      assert.equal(result, 'none;stroke-linejoin: bevel');
+    });
   });
 });

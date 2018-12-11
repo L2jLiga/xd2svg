@@ -50,7 +50,7 @@ Two ways to install utility:
 You can use utility from CLI
 
    ```
-   xd2svg-cli InputFile.xd [options]
+   xd2svg InputFile.xd [options]
    
      options:
        -o, --output       - specify output path (default FileName directory or FileName.svg)

@@ -8,20 +8,16 @@
 
 import * as fill from './fill';
 
-interface PatternStroke extends fill.PatternFill {
+interface CommonStroke {
   width: number;
+  dash: [number, number];
+  cap: string;
+  join: string;
 }
 
-interface GradientStroke extends fill.GradientFill {
-  width: number;
-}
-
-interface ColorStroke extends fill.ColorFill {
-  width: number;
-}
-
-interface NoneStroke extends fill.NoneFill {
-  width: number;
-}
+interface PatternStroke extends fill.PatternFill, CommonStroke {}
+interface GradientStroke extends fill.GradientFill, CommonStroke {}
+interface ColorStroke extends fill.ColorFill, CommonStroke {}
+interface NoneStroke extends fill.NoneFill, CommonStroke {}
 
 export type Stroke = PatternStroke | GradientStroke | ColorStroke | NoneStroke;

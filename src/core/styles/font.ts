@@ -10,11 +10,12 @@ import { Font, Parser } from './models';
 
 // tslint:disable:object-literal-sort-keys
 const fontWeightVariants: any = {
-  Light: 300,
-  Regular: 400,
+  Light: 200,
+  Semilight: 300,
   Medium: 500,
-  SemiBold: 600,
+  Semibold: 600,
   Bold: 700,
+  Extrabold: 800,
   Black: 900,
 };
 // tslint:enable:object-literal-sort-keys
@@ -24,13 +25,36 @@ export const font: Parser = {parse: fontParser};
 function fontParser(src: Font) {
   const cssArr: string[] = [];
   const fontFamilies: string[] = [];
-  const fontStyle = fontWeightVariants[src.style];
 
   if (src.postscriptName) fontFamilies.push(src.postscriptName);
   if (src.family) fontFamilies.push(src.family);
   if (fontFamilies.length) cssArr.push(`font-family: ${fontFamilies.join(', ')}`);
-  if (fontStyle) cssArr.push(`font-weight: ${fontStyle}`);
   if (src.size) cssArr.push(`font-size: ${src.size}px`);
+  cssArr.push(...parseFontStyle(src.style));
 
   return cssArr.join(';');
+}
+
+function parseFontStyle(fontStyle: string = ''): string[] {
+  const parsed = [];
+  fontStyle = fontStyle.trim();
+
+  if (/condensed/i.test(fontStyle)) {
+    fontStyle = fontStyle.replace(/condensed/i, '').trim();
+
+    parsed.push(`font-stretch: condensed`);
+  }
+
+  if (/italic/i.test(fontStyle)) {
+    fontStyle = fontStyle.replace(/italic/i, '').trim();
+
+    parsed.push(`font-style: italic`);
+  }
+
+  const weight = fontWeightVariants[fontStyle];
+  if (weight) {
+    parsed.push(`font-weight: ${weight}`);
+  }
+
+  return parsed;
 }

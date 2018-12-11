@@ -34,7 +34,15 @@ describe('Core > Styles parsers > Font', () => {
       },
       {
         given: {style: 'Medium', size: 22},
-        result: 'font-weight: 500;font-size: 22px',
+        result: 'font-size: 22px;font-weight: 500',
+      },
+      {
+        given: {style: 'Semibold Italic', size: 16},
+        result: 'font-size: 16px;font-style: italic;font-weight: 600',
+      },
+      {
+        given: {style: 'Condensed Bold'},
+        result: 'font-stretch: condensed;font-weight: 700',
       },
     ];
 
