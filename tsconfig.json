@@ -12,13 +12,13 @@
     "noImplicitThis": true,
     "noUnusedParameters": true,
     "lib": [
-      "es2017",
+      "es2018",
       "dom"
     ],
     "types": [
       "node"
     ],
-    "target": "es2018",
+    "target": "es2017",
     "typeRoots": [
       "node_modules/@types"
     ]
