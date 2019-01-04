@@ -44,7 +44,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -Rf lib",
+    "clean": "rimraf lib",
     "lint": "yarn lint:src && yarn lint:spec",
     "lint:src": "tslint -c tslint.json -p tsconfig.json",
     "lint:spec": "tslint -c tslint.json -p test/tsconfig.json",
@@ -71,6 +71,7 @@
     "cross-env": "5.2.0",
     "mocha": "5.2.0",
     "nyc": "13.1.0",
+    "rimraf": "^2.6.3",
     "sinon": "7.2.2",
     "ts-node": "7.0.1",
     "tslint": "5.12.0",
