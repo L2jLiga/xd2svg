@@ -1,0 +1,30 @@
+environment:
+  matrix:
+    - nodejs_version: "8.6.0"
+    - nodejs_version: "8"
+    - nodejs_version: "9"
+    - nodejs_version: "10"
+    - nodejs_version: "11"
+
+matrix:
+  fast_finish: true
+
+skip_tags: true
+skip_branch_with_pr: true
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  # --network-timeout is a workaround for https://github.com/yarnpkg/yarn/issues/6221
+  - yarn --frozen-lockfile --network-timeout=500000
+
+test_script:
+  - node --version
+  - yarn --version
+  - yarn test
+
+build: off
+deploy: off
+
+cache:
+  - node_modules -> yarn.lock
+  - "%LOCALAPPDATA%\\Yarn"
