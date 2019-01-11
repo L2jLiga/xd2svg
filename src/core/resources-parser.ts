@@ -9,10 +9,10 @@
 import { readFileSync }                      from 'fs';
 import * as builder                          from 'xmlbuilder';
 import { Dictionary, Directory }             from '../common';
-import { createElem }                        from './artboard-converter';
 import { ArtboardInfo }                      from './models';
 import { Color }                             from './styles/models';
 import { colorTransformer, defs, gradients } from './utils';
+import { createElem }                        from './utils/create-elem';
 
 export function resourcesParser(directory: Directory): Dictionary<ArtboardInfo> {
   const json = readFileSync(`${directory.name}/resources/graphics/graphicContent.agc`, 'utf-8');

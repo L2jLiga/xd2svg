@@ -7,18 +7,18 @@
  */
 import { Artboard } from './artboard';
 
-interface Path {
+export interface Path {
   type: 'path';
   path: string;
 }
 
-interface CompoundPath {
+export interface CompoundPath {
   type: 'compound';
   path: string;
   children: Artboard[];
 }
 
-interface Rectangle {
+export interface Rectangle {
   type: 'rect';
   x: number;
   y: number;
@@ -27,14 +27,14 @@ interface Rectangle {
   height: number;
 }
 
-interface Circle {
+export interface Circle {
   type: 'circle';
   cx: number;
   cy: number;
   r: number;
 }
 
-interface Ellipse {
+export interface Ellipse {
   type: 'ellipse';
   cx: number;
   cy: number;
@@ -42,7 +42,7 @@ interface Ellipse {
   ry: number;
 }
 
-interface Line {
+export interface Line {
   type: 'line';
   x1: number;
   y1: number;

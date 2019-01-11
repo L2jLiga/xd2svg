@@ -44,6 +44,10 @@ export function parseParams(): CliOptions {
       case '--single':
         options.single = !/^f/i.test(value);
         break;
+
+      case '--prefer-compound-path':
+        options.preferCompoundPath = !/^f/i.test(value);
+        break;
     }
   }
 
