@@ -13,7 +13,7 @@ export interface ArtboardLike {
   children: Artboard[];
 }
 
-interface CommonArtboard extends ArtboardLike{
+interface CommonArtboard extends ArtboardLike {
   id?: string;
   name?: string;
   type?: string;
