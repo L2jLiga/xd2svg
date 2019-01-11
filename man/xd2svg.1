@@ -12,6 +12,9 @@ xd2svg - convert xd file to svg or html
 [
 .BI "\fB-s\fR, \fB\-\-signle\fR=" "true"
 ]
+[
+.BI "\fB-s\fR, \fB\-\-prefer\-compound\-path\fR=" "true"
+]
 .SH DESCRIPTION
 .B xd2svg
 is utility for converting Adobe XD files (*.xd) to SVG or HTML
@@ -25,13 +28,18 @@ The default destination path is specified by the input file name.
 
 .TP
 .BI "\fB-s\fR, \fB\-\-single\fR=" "boolean"
-.R Specify does output should be single file with all artboards or directory with separated each other.
+.R Single file output.
 .R The default value is \fBfalse.
 
 .TP
 .BI "\fB-p\fR, \fB\-\-pretty\-print\fR=" "boolean"
-.R Specify does output should be pretty printed (default: false).
+.R Pretty printed output.
 .R The default value is \fBfalse.
+
+.TP
+.BI "\fB-p\fR, \fB\-\-prefer\-compound\-path\fR=" "boolean"
+.R Use compound path instead of source objects.
+.R The default value is \fBtrue.
 
 .SH BUGS
 List of bugs can be found at https://github.com/L2jLiga/xd2svg/issues

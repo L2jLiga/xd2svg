@@ -9,9 +9,19 @@
 export interface Options {
   single?: boolean;
   prettyPrint?: boolean;
+  preferCompoundPath?: boolean;
+}
+
+export interface SingleOutput extends Options {
+  single: true;
+}
+
+export interface MultipleOutput extends Options {
+  single: false;
 }
 
 export const defaultOptions: Options = {
+  preferCompoundPath: true,
   prettyPrint: false,
   single: false,
 };

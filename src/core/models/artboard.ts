@@ -9,28 +9,31 @@
 import { Shape } from './shape';
 import { Text }  from './text';
 
-interface CommonArtboard {
+export interface ArtboardLike {
+  children: Artboard[];
+}
+
+interface CommonArtboard extends ArtboardLike {
   id?: string;
   name?: string;
   type?: string;
-  children: Artboard[];
   artboard?: Artboard;
   visible?: boolean;
   style: { [style: string]: any };
   transform: { [transform: string]: any };
 }
 
-interface ShapeArtboard extends CommonArtboard {
+export interface ShapeArtboard extends CommonArtboard {
   type: 'shape';
   shape: Shape;
 }
 
-interface TextArtboard extends CommonArtboard {
+export interface TextArtboard extends CommonArtboard {
   type: 'text';
   text: Text;
 }
 
-interface GroupArtboard extends CommonArtboard {
+export interface GroupArtboard extends CommonArtboard {
   type: 'group';
   group: Artboard;
 }

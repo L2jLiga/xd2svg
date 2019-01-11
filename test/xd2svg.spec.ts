@@ -52,25 +52,21 @@ describe('Complex test for xd2svg', () => {
       .catch(() => done());
   });
 
-  it('should correctly convert when buffer provided', (done) => {
+  it('should correctly convert when buffer provided', () => {
     const inputBuffer: Buffer = Buffer.from(readFileSync('test/single.xd'));
 
-    xd2svg(inputBuffer, {single: true})
+    return xd2svg(inputBuffer, {single: true})
       .then((svgImage: string) => convert(svgImage, {puppeteer: {args: ['--no-sandbox']}}) as Promise<Buffer>)
-      .then((actual) => runDiffFor(actual, 'test/expected/single.png'))
-      .then(done)
-      .catch(done);
+      .then((actual) => runDiffFor(actual, 'test/expected/single.png'));
   });
 
-  it('should correctly convert when provided path to file', (done) => {
-    xd2svg('test/single.xd', {single: true})
+  it('should correctly convert when provided path to file', () => {
+    return xd2svg('test/single.xd', {single: true})
       .then((svgImage: string) => convert(svgImage, {puppeteer: {args: ['--no-sandbox']}}) as Promise<Buffer>)
-      .then((actual) => runDiffFor(actual, 'test/expected/single.png'))
-      .then(done)
-      .catch(done);
+      .then((actual) => runDiffFor(actual, 'test/expected/single.png'));
   });
 
-  it('should correctly convert when provided directory with extracted mockup', (done) => {
+  it('should correctly convert when provided directory with extracted mockup', () => {
     const tmpDir = dirSync({
       postfix: 'test-directory',
       unsafeCleanup: true,
@@ -78,8 +74,8 @@ describe('Complex test for xd2svg', () => {
 
     let keys: string[];
 
-    promisify(extractZip)('test/multi.xd', {dir: tmpDir.name})
-      .then(() => xd2svg(tmpDir.name, {prettyPrint: true}))
+    return promisify(extractZip)('test/multi.xd', {dir: tmpDir.name})
+      .then(() => xd2svg(tmpDir.name, {prettyPrint: true, preferCompoundPath: false}))
       .then((SVGs) => {
         keys = Object.keys(SVGs);
         return Promise.all(Object.values(SVGs).map((SVG) => convert(SVG, {
@@ -93,9 +89,7 @@ describe('Complex test for xd2svg', () => {
         const diffs = keys.map((key: string, index: number) => runDiffFor(images[index], `test/expected/${key}.png`));
 
         return Promise.all(diffs);
-      })
-      .then(() => done())
-      .catch(done);
+      });
   });
 });
 

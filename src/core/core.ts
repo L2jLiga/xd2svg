@@ -6,13 +6,13 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { readFileSync }                               from 'fs';
-import { Dictionary, Directory, Options }             from '../common';
-import { artboardConverter }                          from './artboard-converter';
-import { manifestParser }                             from './manifest-parser';
-import { Artboard, ArtboardDefinition, ArtboardInfo } from './models';
-import { resourcesParser }                            from './resources-parser';
-import { defs }                                       from './utils';
+import { readFileSync }                                                 from 'fs';
+import { Dictionary, Directory, MultipleOutput, Options, SingleOutput } from '../common';
+import { artboardConverter }                                            from './artboard-converter';
+import { manifestParser }                                               from './manifest-parser';
+import { Artboard, ArtboardDefinition, ArtboardInfo }                   from './models';
+import { resourcesParser }                                              from './resources-parser';
+import { defs }                                                         from './utils';
 
 interface InjectableSvgData {
   defs: string;
@@ -29,32 +29,32 @@ interface ConvertedArtboard {
 let dimensions: { width: number, height: number };
 let convertedArtboards: Dictionary<string>;
 
-export function proceedFile(directory: Directory, single: true): string;
-export function proceedFile(directory: Directory, single?: false): Dictionary<string>;
-export function proceedFile(directory: Directory, single: boolean, prettyPrint?: boolean): string | Dictionary<string>;
-export function proceedFile(directory: Directory, single: boolean, prettyPrint?: boolean): string | Dictionary<string> {
+export function proceedFile(directory: Directory, options: SingleOutput): string;
+export function proceedFile(directory: Directory, options: MultipleOutput): Dictionary<string>;
+export function proceedFile(directory: Directory, options: Options): string | Dictionary<string>;
+export function proceedFile(directory: Directory, options: Options): string | Dictionary<string> {
   dimensions = {width: 0, height: 0};
   convertedArtboards = {};
 
   const manifest = manifestParser(directory);
   const artboardsInfo: Dictionary<ArtboardInfo> = resourcesParser(directory);
 
-  const artboards: ConvertedArtboard[] = manifest.artboards.map(toArtboard(directory, artboardsInfo, {single, prettyPrint}));
+  const artboards: ConvertedArtboard[] = manifest.artboards.map(toArtboard(directory, artboardsInfo, options));
 
-  if (single) {
+  if (options.single) {
     artboards.forEach((artboard: ConvertedArtboard) => {
       convertedArtboards[artboard.name] = artboard.content.join('\n');
     });
 
     return injectResources(Object.values(convertedArtboards), {
-      defs: defs.end({pretty: prettyPrint}),
+      defs: defs.end({pretty: options.prettyPrint}),
       rootHeight: dimensions.height,
       rootId: manifest.id,
       rootWidth: dimensions.width,
     });
   }
 
-  artboards.forEach(toConvertedArtboard(artboardsInfo, prettyPrint));
+  artboards.forEach(toConvertedArtboard(artboardsInfo, options.prettyPrint));
 
   return convertedArtboards;
 }
@@ -65,7 +65,7 @@ function toArtboard(dir: Directory, artboardsInfo: Dictionary<ArtboardInfo>, opt
 
     const artboard: Artboard = JSON.parse(json);
 
-    const artboardContent: string[] = artboardConverter(artboard, artboardsInfo[artboardItem.name], options.prettyPrint);
+    const artboardContent: string[] = artboardConverter(artboard, artboardsInfo[artboardItem.name], options);
 
     if (options.single) {
       const artboardDimensions = artboardsInfo[artboardItem.name];

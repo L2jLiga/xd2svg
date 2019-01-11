@@ -12,7 +12,7 @@
   "rules": {
     "max-line-length": {
       "options": [
-        160
+        200
       ]
     },
     "quotemark": {
