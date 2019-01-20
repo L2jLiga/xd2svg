@@ -6,54 +6,63 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { defaultOptions } from '../common';
+import * as minimist      from 'minimist';
+import { basename, join } from 'path';
 import { CliOptions }     from './models';
 
-export function parseParams(): CliOptions {
-  const inputFileName: string = process.argv[2];
-  let customOutput: boolean = false;
+export function parseParams(): Array<[string, CliOptions]> {
+  const parsedArgs = parseArgs(process.argv);
 
-  const inputName: string[] = inputFileName.split('.');
+  // Get the list of modules to check.
+  // When invoked as `node path/to/cli.js something` we need to strip the two starting arguments.
+  // When invoked as `binary something` we only need to strip the first starting argument.
+  const inputFiles = isNodeBinary(parsedArgs._[0]) ? parsedArgs._.slice(2) : parsedArgs._.slice(1);
 
-  if (inputName.length > 1) {
-    inputName.pop();
-  }
+  return inputFiles.map((inputFileName: string) => {
+    const inputName: string[] = inputFileName.split('.');
 
-  const options: CliOptions = {
-    ...defaultOptions,
-    output: inputName.join('.'),
-  };
+    if (inputName.length > 1) inputName.pop();
 
-  for (let argIdx = 2; argIdx++; argIdx < process.argv.length) {
-    if (process.argv[argIdx] === undefined) break;
+    let output: string;
+    if (inputFiles.length > 1 && parsedArgs.output) {
+      const inputFile = basename(inputFileName, '.xd');
 
-    const [key, value] = process.argv[argIdx].split('=');
-    switch (key) {
-      case '-o':
-      case '--output':
-        options.output = value;
-        customOutput = true;
-        break;
-
-      case '-p':
-      case '--pretty-pring':
-        options.prettyPrint = !/^f/i.test(value);
-        break;
-
-      case '-s':
-      case '--single':
-        options.single = !/^f/i.test(value);
-        break;
-
-      case '--prefer-compound-path':
-        options.preferCompoundPath = !/^f/i.test(value);
-        break;
+      output = join(parsedArgs.output, `${inputFile}${parsedArgs.single ? '.svg' : ''}`);
+    } else if (parsedArgs.output) {
+      output = parsedArgs.output;
+    } else {
+      output = `${inputName.join('.')}${parsedArgs.single ? '.svg' : ''}`;
     }
-  }
 
-  if (!customOutput && options.single) {
-    options.output += `.svg`;
-  }
+    return [inputFileName, {
+      output,
+      preferCompoundPath: parsedArgs.preferCompoundPath,
+      prettyPrint: parsedArgs.prettyPrint,
+      single: parsedArgs.single,
+    }] as [string, CliOptions];
+  });
+}
 
-  return options;
+function parseArgs(argv) {
+  return minimist(argv, {
+    '--': true,
+    'alias': {
+      output: 'o',
+      preferCompoundPath: 'prefer-compound-path',
+      prettyPrint: ['p', 'pretty-print'],
+      single: 's',
+    },
+    'boolean': ['preferCompoundPath', 'single', 'prettyPrint'],
+    'default': {
+      preferCompoundPath: false,
+      prettyPrint: false,
+      single: false,
+    },
+    'string': ['output'],
+  });
+}
+
+// Check if a given string looks like the node binary.
+function isNodeBinary(str: string): boolean {
+  return str.endsWith('node') || str.endsWith('node.exe');
 }
