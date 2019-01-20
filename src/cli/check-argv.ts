@@ -10,14 +10,17 @@ import * as logger from '../utils/logger';
 export function checkArgv(): void {
   if (process.argv[2]) return;
 
-  console.log(`${logger.bold('Usage:')} xd2svg-cli InputFile.xd [options]
-  ${logger.bold('options:')}
-  ${logger.bold('-o, --output')}           - output path (default FileName directory or FileName.svg)
-  ${logger.bold('-s, --single')}           - single file output (default: false)
-  ${logger.bold('-p, --pretty-print')}     - pretty printed output (default: false)
-  ${logger.bold('--prefer-compound-path')} - use compound path instead of source objects (default: true)
+  const helpMessage = `
+${logger.bold('Usage:')} xd2svg [Input] [options]
 
-  For additional information: man xd2svg-cli`);
+  ${logger.bold('options:')}
+  ${logger.bold('-o, --output')}             output path [Default: directory or file name]
+  ${logger.bold('-s, --single')}             single file output [Default: false]
+  ${logger.bold('-p, --pretty-print')}       pretty printed output [Default: false]
+  ${logger.bold('--prefer-compound-path')}   use compound path instead of source objects [Default: true]
+`;
+
+  console.log(helpMessage);
 
   process.exit(0);
 }

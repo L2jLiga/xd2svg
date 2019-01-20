@@ -55,12 +55,14 @@
   },
   "dependencies": {
     "extract-zip": "1.6.7",
+    "minimist": "1.2.0",
     "sanitize-filename": "1.6.1",
     "tmp": "0.0.33",
     "xmlbuilder": "10.1.1"
   },
   "devDependencies": {
     "@types/extract-zip": "1.6.2",
+    "@types/minimist": "1.2.0",
     "@types/mocha": "5.2.5",
     "@types/node": "8.10.39",
     "@types/sinon": "7.0.4",

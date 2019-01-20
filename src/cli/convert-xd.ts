@@ -15,21 +15,17 @@ import { CliOptions }                       from './models';
 const sanitize = require('sanitize-filename');
 
 export async function convertXd(input: string, options: CliOptions): Promise<void> {
-  try {
-    const svgImages: OutputFormat = await xd2svg(input, options);
+  const svgImages: OutputFormat = await xd2svg(input, options);
 
-    preparePath(options);
+  preparePath(options);
 
-    typeof svgImages === 'string' ?
-      writeFile(options.output, svgImages, errorHandler)
-      : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${sanitize(key)}.svg`, svgImages[key], errorHandler));
-  } catch (e) {
-    process.exit(-1);
-  }
+  typeof svgImages === 'string' ?
+    writeFile(options.output, svgImages, errorHandler)
+    : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${sanitize(key)}.svg`, svgImages[key], errorHandler));
 }
 
 function preparePath(options: CliOptions): void {
-  const path: string[] = options.output.split('/');
+  const path: string[] = options.output.replace(/\\+/g, '/').split('/');
   if (options.single) path.pop();
 
   if (path.length) {
