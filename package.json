@@ -48,9 +48,9 @@
     "lint": "yarn lint:src && yarn lint:spec",
     "lint:src": "tslint -c tslint.json -p tsconfig.json",
     "lint:spec": "tslint -c tslint.json -p test/tsconfig.json",
-    "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json mocha test/**/*.ts",
-    "test:coverage": "cross-env TS_NODE_PROJECT=test/tsconfig.json nyc mocha test/**/*.ts",
-    "test:integration": "cross-env TS_NODE_PROJECT=integration/tsconfig.json mocha --timeout 600000 integration/**/*.ts",
+    "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json mocha test/**/*.spec.ts",
+    "test:coverage": "cross-env TS_NODE_PROJECT=test/tsconfig.json nyc mocha test/**/*.spec.ts",
+    "test:integration": "cross-env TS_NODE_PROJECT=integration/tsconfig.json mocha --timeout 600000 integration/xd2svg.spec.ts",
     "test:watch": "yarn test --watch-extensions ts --watch",
     "prepublish": "yarn lint && yarn clean && yarn build"
   },
