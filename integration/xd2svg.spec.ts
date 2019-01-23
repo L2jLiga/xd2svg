@@ -16,7 +16,7 @@ import { manifestInfo }          from '../src/core/manifest-parser';
 const BlinkDiff = require('blink-diff');
 const readFilePromise = promisify(readFile);
 
-describe('Complex test for xd2svg', () => {
+describe.only('Complex test for xd2svg', () => {
   let maxListeners;
 
   before(() => {
