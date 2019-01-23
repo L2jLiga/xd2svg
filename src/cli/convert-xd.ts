@@ -6,39 +6,32 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { existsSync, mkdirSync, writeFile } from 'fs';
-import { OutputFormat }                     from '../common';
-import * as logger                          from '../utils/logger';
-import xd2svg                               from '../xd2svg';
-import { CliOptions }                       from './models';
+import { writeFile }    from 'fs';
+import * as mkdirp      from 'mkdirp';
+import { promisify }    from 'util';
+import { OutputFormat } from '../common';
+import * as logger      from '../utils/logger';
+import xd2svg           from '../xd2svg';
+import { CliOptions }   from './models';
 
 const sanitize = require('sanitize-filename');
+const mkdirPromise = promisify(mkdirp);
 
 export async function convertXd(input: string, options: CliOptions): Promise<void> {
   const svgImages: OutputFormat = await xd2svg(input, options);
 
-  preparePath(options);
+  await preparePath(options);
 
   typeof svgImages === 'string' ?
     writeFile(options.output, svgImages, errorHandler)
     : Object.keys(svgImages).map((key) => writeFile(`${options.output}/${sanitize(key)}.svg`, svgImages[key], errorHandler));
 }
 
-function preparePath(options: CliOptions): void {
+async function preparePath(options: CliOptions): Promise<void> {
   const path: string[] = options.output.replace(/\\+/g, '/').split('/');
   if (options.single) path.pop();
 
-  if (path.length) {
-    path.reduce((prev, cur) => {
-      const newPath = `${prev}/${cur}`;
-
-      if (!existsSync(newPath)) {
-        mkdirSync(newPath);
-      }
-
-      return newPath;
-    }, '.');
-  }
+  await mkdirPromise(path.join('/'));
 }
 
 function errorHandler(error) {

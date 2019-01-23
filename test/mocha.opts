@@ -2,4 +2,3 @@
 --full-trace
 --bail
 --timeout 600000
-test/**/*.ts

@@ -48,14 +48,16 @@
     "lint": "yarn lint:src && yarn lint:spec",
     "lint:src": "tslint -c tslint.json -p tsconfig.json",
     "lint:spec": "tslint -c tslint.json -p test/tsconfig.json",
-    "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json mocha",
-    "test:coverage": "cross-env TS_NODE_PROJECT=test/tsconfig.json nyc mocha",
+    "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json mocha test/**/*.ts",
+    "test:integration": "cross-env TS_NODE_PROJECT=integration/tsconfig.json mocha --timeout 600000 integration/**/*.ts",
+    "test:coverage": "cross-env TS_NODE_PROJECT=test/tsconfig.json nyc mocha test/**/*.ts",
     "test:watch": "yarn test --watch-extensions ts --watch",
     "prepublish": "yarn lint && yarn clean && yarn build"
   },
   "dependencies": {
     "extract-zip": "1.6.7",
     "minimist": "1.2.0",
+    "mkdirp": "0.5.1",
     "sanitize-filename": "1.6.1",
     "tmp": "0.0.33",
     "xmlbuilder": "10.1.1"
@@ -63,6 +65,7 @@
   "devDependencies": {
     "@types/extract-zip": "1.6.2",
     "@types/minimist": "1.2.0",
+    "@types/mkdirp": "0.5.2",
     "@types/mocha": "5.2.5",
     "@types/node": "8.10.39",
     "@types/sinon": "7.0.4",
@@ -104,6 +107,7 @@
     "reporter": [
       "text",
       "text-summary",
+      "html",
       "lcovonly"
     ]
   },

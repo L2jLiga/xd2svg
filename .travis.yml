@@ -33,9 +33,13 @@ matrix:
 
   - node_js: "11"
     os: linux
-    script: yarn test
+    script:
+      - yarn test
+      - yarn test:integration
     after_success: skip
   - node_js: "11"
     os: osx
-    script: yarn test
+    script:
+      - yarn test
+      - yarn test:integration
     after_success: skip

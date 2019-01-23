@@ -17,7 +17,8 @@ checkArgv();
 const filesToProceed: Array<[string, CliOptions]> = parseParams();
 
 console.log(logger.blue(logger.bold('XD2SVG starts their work\n')));
-filesToProceed.forEach( ([inputFile, options]) => {
+
+const Promises = filesToProceed.map( ([inputFile, options]) => {
   console.log(
     logger.blue('filename: ') + '%s\n' +
     logger.blue('output type: ') + '%s\n' +
@@ -27,5 +28,10 @@ filesToProceed.forEach( ([inputFile, options]) => {
     options.output,
   );
 
-  fork(__dirname + '/runner.js', [inputFile, JSON.stringify(options)]);
+  return new Promise((res, rej) => {
+    fork(__dirname + '/runner.js', [inputFile, JSON.stringify(options)])
+      .on('exit', (code) => code === 0 ? res() : rej(code));
+  });
 });
+
+Promise.all(Promises).catch((code) => process.exit(code));
