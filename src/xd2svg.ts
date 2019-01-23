@@ -8,6 +8,7 @@
 
 import * as extractZip                                                                                from 'extract-zip';
 import { existsSync, lstatSync, writeFileSync }                                                       from 'fs';
+import { join }                                                                                       from 'path';
 import { dirSync, SynchrounousResult }                                                                from 'tmp';
 import { promisify }                                                                                  from 'util';
 import { defaultOptions, Dictionary, Directory, MultipleOutput, Options, OutputFormat, SingleOutput } from './common';
@@ -34,23 +35,11 @@ export default async function xd2svg(input: string | Buffer, options: Options = 
 }
 
 async function openMockup(input: string | Buffer): Promise<Directory> {
-  let tmpInputFile: SynchrounousResult;
-
-  if (Buffer.isBuffer(input)) {
-    tmpInputFile = dirSync({unsafeCleanup: true, postfix: `_input_${Date.now()}`});
-    const buffer = input;
-    input = tmpInputFile.name + '/tmp.xd';
-
-    writeFileSync(input, buffer);
-  }
+  if (Buffer.isBuffer(input)) input = createFileFromBuffer(input);
 
   throwIfPathDoesNotExist(input);
 
-  if (lstatSync(input).isDirectory()) {
-    return {
-      name: input,
-    } as Directory;
-  }
+  if (lstatSync(input).isDirectory()) return {name: input};
 
   const directory: SynchrounousResult = dirSync({unsafeCleanup: true, postfix: `_${Date.now()}`});
 
@@ -61,9 +50,16 @@ async function openMockup(input: string | Buffer): Promise<Directory> {
       throw error;
     });
 
-  if (tmpInputFile) tmpInputFile.removeCallback();
-
   return directory;
+}
+
+function createFileFromBuffer(data: Buffer): string {
+  const dir = dirSync({unsafeCleanup: true, postfix: `_input_${Date.now()}`});
+  const input = join(dir.name, '/tmp.xd');
+
+  writeFileSync(input, data);
+
+  return input;
 }
 
 function throwIfPathDoesNotExist(path: string) {

@@ -86,4 +86,28 @@ describe('Create element', () => {
     assert.equal(defs.end(), clipPath);
     assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="15" style="clip-path: url(#clip-path-15-15-5-6-5-6)"/>');
   });
+
+  it('should create style object for invisible element if it does not have any styles', () => {
+    const parent = builder.begin();
+
+    const svgObjCollection: any = {
+      children: [
+        {
+          shape: {
+            height: 15,
+            type: 'rect',
+            width: 15,
+            x: 1,
+            y: 2,
+          },
+          type: 'shape',
+          visible: false,
+        },
+      ],
+    };
+
+    createElem(svgObjCollection, parent, null);
+
+    assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="15" style="display: none"/>');
+  });
 });

@@ -21,11 +21,6 @@ matrix:
   - node_js: "8"
     os: osx
 
-  - node_js: "9"
-    os: linux
-  - node_js: "9"
-    os: osx
-
   - node_js: "10"
     os: linux
   - node_js: "10"
@@ -33,9 +28,13 @@ matrix:
 
   - node_js: "11"
     os: linux
-    script: yarn test
+    script:
+      - yarn test
+      - yarn test:integration
     after_success: skip
   - node_js: "11"
     os: osx
-    script: yarn test
+    script:
+      - yarn test
+      - yarn test:integration
     after_success: skip

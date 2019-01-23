@@ -1,5 +1,4 @@
 --require ts-node/register
 --full-trace
 --bail
---timeout 600000
-test/**/*.ts
+test/**/*.spec.ts
