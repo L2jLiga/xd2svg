@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Support for multiple files input
+- List of unsuccessful files when process exited with error
+
+### Fixed
+- No output when absolute path given
+
 ## [1.0.3]
 ### Added
 - Added support for stroke dasharray, linecap and linejoin
