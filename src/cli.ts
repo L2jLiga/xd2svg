@@ -16,9 +16,16 @@ checkArgv();
 
 const filesToProceed: Array<[string, CliOptions]> = parseParams();
 
+let code: number = 0;
+const failedFiles: string[] = [];
+
 console.log(logger.blue(logger.bold('XD2SVG starts their work\n')));
 
-const Promises = filesToProceed.map( ([inputFile, options]) => {
+const Promises = filesToProceed.map(proceedFile);
+
+Promise.all(Promises).finally(finalizeProcess);
+
+function proceedFile([inputFile, options]): Promise<void> {
   console.log(
     logger.blue('filename: ') + '%s\n' +
     logger.blue('output type: ') + '%s\n' +
@@ -28,10 +35,34 @@ const Promises = filesToProceed.map( ([inputFile, options]) => {
     options.output,
   );
 
-  return new Promise((res, rej) => {
-    fork(__dirname + '/runner.js', [inputFile, JSON.stringify(options)])
-      .on('exit', (code) => code === 0 ? res() : rej(code));
+  return new Promise((res) => {
+    fork(
+      __dirname + '/runner.js',
+      [inputFile, JSON.stringify(options)],
+    ).on('exit', handleProcessEnd(inputFile, res));
   });
-});
+}
 
-Promise.all(Promises).catch((code) => process.exit(code));
+function handleProcessEnd(file: string, res: () => void) {
+  return (c: number) => {
+    if (c !== 0) {
+      code = -1;
+      failedFiles.push(file);
+    }
+
+    res();
+  };
+}
+
+function finalizeProcess() {
+  console.log('\n');
+
+  if (failedFiles.length) {
+    console.log(`Converting of some mockups failed:`);
+    failedFiles.forEach((file) => console.log(`> ${file}`));
+  }
+
+  console.log(logger[code === 0 ? 'blue' : 'red']('\nFinished with code: ' + code));
+
+  process.exit(code);
+}
