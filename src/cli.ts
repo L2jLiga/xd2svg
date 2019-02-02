@@ -23,7 +23,7 @@ console.log(logger.blue(logger.bold('XD2SVG starts their work\n')));
 
 const Promises = filesToProceed.map(proceedFile);
 
-Promise.all(Promises).finally(finalizeProcess);
+Promise.all(Promises).then(finalizeProcess);
 
 function proceedFile([inputFile, options]): Promise<void> {
   console.log(
