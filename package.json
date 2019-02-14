@@ -66,7 +66,7 @@
     "@types/extract-zip": "1.6.2",
     "@types/minimist": "1.2.0",
     "@types/mkdirp": "0.5.2",
-    "@types/mocha": "5.2.5",
+    "@types/mocha": "5.2.6",
     "@types/node": "8.10.39",
     "@types/sinon": "7.0.5",
     "@types/tmp": "0.0.33",
