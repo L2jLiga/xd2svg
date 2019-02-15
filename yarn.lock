@@ -150,10 +150,10 @@
   resolved "https://registry.yarnpkg.com/@types/sinon/-/sinon-7.0.5.tgz#f7dea19400c193a3b36a804a7f1f4b26dacf452b"
   integrity sha512-4DShbH857bZVOY4tPi1RQJNrLcf89hEtU0klZ9aYTMbtt95Ok4XdPqqcbtGOHIbAHMLSzQP8Uw/6qtBBqyloww==
 
-"@types/tmp@0.0.33":
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/@types/tmp/-/tmp-0.0.33.tgz#1073c4bc824754ae3d10cfab88ab0237ba964e4d"
-  integrity sha1-EHPEvIJHVK49EM+riKsCN7qWTk0=
+"@types/tmp@0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/tmp/-/tmp-0.0.34.tgz#4d01c0afce0ac9be316c5fc52b6407c6fc8cd440"
+  integrity sha512-Tx7JYeYR+pkAnDQjN1Cj43KuOuUvyybZHl+fAezReXuH/SQoxLhsuPvHZH/SA4XtrBEhaTcbb5gVc1WQcjQgdg==
 
 "@types/xmlbuilder@0.0.34":
   version "0.0.34"
