@@ -75,7 +75,7 @@
     "convert-svg-to-png": "0.5.0",
     "cross-env": "5.2.0",
     "mocha": "5.2.0",
-    "nyc": "13.2.0",
+    "nyc": "13.3.0",
     "rimraf": "2.6.3",
     "sinon": "7.2.3",
     "ts-node": "8.0.2",
