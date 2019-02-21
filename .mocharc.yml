@@ -1,0 +1,4 @@
+bail: true
+require: 'ts-node/register'
+timeout: 10000
+spec: test/**/*.spec.ts
