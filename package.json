@@ -68,7 +68,7 @@
     "@types/mkdirp": "0.5.2",
     "@types/mocha": "5.2.6",
     "@types/node": "8.10.40",
-    "@types/sinon": "7.0.8",
+    "@types/sinon": "7.0.9",
     "@types/tmp": "0.0.34",
     "@types/xmlbuilder": "0.0.34",
     "blink-diff": "1.0.13",
