@@ -79,7 +79,7 @@
     "rimraf": "2.6.3",
     "sinon": "7.2.7",
     "ts-node": "8.0.3",
-    "tslint": "5.13.1",
+    "tslint": "5.14.0",
     "typescript": "3.3.3333"
   },
   "engines": {
