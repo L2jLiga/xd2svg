@@ -70,7 +70,7 @@
     "@types/node": "8.10.40",
     "@types/sinon": "7.0.10",
     "@types/tmp": "0.0.34",
-    "@types/xmlbuilder": "0.0.34",
+    "@types/xmlbuilder": "0.0.35",
     "blink-diff": "1.0.13",
     "convert-svg-to-png": "0.5.0",
     "cross-env": "5.2.0",
