@@ -12,13 +12,15 @@ import { CliOptions }     from './models';
 
 export function parseParams(): Array<[string, CliOptions]> {
   const parsedArgs = parseArgs(process.argv);
+  const commonOptions: CliOptions = {
+    preferCompoundPath: parsedArgs.preferCompoundPath,
+    prettyPrint: parsedArgs.prettyPrint,
+    single: parsedArgs.single,
+  };
 
-  // Get the list of modules to check.
-  // When invoked as `node path/to/cli.js something` we need to strip the two starting arguments.
-  // When invoked as `binary something` we only need to strip the first starting argument.
-  const inputFiles = isNodeBinary(parsedArgs._[0]) ? parsedArgs._.slice(2) : parsedArgs._.slice(1);
+  const inputFiles = getInputFiles(parsedArgs);
 
-  return inputFiles.map((inputFileName: string) => {
+  return inputFiles.map((inputFileName: string): [string, CliOptions] => {
     const inputName: string[] = inputFileName.split('.');
 
     if (inputName.length > 1) inputName.pop();
@@ -35,11 +37,9 @@ export function parseParams(): Array<[string, CliOptions]> {
     }
 
     return [inputFileName, {
+      ...commonOptions,
       output,
-      preferCompoundPath: parsedArgs.preferCompoundPath,
-      prettyPrint: parsedArgs.prettyPrint,
-      single: parsedArgs.single,
-    }] as [string, CliOptions];
+    }];
   });
 }
 
@@ -60,6 +60,13 @@ function parseArgs(argv) {
     },
     'string': ['output'],
   });
+}
+
+// Get the list of modules to check.
+// When invoked as `node path/to/cli.js something` we need to strip the two starting arguments.
+// When invoked as `binary something` we only need to strip the first starting argument.
+function getInputFiles(parsedArgs: minimist.ParsedArgs): string[] {
+  return isNodeBinary(parsedArgs._[0]) ? parsedArgs._.slice(2) : parsedArgs._.slice(1);
 }
 
 // Check if a given string looks like the node binary.
