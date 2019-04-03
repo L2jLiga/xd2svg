@@ -9,7 +9,7 @@
 import * as extractZip                                                                                from 'extract-zip';
 import { existsSync, lstatSync, writeFileSync }                                                       from 'fs';
 import { join }                                                                                       from 'path';
-import { dirSync, SynchrounousResult }                                                                from 'tmp';
+import { dirSync }                                                                                    from 'tmp';
 import { promisify }                                                                                  from 'util';
 import { defaultOptions, Dictionary, Directory, MultipleOutput, Options, OutputFormat, SingleOutput } from './common';
 import { proceedFile }                                                                                from './core';
@@ -41,7 +41,7 @@ async function openMockup(input: string | Buffer): Promise<Directory> {
 
   if (lstatSync(input).isDirectory()) return {name: input};
 
-  const directory: SynchrounousResult = dirSync({unsafeCleanup: true, postfix: `_${Date.now()}`});
+  const directory = dirSync({unsafeCleanup: true, postfix: `_${Date.now()}`});
 
   await extract(input, {dir: directory.name})
     .catch((error) => {
