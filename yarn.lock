@@ -2233,10 +2233,10 @@ ws@^6.1.0:
   dependencies:
     async-limiter "~1.0.0"
 
-xmlbuilder@12.0.1:
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-12.0.1.tgz#885f0ab731e0c9bfd4970381513760131cc71a25"
-  integrity sha512-rRjf/JR+sEMqU2o6WEA+iR/YRIegH3P35eiQuCsT1YfZqOS+iu23azPq0igZjpBX+wa7D8gHd845kLPzow7IKg==
+xmlbuilder@13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-13.0.0.tgz#51d5dfabaada7385c6861d74f274849b5d037ede"
+  integrity sha512-b1WOXl2I5wArvb2ZcSx147Rqg/SIudDKZgTcadjFaGjkgucy7Z0egSB5w4kBg9X0/edWdNiE/eKD8KQtaM2c6w==
 
 "y18n@^3.2.1 || ^4.0.0", y18n@^4.0.0:
   version "4.0.0"
