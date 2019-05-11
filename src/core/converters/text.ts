@@ -6,21 +6,21 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLElementOrXMLNode }   from 'xmlbuilder';
+import { XMLNode }   from 'xmlbuilder';
 import { Line, Paragraph, Text } from '../models';
 import { applyIfPossible }       from '../utils';
 
 export class TextConverter {
-  public static createText(srcObj: Text, parentElement: XMLElementOrXMLNode) {
+  public static createText(srcObj: Text, parentElement: XMLNode) {
     return new TextConverter(srcObj, parentElement);
   }
 
-  public result: XMLElementOrXMLNode;
+  public result: XMLNode;
   private rawText: string;
   private source: Text;
-  private parent: XMLElementOrXMLNode;
+  private parent: XMLNode;
 
-  constructor(srcObj: Text, parentElement: XMLElementOrXMLNode) {
+  constructor(srcObj: Text, parentElement: XMLNode) {
     this.source = srcObj;
     this.parent = parentElement;
 
@@ -36,7 +36,7 @@ export class TextConverter {
   private toLine = (line: Line[]) => line.forEach(this.toTextPart);
 
   private toTextPart = (line: Line): void => {
-    const element: XMLElementOrXMLNode = this.result
+    const element: XMLNode = this.result
       .element('tspan')
       .raw(this.rawText.substring(line.from, line.to));
 

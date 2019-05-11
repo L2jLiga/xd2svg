@@ -1,6 +1,6 @@
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLNode } from 'xmlbuilder';
 
-export function applyIfPossible(node: XMLElementOrXMLNode, attribute: string, value: any): void {
+export function applyIfPossible(node: XMLNode, attribute: string, value: any): void {
   if (value != null) {
     node.attribute(attribute, value);
   }

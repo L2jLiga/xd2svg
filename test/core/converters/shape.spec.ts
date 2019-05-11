@@ -7,12 +7,12 @@
  */
 
 import { equal } from 'assert';
-import { begin, XMLElementOrXMLNode } from 'xmlbuilder';
+import { begin, XMLNode } from 'xmlbuilder';
 import { createShape } from '../../../src/core/converters';
 import { Shape } from '../../../src/core/models';
 
 describe(`Core > Converters > Shape`, () => {
-  let parentElement: XMLElementOrXMLNode;
+  let parentElement: XMLNode;
 
   beforeEach(() => {
     parentElement = begin();

@@ -1,4 +1,4 @@
-import { XMLElementOrXMLNode }                  from 'xmlbuilder';
+import { XMLNode }                  from 'xmlbuilder';
 import { Options }                              from '../../common';
 import * as logger                              from '../../utils/logger';
 import { createShape, TextConverter }           from '../converters';
@@ -8,10 +8,10 @@ import { ArtboardLike }                         from '../models/artboard';
 import { applyIfPossible }                      from './guarded-ops';
 import { svgRectToClipPath, SvgRectToClipPath } from './svg-rect-to-clip-path';
 
-export function createElem(collection: ArtboardLike, parent: XMLElementOrXMLNode, defs: XMLElementOrXMLNode, options: Options = {}): XMLElementOrXMLNode {
+export function createElem(collection: ArtboardLike, parent: XMLNode, defs: XMLNode, options: Options = {}): XMLNode {
   collection.children
     .map((svgObject: Artboard): void => {
-      let node: XMLElementOrXMLNode;
+      let node: XMLNode;
 
       switch (svgObject.type) {
         case 'shape':
@@ -48,7 +48,7 @@ export function createElem(collection: ArtboardLike, parent: XMLElementOrXMLNode
   return parent;
 }
 
-function applyBorderRadius(svgObject: Artboard, shape: Shape, defs: XMLElementOrXMLNode) {
+function applyBorderRadius(svgObject: Artboard, shape: Shape, defs: XMLNode) {
   if (shape.type === 'rect' && shape.r) {
     const {width, height, r} = shape;
     const ref = `clip-path-${width}-${height}-${r.join('-')}`;
@@ -60,7 +60,7 @@ function applyBorderRadius(svgObject: Artboard, shape: Shape, defs: XMLElementOr
   }
 }
 
-function createClipPath(data: SvgRectToClipPath, id: string, defs: XMLElementOrXMLNode) {
+function createClipPath(data: SvgRectToClipPath, id: string, defs: XMLNode) {
   const {width, height, r} = data;
   const maxBR = Math.min(width, height) / 2;
 
@@ -78,7 +78,7 @@ function createClipPath(data: SvgRectToClipPath, id: string, defs: XMLElementOrX
   clipPath.attribute('id', id);
 }
 
-function applyAttributes(node: XMLElementOrXMLNode, defs: XMLElementOrXMLNode, svgObject: Artboard) {
+function applyAttributes(node: XMLNode, defs: XMLNode, svgObject: Artboard) {
   applyIfPossible(node, 'id', svgObject.id);
   applyIfPossible(node, 'name', svgObject.name);
 

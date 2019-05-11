@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLNode } from 'xmlbuilder';
 import { bold, red }           from '../../utils';
 import { Shape }               from '../models';
 import { applyIfPossible }     from '../utils';
@@ -21,7 +21,7 @@ const strategies = {
   rect: ['x', 'y', 'width', 'height'],
 };
 
-export function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode) {
+export function createShape(srcObj: Shape, parentElement: XMLNode) {
   const type: Strategy = srcObj.type === 'compound' ? 'path' : srcObj.type;
   const shape = parentElement.element(type);
 
@@ -30,7 +30,7 @@ export function createShape(srcObj: Shape, parentElement: XMLElementOrXMLNode) {
   return shape;
 }
 
-function applyAttrsByStrategy(strategy: Strategy, shape: XMLElementOrXMLNode, srcObj: Shape): void {
+function applyAttrsByStrategy(strategy: Strategy, shape: XMLNode, srcObj: Shape): void {
   if (!strategies[strategy]) return console.warn(`${bold(red('Shape converter:'))} unknown shape given: %j`, srcObj);
 
   strategies[strategy].forEach((val) => {

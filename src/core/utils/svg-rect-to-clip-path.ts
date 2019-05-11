@@ -1,4 +1,4 @@
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLNode } from 'xmlbuilder';
 
 export interface SvgRectToClipPath {
   width: number;
@@ -6,7 +6,7 @@ export interface SvgRectToClipPath {
   r: number[];
 }
 
-export function svgRectToClipPath(attributes: SvgRectToClipPath, defs: XMLElementOrXMLNode) {
+export function svgRectToClipPath(attributes: SvgRectToClipPath, defs: XMLNode) {
   const clipPath = defs.element('clipPath');
 
   clipPath.element('path', {

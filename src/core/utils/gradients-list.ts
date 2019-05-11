@@ -1,4 +1,4 @@
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLNode } from 'xmlbuilder';
 import { Dictionary }          from '../../common';
 
-export const gradients: Dictionary<XMLElementOrXMLNode> = {};
+export const gradients: Dictionary<XMLNode> = {};

@@ -6,31 +6,31 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLElementOrXMLNode }           from 'xmlbuilder';
+import { XMLNode }           from 'xmlbuilder';
 import { camelToDash, colorTransformer } from '../utils';
 import { Parser }                        from './models';
 
 export const filters: Parser = {
   name: 'filter',
-  parse: (src: any[], defs: XMLElementOrXMLNode) => Filters.createFilters(src, defs).result,
+  parse: (src: any[], defs: XMLNode) => Filters.createFilters(src, defs).result,
 };
 
 const supportedTypes = ['blur', 'drop-shadow'];
 
 class Filters {
-  public static createFilters(src: any[], defs: XMLElementOrXMLNode): Filters {
+  public static createFilters(src: any[], defs: XMLNode): Filters {
     return new Filters(src, defs);
   }
 
   public result: string = '';
-  private filter: XMLElementOrXMLNode;
-  private defs: XMLElementOrXMLNode;
+  private filter: XMLNode;
+  private defs: XMLNode;
 
   private get filterNo() {
     return elementChildrenCount(this.defs);
   }
 
-  constructor(src: any[], defs: XMLElementOrXMLNode) {
+  constructor(src: any[], defs: XMLNode) {
     this.defs = defs;
     this.filter = defs.element('filter');
 
@@ -105,7 +105,7 @@ function filterInvisible(filterDesc: any): boolean {
 }
 
 // TODO: Still work not so fine as I expect
-function makeBlurFilter(filter: XMLElementOrXMLNode, filterParams: any, filterPostfix: string): void {
+function makeBlurFilter(filter: XMLNode, filterParams: any, filterPostfix: string): void {
   makeFeGaussianBlur(filter, filterPostfix, filterParams);
   makeFeComponentTransfer(filter, filterPostfix, filterParams);
   makeFeComposite(filter, filterPostfix);
@@ -118,7 +118,7 @@ function makeBlurFilter(filter: XMLElementOrXMLNode, filterParams: any, filterPo
   }
 }
 
-function makeFeGaussianBlur(parent: XMLElementOrXMLNode, filterPostfix: string, filterParams: any) {
+function makeFeGaussianBlur(parent: XMLNode, filterPostfix: string, filterParams: any) {
   parent
     .element('feGaussianBlur', {
       in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',
@@ -127,7 +127,7 @@ function makeFeGaussianBlur(parent: XMLElementOrXMLNode, filterPostfix: string, 
     });
 }
 
-function makeFeComponentTransfer(parent: XMLElementOrXMLNode, filterPostfix: string, filterParams: any): void {
+function makeFeComponentTransfer(parent: XMLNode, filterPostfix: string, filterParams: any): void {
   parent
     .element('feComponentTransfer', {
       in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',
@@ -139,7 +139,7 @@ function makeFeComponentTransfer(parent: XMLElementOrXMLNode, filterPostfix: str
     .element('feFuncA', {type: 'linear', slope: filterParams.fillOpacity});
 }
 
-function makeFeComposite(parent: XMLElementOrXMLNode, filterPostfix: string): void {
+function makeFeComposite(parent: XMLNode, filterPostfix: string): void {
   parent.element('feComposite', {
     in: `blur-${filterPostfix}`,
     in2: `transfer-${filterPostfix}`,

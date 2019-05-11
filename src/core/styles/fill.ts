@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLElementOrXMLNode }                          from 'xmlbuilder';
+import { XMLNode }                          from 'xmlbuilder';
 import * as logger                                      from '../../utils/logger';
 import { manifestInfo }                                 from '../manifest-parser';
 import { applyIfPossible, colorTransformer, gradients } from '../utils';
@@ -17,7 +17,7 @@ export const fill: Parser = {
   parse: fillParser,
 };
 
-export function fillParser(src: Fill, defs: XMLElementOrXMLNode): string {
+export function fillParser(src: Fill, defs: XMLNode): string {
 
   switch (src.type) {
     case 'color':
@@ -41,8 +41,8 @@ export function fillParser(src: Fill, defs: XMLElementOrXMLNode): string {
   }
 }
 
-function makeGradient(gradientInfo: GradientFill['gradient'], defs: XMLElementOrXMLNode) {
-  const gradient: XMLElementOrXMLNode = gradients[gradientInfo.ref].clone();
+function makeGradient(gradientInfo: GradientFill['gradient'], defs: XMLNode) {
+  const gradient = gradients[gradientInfo.ref];
   const gradientId = 'gradient-' + Object.values(gradientInfo).join('-');
 
   gradient.attribute('id', gradientId);
@@ -60,7 +60,7 @@ function makeGradient(gradientInfo: GradientFill['gradient'], defs: XMLElementOr
   return gradientId;
 }
 
-function createPattern(patternObject: Pattern, defs: XMLElementOrXMLNode): void {
+function createPattern(patternObject: Pattern, defs: XMLNode): void {
   const resources = manifestInfo.resources;
   const scaleBehaviors = ['fill', 'cover'];
 

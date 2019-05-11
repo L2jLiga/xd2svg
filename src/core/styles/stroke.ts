@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLNode } from 'xmlbuilder';
 import { fillParser }          from './fill';
 import { Parser, Stroke }      from './models';
 
@@ -15,7 +15,7 @@ export const stroke: Parser = {
   parse: strokeParser,
 };
 
-function strokeParser(src: Stroke, parentElement: XMLElementOrXMLNode) {
+function strokeParser(src: Stroke, parentElement: XMLNode) {
   const styles: string[] = [];
   styles.push(fillParser(src, parentElement));
 
