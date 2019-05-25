@@ -60,7 +60,7 @@
     "mkdirp": "0.5.1",
     "sanitize-filename": "1.6.1",
     "tmp": "0.1.0",
-    "xmlbuilder": "13.0.1"
+    "xmlbuilder": "13.0.2"
   },
   "devDependencies": {
     "@types/extract-zip": "1.6.2",
