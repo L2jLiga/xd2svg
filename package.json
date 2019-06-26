@@ -67,7 +67,7 @@
     "@types/minimist": "1.2.0",
     "@types/mkdirp": "0.5.2",
     "@types/mocha": "5.2.7",
-    "@types/node": "8.10.48",
+    "@types/node": "8.10.49",
     "@types/sinon": "7.0.13",
     "@types/tmp": "0.1.0",
     "blink-diff": "1.0.13",

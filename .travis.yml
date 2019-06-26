@@ -1,40 +1,19 @@
+os:
+  - linux
+  - osx
 language: node_js
+node_js:
+  - "8.3.0"
+  - "10"
+  - "12"
 cache: yarn
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH="$HOME/.yarn/bin:$PATH"
 script:
   - yarn test:coverage
+  - yarn test:integration
 after_success:
   - yarn add codecov --ignore-engines --frozen-lockfile --ignore-scripts && yarn codecov
   - yarn add codacy-coverage --ignore-engines --frozen-lockfile --ignore-scripts && cat ./coverage/lcov.info | yarn codacy-coverage
   - yarn add codeclimate-test-reporter --ignore-engines --frozen-lockfile --ignore-scripts && yarn codeclimate-test-reporter < ./coverage/lcov.info
-matrix:
-  include:
-  - node_js: "8.3.0"
-    os: linux
-  - node_js: "8.3.0"
-    os: osx
-
-  - node_js: "8"
-    os: linux
-  - node_js: "8"
-    os: osx
-
-  - node_js: "10"
-    os: linux
-  - node_js: "10"
-    os: osx
-
-  - node_js: "11"
-    os: linux
-    script:
-      - yarn test
-      - yarn test:integration
-    after_success: skip
-  - node_js: "11"
-    os: osx
-    script:
-      - yarn test
-      - yarn test:integration
-    after_success: skip
