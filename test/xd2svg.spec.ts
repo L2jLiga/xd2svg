@@ -46,5 +46,5 @@ describe('Complex test for xd2svg', () => {
     return xd2svg(inputBuffer, {single: false, preferCompoundPath: false, prettyPrint: false});
   });
 
-  it('should be able to convert from path', () => xd2svg('integration/unpacked', {single: true, prettyPrint: true, preferCompoundPath: true}));
+  it('should be able to convert from path', () => xd2svg('e2e/unpacked', {single: true, prettyPrint: true, preferCompoundPath: true}));
 });
