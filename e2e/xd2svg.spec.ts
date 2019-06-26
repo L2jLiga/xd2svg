@@ -87,41 +87,6 @@ describe.only('Complex test for xd2svg', () => {
   });
 });
 
-/*
-  it('should correctly convert when provided path to file', () => {
-    return xd2svg('test/single.xd', {single: true})
-      .then((svgImage: string) => convert(svgImage, {puppeteer: {args: ['--no-sandbox']}}) as Promise<Buffer>)
-      .then((actual) => runDiffFor(actual, 'test/expected/single.png'));
-  });
-
-  it('should correctly convert when provided directory with extracted mockup', () => {
-    const tmpDir = dirSync({
-      postfix: 'test-directory',
-      unsafeCleanup: true,
-    });
-
-    let keys: string[];
-
-    return promisify(extractZip)('test/multi.xd', {dir: tmpDir.name})
-      .then(() => xd2svg(tmpDir.name, {prettyPrint: true, preferCompoundPath: false}))
-      .then((SVGs) => {
-        keys = Object.keys(SVGs);
-        return Promise.all(Object.values(SVGs).map((SVG) => convert(SVG, {
-          puppeteer: {
-            args: ['--no-sandbox'],
-            timeout: 180000,
-          },
-        })));
-      })
-      .then((images) => {
-        const diffs = keys.map((key: string, index: number) => runDiffFor(images[index], `test/expected/${key}.png`));
-
-        return Promise.all(diffs);
-      });
-  });
-});
-*/
-
 function runDiffFor(actual: string, expected: string): Promise<void> {
   return convertFile(actual, {puppeteer: {args: ['--no-sandbox']}})
     .then(() => readFilePromise(actual.replace('.svg', '.png')))
