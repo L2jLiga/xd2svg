@@ -29,10 +29,10 @@
     "lib",
     "man"
   ],
-  "main": "lib/xd2svg.js",
+  "main": "lib/converter/xd2svg.js",
   "man": [
     "./man/xd2svg.1",
-    "./man/cli.1"
+    "./man/xd2svg-cli.1"
   ],
   "bin": {
     "xd2svg": "bin/xd2svg-cli",
@@ -43,14 +43,14 @@
     "url": "https://github.com/L2jLiga/xd2svg.git"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.app.json",
     "clean": "rimraf lib",
     "lint": "yarn lint:src && yarn lint:spec",
-    "lint:src": "tslint -c tslint.json -p tsconfig.json",
-    "lint:spec": "tslint -c tslint.json -p test/tsconfig.json",
-    "test": "cross-env TS_NODE_PROJECT=test/tsconfig.json mocha",
-    "test:coverage": "cross-env TS_NODE_PROJECT=test/tsconfig.json nyc mocha",
-    "test:e2e": "cross-env TS_NODE_PROJECT=e2e/tsconfig.json mocha --config .mocharc-int.yml",
+    "lint:src": "tslint -c tslint.json -p tsconfig.app.json",
+    "lint:spec": "tslint -c tslint.json -p tsconfig.spec.json",
+    "test": "cross-env TS_NODE_PROJECT=tsconfig.spec.json mocha",
+    "test:coverage": "cross-env TS_NODE_PROJECT=tsconfig.spec.json nyc mocha",
+    "test:e2e": "cross-env TS_NODE_PROJECT=tsconfig.e2e.json mocha --config .mocharc-int.yml",
     "test:watch": "yarn test --watch-extensions ts --watch",
     "prepublish": "yarn lint && yarn clean && yarn build"
   },
@@ -87,8 +87,7 @@
   "nyc": {
     "all": true,
     "include": [
-      "src/xd2svg.ts",
-      "src/core/**/*.ts"
+      "src/converter/**/*.ts"
     ],
     "exclude": [
       "**/*.d.ts",

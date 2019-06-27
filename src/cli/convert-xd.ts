@@ -10,8 +10,8 @@ import { writeFile }    from 'fs';
 import * as mkdirp      from 'mkdirp';
 import { promisify }    from 'util';
 import { OutputFormat } from '../common';
-import * as logger      from '../utils/logger';
-import xd2svg           from '../xd2svg';
+import * as logger      from '../common/utils/logger';
+import xd2svg           from '../converter/xd2svg';
 import { CliOptions }   from './models';
 
 const sanitize = require('sanitize-filename');

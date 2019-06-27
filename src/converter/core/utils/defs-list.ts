@@ -6,8 +6,6 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Options } from '../../common';
+import * as builder from 'xmlbuilder';
 
-export interface CliOptions extends Options {
-  output?: string;
-}
+export const defs = builder.begin().element('defs');

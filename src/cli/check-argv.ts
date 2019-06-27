@@ -5,7 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
-import * as logger from '../utils/logger';
+
+import * as logger from '../common/utils/logger';
 
 export function checkArgv(): void {
   if (process.argv[2]) return;

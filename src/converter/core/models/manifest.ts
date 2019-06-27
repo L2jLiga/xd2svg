@@ -6,8 +6,17 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-export interface Directory {
-  name: string;
+import { ResourcesMap } from './resources';
 
-  removeCallback?(): void;
+export interface ArtboardDefinition {
+  name: string;
+  path: string;
+}
+
+export interface Manifest {
+  artboards: ArtboardDefinition[];
+  id: string;
+  name: string;
+  resources: ResourcesMap;
+  version: string;
 }

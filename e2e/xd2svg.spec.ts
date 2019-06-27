@@ -11,7 +11,7 @@ import { convertFile }           from 'convert-svg-to-png';
 import { readdirSync, readFile } from 'fs';
 import { join }                  from 'path';
 import { promisify }             from 'util';
-import { manifestInfo }          from '../src/core/manifest-parser';
+import { manifestInfo }          from '../src/converter/core/manifest-parser';
 
 const BlinkDiff = require('blink-diff');
 const readFilePromise = promisify(readFile);
@@ -37,9 +37,9 @@ describe.only('Complex test for xd2svg', () => {
   const forkProcess = (...args: string[]) => fork('./bin/xd2svg-cli', args);
 
   it('should throw an error when file does not exist', (done) => {
-    const process = forkProcess('test/path/to/not/existed/file.xd');
+    const forked = forkProcess('test/path/to/not/existed/file.xd');
 
-    process.on('exit', (code) => {
+    forked.on('exit', (code) => {
       if (code !== 0) return done();
 
       done('It should throw error when invalid mockup given');
@@ -47,9 +47,9 @@ describe.only('Complex test for xd2svg', () => {
   });
 
   it('should throw an error when file is invalid', (done) => {
-    const process = forkProcess(join(__dirname, 'invalid-mockup.xd'));
+    const forked = forkProcess(join(process.cwd(), '/test/input/invalid-mockup.xd'));
 
-    process.on('exit', (code) => {
+    forked.on('exit', (code) => {
       if (code !== 0) return done();
 
       done('It should throw error when invalid mockup given');
@@ -57,29 +57,29 @@ describe.only('Complex test for xd2svg', () => {
   });
 
   it('should be able to convert single file with single output option', (done) => {
-    const process = forkProcess(join(__dirname, 'single.xd'), '-s');
+    const forked = forkProcess(join(process.cwd(), 'test', 'input', 'single.xd'), '-s', '-o', join(__dirname, 'output', 'single.svg'));
 
-    process.on('exit', (code) => {
+    forked.on('exit', (code) => {
       if (code !== 0) return done(new Error('Could not convert'));
 
       runDiffFor(
-        join(__dirname, 'single.svg'),
-        join(__dirname, 'expected', 'single.png'),
+        join(__dirname, 'output', 'single.svg'),
+        join(process.cwd(), 'test', 'expected', 'single.png'),
       ).then(() => done()).catch(done);
     });
   });
 
   it('should be able to convert unpacked mockup', (done) => {
-    const process = forkProcess(join(__dirname, 'unpacked'), '-o', join(__dirname, 'multi'));
+    const forked = forkProcess(join(process.cwd(), 'test', 'input', 'unpacked'), '-o', join(__dirname, 'output', 'multi'));
 
-    process.on('exit', (code) => {
+    forked.on('exit', (code) => {
       if (code !== 0) return done(new Error('Unable to convert multiple artboards'));
 
-      const results = readdirSync(join(__dirname, 'multi'))
+      const results = readdirSync(join(__dirname, 'output', 'multi'))
         .filter((f) => f.endsWith('.svg'))
         .map((actual) => runDiffFor(
-          join(__dirname, 'multi', actual),
-          join(__dirname, 'expected', actual.replace('.svg', '.png')),
+          join(__dirname, 'output', 'multi', actual),
+          join(process.cwd(), 'test', 'expected', actual.replace('.svg', '.png')),
         ));
 
       Promise.all(results).then(() => done()).catch(done);
