@@ -9,7 +9,15 @@
 import { XMLNode } from 'xmlbuilder';
 
 export function applyIfPossible(node: XMLNode, attribute: string, value: any): void {
-  if (value != null) {
+  if (!isNil(value) && !isEmptyString(value)) {
     node.attribute(attribute, value);
   }
+}
+
+function isEmptyString(value: any) {
+  return value === '';
+}
+
+function isNil(value: any) {
+  return value == null;
 }
