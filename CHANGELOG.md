@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [1.1.3]
+### Changed
+- Updated [xmlbuilder](https://npmjs.org/package/xmlbuilder) to latest version
+- Updated [tmp](https://www.npmjs.com/package/tmp) to latest version
+
+### Fixed
+- Incorrect man page field in package.json
+
 ## [1.1.2]
 ### Changed
 - Updated dependencies
@@ -360,7 +368,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add Artboard parser
 
-[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/L2jLiga/xd2svg/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/L2jLiga/xd2svg/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/L2jLiga/xd2svg/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/L2jLiga/xd2svg/compare/v1.0.3...v1.1.0
