@@ -10,7 +10,7 @@ import { fork }        from 'child_process';
 import { checkArgv }   from './cli/check-argv';
 import { CliOptions }  from './cli/models';
 import { parseParams } from './cli/parse-params';
-import * as logger     from './utils/logger';
+import * as logger     from './common/utils/logger';
 
 checkArgv();
 

@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": true,
+    "types": [
+      "node",
+      "mocha"
+    ]
+  },
+  "include": [
+    "src/**/*.spec.ts"
+  ]
+}

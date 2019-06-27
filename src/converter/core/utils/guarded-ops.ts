@@ -6,8 +6,10 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Options } from '../../common';
+import { XMLNode } from 'xmlbuilder';
 
-export interface CliOptions extends Options {
-  output?: string;
+export function applyIfPossible(node: XMLNode, attribute: string, value: any): void {
+  if (value != null) {
+    node.attribute(attribute, value);
+  }
 }

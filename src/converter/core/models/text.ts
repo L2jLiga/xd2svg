@@ -6,8 +6,18 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { Options } from '../../common';
+export interface Text {
+  rawText: string;
+  paragraphs: Paragraph[];
+}
 
-export interface CliOptions extends Options {
-  output?: string;
+export interface Paragraph {
+  lines: Line[][];
+}
+
+export interface Line {
+  from: number;
+  to: number;
+  x?: number;
+  y?: number;
 }

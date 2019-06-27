@@ -25,11 +25,5 @@
   },
   "files": [
     "src/cli.ts"
-  ],
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
   ]
 }
