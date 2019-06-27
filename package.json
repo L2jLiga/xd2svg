@@ -32,7 +32,7 @@
   "main": "lib/xd2svg.js",
   "man": [
     "./man/xd2svg.1",
-    "./man/cli.1"
+    "./man/xd2svg-cli.1"
   ],
   "bin": {
     "xd2svg": "bin/xd2svg-cli",
