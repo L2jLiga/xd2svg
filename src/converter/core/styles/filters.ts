@@ -6,69 +6,66 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLNode }           from 'xmlbuilder';
+import { XMLNode }                       from 'xmlbuilder';
 import { camelToDash, colorTransformer } from '../utils';
 import { Parser }                        from './models';
 
 export const filters: Parser = {
   name: 'filter',
-  parse: (src: any[], defs: XMLNode) => Filters.createFilters(src, defs).result,
+  parse: (src: any[], defs: XMLNode) => new FiltersParser(src, defs).getStyle(),
 };
 
-const supportedTypes = ['blur', 'drop-shadow'];
-
-class Filters {
-  public static createFilters(src: any[], defs: XMLNode): Filters {
-    return new Filters(src, defs);
-  }
-
-  public result: string = '';
-  private filter: XMLNode;
-  private defs: XMLNode;
+class FiltersParser {
 
   private get filterNo() {
-    return elementChildrenCount(this.defs);
+    return FiltersParser.getChildrenCount(this.defs);
   }
 
-  constructor(src: any[], defs: XMLNode) {
-    this.defs = defs;
+  private static getChildrenCount(ele: any): number {
+    return ele.children.length;
+  }
+
+  private filter: XMLNode;
+  private filterId: string;
+
+  constructor(src: any[], private defs: XMLNode) {
     this.filter = defs.element('filter');
+    this.filterId = src.reduceRight(this.createFilters, `filter-${this.filterNo}-`);
+    this.filter.attribute('id', this.filterId);
 
-    const filterId = src.reduceRight(this.filtersReducer, `filter-${this.filterNo}-`);
-
-    if (this.checkWhetherFilterIsEmpty()) return;
-
-    this.filter.attribute('id', filterId);
-
-    this.result = `url(#${filterId})`;
+    if (this.isFilterEmpty()) {
+      this.filterId = '';
+      this.filter.remove();
+    }
   }
 
-  private filtersReducer = (filterId: string, filterDesc: any, index: number): string => {
-    const type = filterDesc.type.includes('#blur') ? 'blur' : camelToDash(filterDesc.type);
-    const filterParams = getFilterParams(filterDesc);
+  public getStyle() {
+      return this.filterId
+        ? `url(#${this.filterId})`
+        : '';
+  }
 
-    if (!supportedTypes.includes(type)) {
-      console.log(`Currently unsupported filter: ${type}`);
+  private createFilters = (filterId: string, filterDesc: any, index: number): string => {
+    const type = FilterUtils.getFilterType(filterDesc);
+    const filterParams = FilterUtils.getFilterParams(filterDesc);
 
-      return filterId;
-    }
-
-    if (filterInvisible(filterDesc)) return filterId;
+    if (FilterUtils.unsupportedFilter(type)) return filterId;
+    if (FilterUtils.invisibleFilter(filterDesc)) return filterId;
 
     filterId += type === 'blur'
-      ? this.externIdWithBlur(filterParams, index)
-      : this.externIdWithShadow(filterParams);
+      ? this.createBlur(filterParams, index)
+      : this.createShadow(filterParams);
 
     return filterId;
   }
 
-  private externIdWithBlur(filterParams: any, index: number): string {
-    makeBlurFilter(this.filter, filterParams, `${this.filterNo}-${index}`);
+  private createBlur(filterParams: any, index: number): string {
+    FilterUtils.createBlur(this.filter, filterParams, `${this.filterNo}-${index}`);
 
     return `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
   }
 
-  private externIdWithShadow(filterParams: any) {
+  private createShadow(filterParams: any) {
     let addition = '';
 
     for (const {dx, dy, r, color} of filterParams) {
@@ -87,71 +84,87 @@ class Filters {
     return addition;
   }
 
-  private checkWhetherFilterIsEmpty(): boolean {
-    if (elementChildrenCount(this.filter)) return false;
-
-    this.filter.remove();
-
-    return true;
+  private isFilterEmpty(): boolean {
+    return !FiltersParser.getChildrenCount(this.filter);
   }
 }
 
-function getFilterParams(filterDesc: any): any {
-  return filterDesc.params && filterDesc.params[filterDesc.type + 's'] || filterDesc.params || {};
-}
+// tslint:disable-next-line:max-classes-per-file
+class FilterUtils {
 
-function filterInvisible(filterDesc: any): boolean {
-  return filterDesc.visible === false || filterDesc.params && filterDesc.params.visible === false;
-}
+  public static unsupportedFilter(type: string) {
+    const supportedTypes = ['blur', 'drop-shadow'];
 
-// TODO: Still work not so fine as I expect
-function makeBlurFilter(filter: XMLNode, filterParams: any, filterPostfix: string): void {
-  makeFeGaussianBlur(filter, filterPostfix, filterParams);
-  makeFeComponentTransfer(filter, filterPostfix, filterParams);
-  makeFeComposite(filter, filterPostfix);
+    if (!supportedTypes.includes(type)) {
+      console.log(`Unsupported filter type: ${type}`);
 
-  if (filterParams.fillOpacity !== 0) {
-    filter
-      .element('feMerge')
-      .element('feMergeNode', {in: 'SourceGraphic'}).up()
-      .element('feMergeNode', {in: `composite-${filterPostfix}`});
+      return true;
+    }
+
+    return false;
   }
-}
 
-function makeFeGaussianBlur(parent: XMLNode, filterPostfix: string, filterParams: any) {
-  parent
-    .element('feGaussianBlur', {
-      in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',
-      result: `blur-${filterPostfix}`,
-      stdDeviation: filterParams.blurAmount,
-    });
-}
+  public static invisibleFilter(filterDesc: any): boolean {
+    return filterDesc.visible === false || filterDesc.params && filterDesc.params.visible === false;
+  }
 
-function makeFeComponentTransfer(parent: XMLNode, filterPostfix: string, filterParams: any): void {
-  parent
-    .element('feComponentTransfer', {
-      in: filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic',
+  public static getFilterType(filterDesc: any) {
+    return filterDesc.type.includes('#blur') ? 'blur' : camelToDash(filterDesc.type);
+  }
+
+  public static getFilterParams(filterDesc: any): any {
+    return filterDesc.params && filterDesc.params[filterDesc.type + 's'] || filterDesc.params || {};
+  }
+
+  // TODO: Still work not so fine as I expect
+  public static createBlur(filter: XMLNode, filterParams: any, filterPostfix: string): void {
+    FilterUtils.makeFeGaussianBlur(filter, filterPostfix, filterParams);
+    FilterUtils.makeFeComponentTransfer(filter, filterPostfix, filterParams);
+    FilterUtils.makeFeComposite(filter, filterPostfix);
+
+    if (filterParams.fillOpacity !== 0) {
+      const feMerge = filter.element('feMerge');
+      feMerge.element('feMergeNode', {in: 'SourceGraphic'});
+      feMerge.element('feMergeNode', {in: `composite-${filterPostfix}`});
+    }
+  }
+
+  private static makeFeGaussianBlur(parent: XMLNode, filterPostfix: string, filterParams: any) {
+    parent
+      .element('feGaussianBlur', {
+        in: FilterUtils.getBackgroundEffect(filterParams),
+        result: `blur-${filterPostfix}`,
+        stdDeviation: filterParams.blurAmount,
+      });
+  }
+
+  private static makeFeComponentTransfer(parent: XMLNode, filterPostfix: string, filterParams: any): void {
+    const feComponentTransfer = parent.element('feComponentTransfer', {
+      in: FilterUtils.getBackgroundEffect(filterParams),
       result: `transfer-${filterPostfix}`,
-    })
-    .element('feFuncR', {type: 'linear', slope: brigtnessToSlope(filterParams.brightnessAmount)}).up()
-    .element('feFuncG', {type: 'linear', slope: brigtnessToSlope(filterParams.brightnessAmount)}).up()
-    .element('feFuncB', {type: 'linear', slope: brigtnessToSlope(filterParams.brightnessAmount)}).up()
-    .element('feFuncA', {type: 'linear', slope: filterParams.fillOpacity});
-}
+    });
 
-function makeFeComposite(parent: XMLNode, filterPostfix: string): void {
-  parent.element('feComposite', {
-    in: `blur-${filterPostfix}`,
-    in2: `transfer-${filterPostfix}`,
-    operator: 'in',
-    result: `composite-${filterPostfix}`,
-  });
-}
+    const slope = FilterUtils.brigtnessToSlope(filterParams.brightnessAmount);
+    feComponentTransfer.element('feFuncR', {type: 'linear', slope});
+    feComponentTransfer.element('feFuncG', {type: 'linear', slope});
+    feComponentTransfer.element('feFuncB', {type: 'linear', slope});
+    feComponentTransfer.element('feFuncA', {type: 'linear', slope: filterParams.fillOpacity});
+  }
 
-function brigtnessToSlope(brightness: number): number {
-  return (brightness + 50) / 200;
-}
+  private static getBackgroundEffect(filterParams: any) {
+    return filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic';
+  }
 
-function elementChildrenCount(ele: any): number {
-  return ele.children.length;
+  private static brigtnessToSlope(brightness: number): number {
+    return (brightness + 50) / 200;
+  }
+
+  private static makeFeComposite(parent: XMLNode, filterPostfix: string): void {
+    parent.element('feComposite', {
+      in: `blur-${filterPostfix}`,
+      in2: `transfer-${filterPostfix}`,
+      operator: 'in',
+      result: `composite-${filterPostfix}`,
+    });
+  }
 }

@@ -103,9 +103,8 @@ describe('Core > Styles parsers > Filters', () => {
     const filterSrc = [{type: filterName}];
 
     console.log = (msg) => {
-      assert.equal(msg, `Currently unsupported filter: ${camelToDash(filterName)}`);
-
       console.log = log;
+      assert.equal(msg, `Unsupported filter type: ${camelToDash(filterName)}`);
 
       done();
     };
