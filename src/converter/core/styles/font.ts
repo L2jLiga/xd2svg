@@ -20,41 +20,61 @@ const fontWeightVariants: any = {
 };
 // tslint:enable:object-literal-sort-keys
 
-export const font: Parser = {parse: fontParser};
+export const font: Parser = {
+  parse: (src: Font) => new FontParser(src).getStyle(),
+};
 
-function fontParser(src: Font) {
-  const cssArr: string[] = [];
-  const fontFamilies: string[] = [];
+class FontParser {
+  private parsed = [];
 
-  if (src.postscriptName) fontFamilies.push(src.postscriptName);
-  if (src.family) fontFamilies.push(src.family);
-  if (fontFamilies.length) cssArr.push(`font-family: ${fontFamilies.join(', ')}`);
-  if (src.size) cssArr.push(`font-size: ${src.size}px`);
-  cssArr.push(...parseFontStyle(src.style));
-
-  return cssArr.join(';');
-}
-
-function parseFontStyle(fontStyle: string = ''): string[] {
-  const parsed = [];
-  fontStyle = fontStyle.trim();
-
-  if (/condensed/i.test(fontStyle)) {
-    fontStyle = fontStyle.replace(/condensed/i, '').trim();
-
-    parsed.push(`font-stretch: condensed`);
+  constructor(private input: Font) {
+    this.fontFamily();
+    this.fontSize();
+    this.fontStretch();
+    this.fontStyle();
+    this.fontWeight();
   }
 
-  if (/italic/i.test(fontStyle)) {
-    fontStyle = fontStyle.replace(/italic/i, '').trim();
-
-    parsed.push(`font-style: italic`);
+  public getStyle() {
+    return this.parsed.join(';');
   }
 
-  const weight = fontWeightVariants[fontStyle];
-  if (weight) {
-    parsed.push(`font-weight: ${weight}`);
+  private fontFamily() {
+    const {postscriptName, family} = this.input;
+
+    const families = [postscriptName, family].filter(Boolean);
+
+    if (families.length) {
+      this.parsed.push(`font-family: ${families.join(', ')}`);
+    }
   }
 
-  return parsed;
+  private fontSize() {
+    if (this.input.size) {
+      this.parsed.push(`font-size: ${this.input.size}px`);
+    }
+  }
+
+  private fontStretch() {
+    if (/condensed/i.test(this.input.style)) {
+      this.input.style = this.input.style.replace(/condensed/i, '').trim();
+
+      this.parsed.push(`font-stretch: condensed`);
+    }
+  }
+
+  private fontStyle() {
+    if (!/italic/i.test(this.input.style)) return;
+
+    this.input.style = this.input.style.replace(/italic/i, '').trim();
+    this.parsed.push(`font-style: italic`);
+  }
+
+  private fontWeight() {
+    const weight = fontWeightVariants[this.input.style];
+
+    if (weight) {
+      this.parsed.push(`font-weight: ${weight}`);
+    }
+  }
 }
