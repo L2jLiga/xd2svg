@@ -11,7 +11,6 @@ import { convertFile }           from 'convert-svg-to-png';
 import { readdirSync, readFile } from 'fs';
 import { join }                  from 'path';
 import { promisify }             from 'util';
-import { manifestInfo }          from '../src/converter/core/manifest-parser';
 
 const BlinkDiff = require('blink-diff');
 const readFilePromise = promisify(readFile);
@@ -23,11 +22,6 @@ describe.only('Complex test for xd2svg', () => {
     maxListeners = process.getMaxListeners();
 
     process.setMaxListeners(0);
-  });
-
-  beforeEach(() => {
-    manifestInfo.resources = null;
-    manifestInfo.artboards = [];
   });
 
   after(() => {

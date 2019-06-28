@@ -1,4 +1,4 @@
 bail: true
 require: 'ts-node/register'
 timeout: 60000
-spec: e2e/**/*.spec.ts
+spec: test/e2e/**/*.spec.ts

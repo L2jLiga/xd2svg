@@ -50,7 +50,7 @@
     "lint:spec": "tslint -c tslint.json -p tsconfig.spec.json",
     "test": "cross-env TS_NODE_PROJECT=tsconfig.spec.json mocha",
     "test:coverage": "cross-env TS_NODE_PROJECT=tsconfig.spec.json nyc mocha",
-    "test:e2e": "cross-env TS_NODE_PROJECT=tsconfig.e2e.json mocha --config .mocharc-int.yml",
+    "test:e2e": "cross-env TS_NODE_PROJECT=tsconfig.e2e.json mocha --config .mocharc-e2e.yml",
     "test:watch": "yarn test --watch-extensions ts --watch",
     "prepublish": "yarn lint && yarn clean && yarn build"
   },

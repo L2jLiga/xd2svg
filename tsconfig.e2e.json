@@ -7,6 +7,6 @@
     ]
   },
   "include": [
-    "**/*.spec.ts"
+    "test/e2e/**/*.spec.ts"
   ]
 }
