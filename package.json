@@ -29,7 +29,8 @@
     "lib",
     "man"
   ],
-  "main": "lib/converter/xd2svg.js",
+  "main": "./lib/converter/xd2svg.js",
+  "types": "./lib/converter/xd2svg.d.ts",
   "man": [
     "./man/xd2svg.1",
     "./man/xd2svg-cli.1"
