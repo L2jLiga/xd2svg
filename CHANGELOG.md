@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [2.0.0]
+
+### Added
+- `type` property into `package.json` to specify that package use CommonJS modules ([ref](https://medium.com/@nodejs/announcing-core-node-js-support-for-ecmascript-modules-c5d6dc29b663))
+
+### Changed
+- Updated all dependencies to latest versions
+- Built with TypeScript 3.7 and ES2018 target
+- Code clean-ups
+
+### Fixed
+- Several typos
+
+### Removed
+- Node 8 support
+
 ## [1.1.3]
 ### Changed
 - Updated [xmlbuilder](https://npmjs.org/package/xmlbuilder) to latest version
@@ -226,7 +242,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI was updated
    ```
    xd2svg-cli InputFile.xd [options]
-   
+
      options:
        --output - specify output path (default FileName directory or FileName.svg)
        --format - specify output format: svg, html (default: svg)
@@ -368,7 +384,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add Artboard parser
 
-[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v1.1.3...HEAD
+[Unreleased]: https://github.com/L2jLiga/xd2svg/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/L2jLiga/xd2svg/compare/v1.1.3...v2.0.0
 [1.1.3]: https://github.com/L2jLiga/xd2svg/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/L2jLiga/xd2svg/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/L2jLiga/xd2svg/compare/v1.1.0...v1.1.1
