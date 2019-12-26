@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLNode } from 'xmlbuilder';
-import { Dictionary }          from '../../../common';
+import { XMLNode }    from 'xmlbuilder';
+import { Dictionary } from '../../../common';
 
 export const gradients: Dictionary<XMLNode> = {};

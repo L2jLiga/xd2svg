@@ -1,12 +1,11 @@
-import { strictEqual } from 'assert';
-import * as xmlbuilder from 'xmlbuilder';
-import { XMLNode } from 'xmlbuilder';
+import { strictEqual }     from 'assert';
+import { begin, XMLNode }  from 'xmlbuilder';
 import { applyIfPossible } from './guarded-ops';
 
 describe('Guarded operations', () => {
   let node: XMLNode;
 
-  beforeEach(() => node = xmlbuilder.begin().ele('node'));
+  beforeEach(() => node = begin().ele('node'));
 
   it('should not apply attribute if value is null', () => {
     applyIfPossible(node, 'attr', null);

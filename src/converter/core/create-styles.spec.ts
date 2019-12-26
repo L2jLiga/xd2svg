@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { equal }        from 'assert';
+import { strictEqual }  from 'assert';
 import { createStyles } from './create-styles';
 
 describe('Core > Create styles', () => {
@@ -17,7 +17,7 @@ describe('Core > Create styles', () => {
 
     const result = createStyles(stylesSrc, null);
 
-    equal(result, '');
+    strictEqual(result, '');
   });
 
   it('should use parser for known properties, filter empty and return formatted string', () => {
@@ -35,6 +35,6 @@ describe('Core > Create styles', () => {
 
     const styles = createStyles(stylesSrc, null);
 
-    equal(styles, `font-family: Arial-Bold, Arial; font-size: 15px; font-weight: 700; opacity: 0.4`);
+    strictEqual(styles, `font-family: Arial-Bold, Arial; font-size: 15px; font-weight: 700; opacity: 0.4`);
   });
 });

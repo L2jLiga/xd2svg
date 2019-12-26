@@ -6,15 +6,15 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert  from 'assert';
-import { clipPath } from './clip-path';
+import { strictEqual } from 'assert';
+import { clipPath }    from './clip-path';
 
 describe('Core > Styles parsers > Clip path', () => {
   it('should return url with href', () => {
     const ref = 'test-href';
 
-    const result = clipPath.parse({ref});
+    const result = clipPath.parse({ ref });
 
-    assert.equal(result, `url(#${ref})`);
+    strictEqual(result, `url(#${ref})`);
   });
 });

@@ -9,7 +9,6 @@
 import { writeFile }    from 'fs';
 import * as mkdirp      from 'mkdirp';
 import { promisify }    from 'util';
-import { OutputFormat } from '../common';
 import * as logger      from '../common/utils/logger';
 import xd2svg           from '../converter/xd2svg';
 import { CliOptions }   from './models';
@@ -18,7 +17,7 @@ const sanitize = require('sanitize-filename');
 const mkdirPromise = promisify(mkdirp);
 
 export async function convertXd(input: string, options: CliOptions): Promise<void> {
-  const svgImages: OutputFormat = await xd2svg(input, options);
+  const svgImages = await xd2svg(input, options);
 
   await preparePath(options);
 
@@ -28,16 +27,16 @@ export async function convertXd(input: string, options: CliOptions): Promise<voi
 }
 
 async function preparePath(options: CliOptions): Promise<void> {
-  const path: string[] = options.output.replace(/\\+/g, '/').split('/');
+  const path = options.output.replace(/\\+/g, '/').split('/');
   if (options.single) path.pop();
 
   await mkdirPromise(path.join('/'));
 }
 
-function errorHandler(error) {
+function errorHandler(error): void {
   if (!error) return;
 
-  logger.error('An error occured while flushing to disk, reason: %O', error);
+  logger.error('An error occurred while flushing to disk, reason: %O', error);
 
   throw error;
 }

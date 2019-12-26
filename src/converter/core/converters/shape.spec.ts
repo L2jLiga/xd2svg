@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { equal }          from 'assert';
+import { strictEqual }    from 'assert';
 import { begin, XMLNode } from 'xmlbuilder';
 import { Shape }          from '../models';
 import { createShape }    from './index';
@@ -24,9 +24,9 @@ describe(`Core > Converters > Shape`, () => {
       type: 'path',
     };
 
-    const actual = createShape(shape, parentElement);
+    const actual = createShape(shape, parentElement).end();
 
-    equal(actual, `<path d="M0"/>`);
+    strictEqual(actual, `<path d="M0"/>`);
   });
 
   it(`should create compound element`, () => {
@@ -38,7 +38,7 @@ describe(`Core > Converters > Shape`, () => {
 
     const actual = createShape(shape, parentElement).end();
 
-    equal(actual, `<path d="M0"/>`);
+    strictEqual(actual, `<path d="M0"/>`);
   });
 
   it(`should create rectangle element`, () => {
@@ -52,7 +52,7 @@ describe(`Core > Converters > Shape`, () => {
 
     const actual = createShape(shape, parentElement).end();
 
-    equal(actual, `<rect x="1" y="2" width="3" height="4"/>`);
+    strictEqual(actual, `<rect x="1" y="2" width="3" height="4"/>`);
   });
 
   it(`should create circle element`, () => {
@@ -65,7 +65,7 @@ describe(`Core > Converters > Shape`, () => {
 
     const actual = createShape(shape, parentElement).end();
 
-    equal(actual, `<circle cx="1" cy="2" r="3"/>`);
+    strictEqual(actual, `<circle cx="1" cy="2" r="3"/>`);
   });
 
   it(`should create ellipse element`, () => {
@@ -79,7 +79,7 @@ describe(`Core > Converters > Shape`, () => {
 
     const actual = createShape(shape, parentElement).end();
 
-    equal(actual, `<ellipse cx="1" cy="2" rx="3" ry="4"/>`);
+    strictEqual(actual, `<ellipse cx="1" cy="2" rx="3" ry="4"/>`);
   });
 
   it(`should create line element`, () => {
@@ -93,6 +93,6 @@ describe(`Core > Converters > Shape`, () => {
 
     const actual = createShape(shape, parentElement).end();
 
-    equal(actual, `<line x1="1" y1="3" x2="2" y2="4"/>`);
+    strictEqual(actual, `<line x1="1" y1="3" x2="2" y2="4"/>`);
   });
 });

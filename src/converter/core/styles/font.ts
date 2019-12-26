@@ -35,12 +35,12 @@ class FontParser {
     this.fontWeight();
   }
 
-  public getStyle() {
+  public getStyle(): string {
     return this.parsed.join(';');
   }
 
-  private fontFamily() {
-    const {postscriptName, family} = this.input;
+  private fontFamily(): void {
+    const { postscriptName, family } = this.input;
 
     const families = [postscriptName, family].filter(Boolean);
 
@@ -49,13 +49,13 @@ class FontParser {
     }
   }
 
-  private fontSize() {
+  private fontSize(): void {
     if (this.input.size) {
       this.parsed.push(`font-size: ${this.input.size}px`);
     }
   }
 
-  private fontStretch() {
+  private fontStretch(): void {
     if (/condensed/i.test(this.input.style)) {
       this.input.style = this.input.style.replace(/condensed/i, '').trim();
 
@@ -63,14 +63,14 @@ class FontParser {
     }
   }
 
-  private fontStyle() {
+  private fontStyle(): void {
     if (!/italic/i.test(this.input.style)) return;
 
     this.input.style = this.input.style.replace(/italic/i, '').trim();
     this.parsed.push(`font-style: italic`);
   }
 
-  private fontWeight() {
+  private fontWeight(): void {
     const weight = fontWeightVariants[this.input.style];
 
     if (weight) {

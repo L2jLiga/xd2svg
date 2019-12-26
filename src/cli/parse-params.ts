@@ -21,7 +21,7 @@ export function parseParams(): Array<[string, CliOptions]> {
   const inputFiles = getInputFiles(parsedArgs);
 
   return inputFiles.map((inputFileName: string): [string, CliOptions] => {
-    const inputName: string[] = inputFileName.split('.');
+    const inputName = inputFileName.split('.');
 
     if (inputName.length > 1) inputName.pop();
 
@@ -43,7 +43,7 @@ export function parseParams(): Array<[string, CliOptions]> {
   });
 }
 
-function parseArgs(argv) {
+function parseArgs(argv): minimist.ParsedArgs {
   return minimist(argv, {
     '--': true,
     'alias': {

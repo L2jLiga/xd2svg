@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert from 'assert';
-import { display } from './display';
+import { strictEqual } from 'assert';
+import { display }     from './display';
 
 describe('Core > Styles parsers > Display', () => {
   it('should return url with href', () => {
@@ -15,6 +15,6 @@ describe('Core > Styles parsers > Display', () => {
 
     const result = display.parse(given);
 
-    assert.equal(result, given);
+    strictEqual(result, given);
   });
 });

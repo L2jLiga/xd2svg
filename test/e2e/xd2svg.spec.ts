@@ -82,7 +82,7 @@ describe.only('Complex test for xd2svg', () => {
 });
 
 function runDiffFor(actual: string, expected: string): Promise<void> {
-  return convertFile(actual, {puppeteer: {args: ['--no-sandbox']}})
+  return convertFile(actual, { puppeteer: { args: ['--no-sandbox'] } })
     .then(() => readFilePromise(actual.replace('.svg', '.png')))
     .then((data: Buffer) => {
       const diff = new BlinkDiff({

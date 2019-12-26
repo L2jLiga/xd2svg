@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert from 'assert';
-import { opacity } from './opacity';
+import { strictEqual } from 'assert';
+import { opacity }     from './opacity';
 
 describe('Core > Styles parsers > Opacity', () => {
   it('should return url with href', () => {
@@ -15,6 +15,6 @@ describe('Core > Styles parsers > Opacity', () => {
 
     const result = opacity.parse(given);
 
-    assert.equal(result, given);
+    strictEqual(result, given);
   });
 });

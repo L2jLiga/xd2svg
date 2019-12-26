@@ -6,11 +6,11 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert         from 'assert';
-import * as fs             from 'fs';
-import { SinonStub, stub } from 'sinon';
-import { resourcesParser } from './resources-parser';
-import { defs }            from './utils/defs-list';
+import { deepStrictEqual, strictEqual } from 'assert';
+import * as fs                          from 'fs';
+import { SinonStub, stub }              from 'sinon';
+import { resourcesParser }              from './resources-parser';
+import { defs }                         from './utils';
 
 describe('Core > Resources parser', () => {
   let readFileSyncStub: SinonStub;
@@ -34,10 +34,10 @@ describe('Core > Resources parser', () => {
 
     readFileSyncStub.returns(JSON.stringify(values));
 
-    const result = resourcesParser({name: ''} as any);
+    const result = resourcesParser({ name: '' } as any);
 
-    assert.deepEqual(result, {});
-    assert.equal(defs.end(), '<defs/>');
+    deepStrictEqual(result, {});
+    strictEqual(defs.end(), '<defs/>');
   });
 
   it('should correctly remap artboard info', () => {
@@ -61,9 +61,9 @@ describe('Core > Resources parser', () => {
 
     readFileSyncStub.returns(JSON.stringify(values));
 
-    const result = resourcesParser({name: ''} as any);
+    const result = resourcesParser({ name: '' } as any);
 
-    assert.deepEqual(result, {
+    deepStrictEqual(result, {
       [values.artboards['artboard-uuid'].name]: values.artboards['artboard-uuid'],
     });
   });
@@ -82,9 +82,9 @@ describe('Core > Resources parser', () => {
     };
 
     readFileSyncStub.returns(JSON.stringify(clipPathsResources));
-    resourcesParser({name: ''} as any);
+    resourcesParser({ name: '' } as any);
 
-    assert.equal(defs.end(), '<defs><clipPath id="clipPathId"/></defs>');
+    strictEqual(defs.end(), '<defs><clipPath id="clipPathId"/></defs>');
 
     const gradientsResources = {
       artboards: {},
@@ -92,7 +92,7 @@ describe('Core > Resources parser', () => {
         clipPaths: {},
         gradients: {
           gradient1: {
-            stops: [{offset: 0}],
+            stops: [{ offset: 0 }],
             type: 'linear',
           },
           gradient2: {
@@ -105,8 +105,8 @@ describe('Core > Resources parser', () => {
 
     readFileSyncStub.returns(JSON.stringify(gradientsResources));
 
-    resourcesParser({name: ''} as any);
+    resourcesParser({ name: '' } as any);
 
-    assert.equal(defs.end(), '<defs><clipPath id="clipPathId"/></defs>');
+    strictEqual(defs.end(), '<defs><clipPath id="clipPathId"/></defs>');
   });
 });

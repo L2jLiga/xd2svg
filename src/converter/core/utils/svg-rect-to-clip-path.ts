@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLNode } from 'xmlbuilder';
+import { XMLElement, XMLNode } from 'xmlbuilder';
 
 export interface SvgRectToClipPath {
   width: number;
@@ -14,7 +14,7 @@ export interface SvgRectToClipPath {
   r: number[];
 }
 
-export function svgRectToClipPath(attributes: SvgRectToClipPath, defs: XMLNode) {
+export function svgRectToClipPath(attributes: SvgRectToClipPath, defs: XMLNode): XMLElement {
   const clipPath = defs.element('clipPath');
 
   clipPath.element('path', {
@@ -24,7 +24,7 @@ export function svgRectToClipPath(attributes: SvgRectToClipPath, defs: XMLNode) 
   return clipPath;
 }
 
-export function svgRectToPath(attributes: SvgRectToClipPath) {
+export function svgRectToPath(attributes: SvgRectToClipPath): string {
   const width = attributes.width;
   const height = attributes.height;
 

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert                      from 'assert';
+import { strictEqual }                  from 'assert';
 import * as builder                     from 'xmlbuilder';
 import { gradients }                    from '../utils';
 import { Color, GradientFill, Pattern } from './models';
@@ -29,34 +29,34 @@ describe(`Core > Styles parsers > Stroke`, () => {
   it(`should return none when type is none`, () => {
     const type = 'none';
 
-    const result = stroke.parse({type});
+    const result = stroke.parse({ type });
 
-    assert.equal(result, type);
+    strictEqual(result, type);
   });
 
   it(`should return color when type is color`, () => {
     const type = 'color';
-    const color: Color = {value: 123456};
+    const color: Color = { value: 123456 };
 
-    const result = stroke.parse({type, fill: {color}});
+    const result = stroke.parse({ type, fill: { color } });
 
-    assert.equal(result, `#${color.value.toString(16)}`);
+    strictEqual(result, `#${color.value.toString(16)}`);
   });
 
   it(`should return color when type is solid`, () => {
     const type = 'solid';
-    const color: Color = {value: 123456};
+    const color: Color = { value: 123456 };
 
-    const result = stroke.parse({type, color});
+    const result = stroke.parse({ type, color });
 
-    assert.equal(result, `#${color.value.toString(16)}`);
+    strictEqual(result, `#${color.value.toString(16)}`);
   });
 
   it(`should return empty string when type is unknown`, () => {
     const fillSrc = {};
     const result = stroke.parse(fillSrc);
 
-    assert.equal(result, '');
+    strictEqual(result, '');
   });
 
   it(`should return ref to gradient when type is gradient`, () => {
@@ -71,44 +71,44 @@ describe(`Core > Styles parsers > Stroke`, () => {
     };
     gradients[gradientInfo.ref] = builder.begin().element('gradient');
 
-    const result = stroke.parse({type: 'gradient', gradient: gradientInfo}, defs);
+    const result = stroke.parse({ type: 'gradient', gradient: gradientInfo }, defs);
 
-    assert.equal(result, `url(#gradient-${Object.values(gradientInfo).join('-')})`);
+    strictEqual(result, `url(#gradient-${Object.values(gradientInfo).join('-')})`);
   });
 
   it(`should append pattern element to defs and return ref to this pattern if type is pattern`, () => {
     const defs: any = builder.create('svg');
     pattern.meta.ux.scaleBehavior = 'fill';
 
-    const result = stroke.parse({type: 'pattern', pattern}, defs);
+    const result = stroke.parse({ type: 'pattern', pattern }, defs);
 
-    assert.equal(result, `url(#${pattern.meta.ux.uid})`);
+    strictEqual(result, `url(#${pattern.meta.ux.uid})`);
   });
 
   it(`should add stroke width if it present`, () => {
     const type = 'color';
-    const color: Color = {value: 123456};
+    const color: Color = { value: 123456 };
 
-    const result = stroke.parse({type, fill: {color}, width: 1});
+    const result = stroke.parse({ type, fill: { color }, width: 1 });
 
-    assert.equal(result, `#${color.value.toString(16)};stroke-width:1px`);
+    strictEqual(result, `#${color.value.toString(16)};stroke-width:1px`);
   });
 
   it('should add stroke-dasharray style property if dash array is present', () => {
-    const result = stroke.parse({type: 'none', dash: [10, 20]});
+    const result = stroke.parse({ type: 'none', dash: [10, 20] });
 
-    assert.equal(result, 'none;stroke-dasharray:10 20');
+    strictEqual(result, 'none;stroke-dasharray:10 20');
   });
 
   it('should add stroke-linecap style property if stroke cap is present', () => {
-    const result = stroke.parse({type: 'none', cap: 'square'});
+    const result = stroke.parse({ type: 'none', cap: 'square' });
 
-    assert.equal(result, 'none;stroke-linecap: square');
+    strictEqual(result, 'none;stroke-linecap: square');
   });
 
   it('should add stroke-linecap style property if stroke cap is present', () => {
-    const result = stroke.parse({type: 'none', join: 'bevel'});
+    const result = stroke.parse({ type: 'none', join: 'bevel' });
 
-    assert.equal(result, 'none;stroke-linejoin: bevel');
+    strictEqual(result, 'none;stroke-linejoin: bevel');
   });
 });

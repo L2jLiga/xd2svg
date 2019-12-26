@@ -6,11 +6,11 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLNode } from 'xmlbuilder';
-import { Dictionary }          from '../../common';
-import { bold, red }           from '../../common/utils';
-import parsers                 from './styles';
-import { Parser }              from './styles/models';
+import { XMLNode }    from 'xmlbuilder';
+import { Dictionary } from '../../common';
+import { bold, red }  from '../../common/utils';
+import parsers        from './styles';
+import { Parser }     from './styles/models';
 
 export function createStyles(stylesSrc: Dictionary<any> = {}, defs: XMLNode): string {
   const styleAttr: string[] = [];
@@ -26,12 +26,12 @@ export function createStyles(stylesSrc: Dictionary<any> = {}, defs: XMLNode): st
   return styleAttr.join('; ');
 }
 
-const toFormatted = (rule: string): string => rule.split(':').map((val: string) => val.trim()).join(': ');
+const toFormatted = (rule: string) => rule.split(':').map((val: string) => val.trim()).join(': ');
 
 function createStyle(parser: Parser, rawStyle: any, defs: XMLNode): string[] {
   const rule: string[] = [];
 
-  const parserResult: string[] = parser.parse(rawStyle, defs).split(';');
+  const parserResult = parser.parse(rawStyle, defs).split(';');
 
   if (!parserResult[0].length) return [];
 

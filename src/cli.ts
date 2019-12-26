@@ -8,15 +8,14 @@
 
 import { fork }        from 'child_process';
 import { checkArgv }   from './cli/check-argv';
-import { CliOptions }  from './cli/models';
 import { parseParams } from './cli/parse-params';
 import * as logger     from './common/utils/logger';
 
 checkArgv();
 
-const filesToProceed: Array<[string, CliOptions]> = parseParams();
+const filesToProceed = parseParams();
 
-let code: number = 0;
+let code = 0;
 const failedFiles: string[] = [];
 
 console.log(logger.blue(logger.bold('XD2SVG starts their work\n')));
@@ -43,7 +42,7 @@ function proceedFile([inputFile, options]): Promise<void> {
   });
 }
 
-function handleProcessEnd(file: string, res: () => void) {
+function handleProcessEnd(file: string, res: () => void): (c: number) => void {
   return (c: number) => {
     if (c !== 0) {
       code = -1;
@@ -54,7 +53,7 @@ function handleProcessEnd(file: string, res: () => void) {
   };
 }
 
-function finalizeProcess() {
+function finalizeProcess(): void {
   console.log('\n');
 
   if (failedFiles.length) {

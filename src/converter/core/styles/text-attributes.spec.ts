@@ -6,11 +6,11 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert        from 'assert';
+import { strictEqual }    from 'assert';
 import { textAttributes } from './text-attributes';
 
 describe('Core > Styles parsers > Text attributes', () => {
-  it('should return all presented text attrubutes', () => {
+  it('should return all presented text attributes', () => {
     const cases = [
       {
         attributes: {},
@@ -41,7 +41,7 @@ describe('Core > Styles parsers > Text attributes', () => {
     cases.forEach((testCase) => {
       const result = textAttributes.parse(testCase.attributes);
 
-      assert.equal(result, testCase.expect);
+      strictEqual(result, testCase.expect);
     });
   });
 });

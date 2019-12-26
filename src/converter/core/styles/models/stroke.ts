@@ -15,9 +15,9 @@ interface CommonStroke {
   join: string;
 }
 
-interface PatternStroke extends fill.PatternFill, CommonStroke {}
-interface GradientStroke extends fill.GradientFill, CommonStroke {}
-interface ColorStroke extends fill.ColorFill, CommonStroke {}
-interface NoneStroke extends fill.NoneFill, CommonStroke {}
+type PatternStroke = fill.PatternFill & CommonStroke;
+type GradientStroke = fill.GradientFill & CommonStroke;
+type ColorStroke = fill.ColorFill & CommonStroke;
+type NoneStroke = fill.NoneFill & CommonStroke;
 
 export type Stroke = PatternStroke | GradientStroke | ColorStroke | NoneStroke;

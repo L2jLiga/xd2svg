@@ -6,23 +6,22 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLNode } from 'xmlbuilder';
-import * as xmlbuilder from 'xmlbuilder';
-import { Options } from '../../../../common';
-import { createShape } from '../../converters';
-import { Shape } from '../../models';
-import { Artboard, ShapeArtboard } from '../../models/artboard';
-import { CompoundPath, Rectangle } from '../../models/shape';
-import { createElem } from '../create-elem';
+import { XMLNode }                              from 'xmlbuilder';
+import { Options }                              from '../../../../common';
+import { createShape }                          from '../../converters';
+import { Shape }                                from '../../models';
+import { Artboard, ShapeArtboard }              from '../../models/artboard';
+import { CompoundPath, Rectangle }              from '../../models/shape';
+import { createElem }                           from '../create-elem';
 import { svgRectToClipPath, SvgRectToClipPath } from '../svg-rect-to-clip-path';
-import { ElementBuilder } from './element-builder';
+import { ElementBuilder }                       from './element-builder';
 
 export class ShapeBuilder implements ElementBuilder<ShapeArtboard> {
   public supports(svgObject: Artboard): svgObject is ShapeArtboard {
     return svgObject.type === 'shape';
   }
 
-  public convert(svgObject: ShapeArtboard, parent: xmlbuilder.XMLNode, defs: xmlbuilder.XMLNode, options: Options) {
+  public convert(svgObject: ShapeArtboard, parent: XMLNode, defs: XMLNode, options: Options): XMLNode {
     let node: XMLNode;
     const shape = svgObject.shape;
 
@@ -41,17 +40,17 @@ export class ShapeBuilder implements ElementBuilder<ShapeArtboard> {
     return shape.type === 'compound';
   }
 
-  private applyBorderRadius(svgObject: Artboard, shape: Shape, defs: XMLNode) {
+  private applyBorderRadius(svgObject: Artboard, shape: Shape, defs: XMLNode): void {
     if (!(this.isRectangle(shape) && shape.r)) return;
 
-    const {width, height, r} = shape;
+    const { width, height, r } = shape;
     const ref = `clip-path-${width}-${height}-${r.join('-')}`;
 
-    this.createClipPath({width, height, r}, ref, defs);
+    this.createClipPath({ width, height, r }, ref, defs);
 
     svgObject.style = {
       ...svgObject.style,
-      clipPath: {ref},
+      clipPath: { ref },
     };
   }
 
@@ -59,7 +58,7 @@ export class ShapeBuilder implements ElementBuilder<ShapeArtboard> {
     return shape.type === 'rect';
   }
 
-  private createClipPath({width, height, r}: SvgRectToClipPath, id: string, defs: XMLNode) {
+  private createClipPath({ width, height, r }: SvgRectToClipPath, id: string, defs: XMLNode): void {
     const maxBR = Math.min(width, height) / 2;
 
     const clipPath = svgRectToClipPath({
@@ -71,7 +70,7 @@ export class ShapeBuilder implements ElementBuilder<ShapeArtboard> {
     clipPath.attribute('id', id);
   }
 
-  private getR(r, maxBR) {
+  private getR(r, maxBR): number[] {
     return [
       Math.min(r[0], maxBR),
       Math.min(r[1], maxBR),

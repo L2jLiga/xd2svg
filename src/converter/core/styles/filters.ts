@@ -17,7 +17,7 @@ export const filters: Parser = {
 
 class FiltersParser {
 
-  private get filterNo() {
+  private get filterNo(): number {
     return FiltersParser.getChildrenCount(this.defs);
   }
 
@@ -39,13 +39,13 @@ class FiltersParser {
     }
   }
 
-  public getStyle() {
-      return this.filterId
-        ? `url(#${this.filterId})`
-        : '';
+  public getStyle(): string {
+    return this.filterId
+      ? `url(#${this.filterId})`
+      : '';
   }
 
-  private createFilters = (filterId: string, filterDesc: any, index: number): string => {
+  private createFilters = (filterId: string, filterDesc: any, index: number) => {
     const type = FilterUtils.getFilterType(filterDesc);
     const filterParams = FilterUtils.getFilterParams(filterDesc);
 
@@ -65,10 +65,10 @@ class FiltersParser {
     return `blur-${filterParams.blurAmount}-${filterParams.brightnessAmount}`;
   }
 
-  private createShadow(filterParams: any) {
+  private createShadow(filterParams: any): string {
     let addition = '';
 
-    for (const {dx, dy, r, color} of filterParams) {
+    for (const { dx, dy, r, color } of filterParams) {
       addition += `drop-shadow-${dx}-${dy}-${r}-${color.mode}`;
 
       this.filter
@@ -92,7 +92,7 @@ class FiltersParser {
 // tslint:disable-next-line:max-classes-per-file
 class FilterUtils {
 
-  public static unsupportedFilter(type: string) {
+  public static unsupportedFilter(type: string): boolean {
     const supportedTypes = ['blur', 'drop-shadow'];
 
     if (!supportedTypes.includes(type)) {
@@ -108,7 +108,7 @@ class FilterUtils {
     return filterDesc.visible === false || filterDesc.params && filterDesc.params.visible === false;
   }
 
-  public static getFilterType(filterDesc: any) {
+  public static getFilterType(filterDesc: any): string {
     return filterDesc.type.includes('#blur') ? 'blur' : camelToDash(filterDesc.type);
   }
 
@@ -124,12 +124,12 @@ class FilterUtils {
 
     if (filterParams.fillOpacity !== 0) {
       const feMerge = filter.element('feMerge');
-      feMerge.element('feMergeNode', {in: 'SourceGraphic'});
-      feMerge.element('feMergeNode', {in: `composite-${filterPostfix}`});
+      feMerge.element('feMergeNode', { in: 'SourceGraphic' });
+      feMerge.element('feMergeNode', { in: `composite-${filterPostfix}` });
     }
   }
 
-  private static makeFeGaussianBlur(parent: XMLNode, filterPostfix: string, filterParams: any) {
+  private static makeFeGaussianBlur(parent: XMLNode, filterPostfix: string, filterParams: any): void {
     parent
       .element('feGaussianBlur', {
         in: FilterUtils.getBackgroundEffect(filterParams),
@@ -144,18 +144,18 @@ class FilterUtils {
       result: `transfer-${filterPostfix}`,
     });
 
-    const slope = FilterUtils.brigtnessToSlope(filterParams.brightnessAmount);
-    feComponentTransfer.element('feFuncR', {type: 'linear', slope});
-    feComponentTransfer.element('feFuncG', {type: 'linear', slope});
-    feComponentTransfer.element('feFuncB', {type: 'linear', slope});
-    feComponentTransfer.element('feFuncA', {type: 'linear', slope: filterParams.fillOpacity});
+    const slope = FilterUtils.brightnessToSlope(filterParams.brightnessAmount);
+    feComponentTransfer.element('feFuncR', { type: 'linear', slope });
+    feComponentTransfer.element('feFuncG', { type: 'linear', slope });
+    feComponentTransfer.element('feFuncB', { type: 'linear', slope });
+    feComponentTransfer.element('feFuncA', { type: 'linear', slope: filterParams.fillOpacity });
   }
 
-  private static getBackgroundEffect(filterParams: any) {
+  private static getBackgroundEffect(filterParams: any): 'BackgroundImage' | 'SourceGraphic' {
     return filterParams.backgroundEffect ? 'BackgroundImage' : 'SourceGraphic';
   }
 
-  private static brigtnessToSlope(brightness: number): number {
+  private static brightnessToSlope(brightness: number): number {
     return (brightness + 50) / 200;
   }
 

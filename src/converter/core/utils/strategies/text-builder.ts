@@ -6,17 +6,17 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as xmlbuilder from 'xmlbuilder';
-import { TextConverter } from '../../converters';
+import { XMLNode }                from 'xmlbuilder';
+import { TextConverter }          from '../../converters';
 import { Artboard, TextArtboard } from '../../models/artboard';
-import { ElementBuilder } from './element-builder';
+import { ElementBuilder }         from './element-builder';
 
 export class TextBuilder implements ElementBuilder<TextArtboard> {
   public supports(svgObject: Artboard): svgObject is TextArtboard {
     return svgObject.type === 'text';
   }
 
-  public convert(svgObject: TextArtboard, parent: xmlbuilder.XMLNode) {
+  public convert(svgObject: TextArtboard, parent: XMLNode): XMLNode {
     return TextConverter.createText(svgObject.text, parent).result;
   }
 }
