@@ -6,14 +6,14 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert         from 'assert';
-import { injectResources } from './index';
+import { strictEqual }     from 'assert';
+import { injectResources } from './core';
 
 describe('Core > Inject resources into SVGs', () => {
   it('should return empty string when empty SVGs list provided', () => {
     const result = injectResources([], null);
 
-    assert.equal(result, '');
+    strictEqual(result, '');
   });
 
   it('should inject resources in first SVG and return it when list length equal to 1', () => {
@@ -26,7 +26,7 @@ describe('Core > Inject resources into SVGs', () => {
     const actual = injectResources(['<svg></svg>'], resources);
     const expected = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><defs/></svg>';
 
-    assert.equal(actual, expected);
+    strictEqual(actual, expected);
   });
 
   it('should inject resources and all SVGs into new one and return it when list length 2 or more', () => {
@@ -47,7 +47,7 @@ describe('Core > Inject resources into SVGs', () => {
 <svg id="g2"></svg>
     </svg>`;
 
-    assert.equal(actual, expected);
+    strictEqual(actual, expected);
   });
 
   it('shouldn\'t paste id in root svg if it is not exist', () => {
@@ -67,6 +67,6 @@ describe('Core > Inject resources into SVGs', () => {
 <svg id="g2"></svg>
     </svg>`;
 
-    assert.equal(actual, expected);
+    strictEqual(actual, expected);
   });
 });

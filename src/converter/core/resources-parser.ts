@@ -46,8 +46,8 @@ function buildGradients(list: Dictionary<{ type, stops }>): void {
   Object.entries(list).forEach(([gradientId, gradient]) => buildElement(gradient, gradientId));
 }
 
-function buildElement({type, stops}, gradientId: string): void {
-  const gradient = builder.begin().element(type === 'linear' ? 'linearGradient' : 'radialGradient', {id: gradientId});
+function buildElement({ type, stops }, gradientId: string): void {
+  const gradient = builder.begin().element(type === 'linear' ? 'linearGradient' : 'radialGradient', { id: gradientId });
   gradients[gradientId] = gradient;
 
   stops.forEach((stop: { offset: string, color: Color }) => {

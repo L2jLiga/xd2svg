@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert          from 'assert';
+import { strictEqual }      from 'assert';
 import { Color }            from '../styles/models';
 import { colorTransformer } from './color-transformer';
 
@@ -14,15 +14,15 @@ describe('Core > Utils > Color Transformer: ', () => {
   it('should return #fff if no params specified', () => {
     const result = colorTransformer();
 
-    assert.equal(result, '#fff');
+    strictEqual(result, '#fff');
   });
 
   it('should return hex value', () => {
-    const color: Color = {value: 123435};
+    const color: Color = { value: 123435 };
 
     const result = colorTransformer(color);
 
-    assert.equal(result, `#${color.value.toString(16)}`);
+    strictEqual(result, `#${color.value.toString(16)}`);
   });
 
   it('should return rgb value', () => {
@@ -37,7 +37,7 @@ describe('Core > Utils > Color Transformer: ', () => {
 
     const result = colorTransformer(color);
 
-    assert.equal(result, 'rgb(1,2,3)');
+    strictEqual(result, 'rgb(1,2,3)');
   });
 
   it('should return rgba value', () => {
@@ -53,7 +53,7 @@ describe('Core > Utils > Color Transformer: ', () => {
 
     const result = colorTransformer(color);
 
-    assert.equal(result, 'rgba(1,2,3,0.4)');
+    strictEqual(result, 'rgba(1,2,3,0.4)');
   });
 
   it('should correctly parse color also if alpha equal to 0', () => {
@@ -69,7 +69,7 @@ describe('Core > Utils > Color Transformer: ', () => {
 
     const result = colorTransformer(color);
 
-    assert.equal(result, 'rgba(0,0,0,0)');
+    strictEqual(result, 'rgba(0,0,0,0)');
   });
 
   it('should return hsl value', () => {
@@ -84,7 +84,7 @@ describe('Core > Utils > Color Transformer: ', () => {
 
     const result = colorTransformer(color);
 
-    assert.equal(result, 'hsl(1,2,3)');
+    strictEqual(result, 'hsl(1,2,3)');
   });
 
   it('should return hsla value', () => {
@@ -100,6 +100,6 @@ describe('Core > Utils > Color Transformer: ', () => {
 
     const result = colorTransformer(color);
 
-    assert.equal(result, 'hsla(1,2,3,0.4)');
+    strictEqual(result, 'hsla(1,2,3,0.4)');
   });
 });

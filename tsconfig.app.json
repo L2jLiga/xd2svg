@@ -2,10 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "sourceMap": true,
-    "types": [
-      "node",
-      "mocha"
-    ]
+    "types": ["node"]
   },
   "include": [
     "src/**/*.ts"

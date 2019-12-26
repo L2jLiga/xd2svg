@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { defs } from './defs-list';
+import { defs }    from './defs-list';
 
 describe('Definitions list', () => {
   it('should export definitions list', () => {

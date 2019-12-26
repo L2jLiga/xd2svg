@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert     from 'assert';
+import { strictEqual } from 'assert';
 import { camelToDash } from './camel-to-dash';
 
 describe('Core > Utils > Camel to Dash:', () => {
@@ -15,6 +15,6 @@ describe('Core > Utils > Camel to Dash:', () => {
 
     const result = camelToDash(str);
 
-    assert.equal(result, 'camel-case-string');
+    strictEqual(result, 'camel-case-string');
   });
 });

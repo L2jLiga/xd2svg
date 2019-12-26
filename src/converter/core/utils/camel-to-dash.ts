@@ -6,6 +6,6 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-export const camelToDash = (str: string): string => str
+export const camelToDash = (str: string) => str
   .replace(/(^[A-Z])/, ([first]) => first.toLowerCase())
   .replace(/([A-Z])/g, ([letter]) => `-${letter.toLowerCase()}`);

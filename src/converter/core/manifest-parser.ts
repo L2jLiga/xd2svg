@@ -18,8 +18,8 @@ export const manifestInfo: Manifest = {
   version: '',
 };
 
-export function manifestParser(directory: Directory) {
-  const json: string = readFileSync(`${directory.name}/manifest`, 'utf-8');
+export function manifestParser(directory: Directory): Manifest {
+  const json = readFileSync(`${directory.name}/manifest`, 'utf-8');
 
   const manifest: ManifestFile = JSON.parse(json);
 
@@ -44,7 +44,7 @@ function parseResources(dirName: string, resources: RawResource[] = []): Resourc
   resources.forEach((res) => {
     const resourceSourcePath = dirName + '/resources/' + res.path;
 
-    const resourceSource: Buffer = readFileSync(resourceSourcePath);
+    const resourceSource = readFileSync(resourceSourcePath);
 
     const base64 = resourceSource.toString('base64');
 

@@ -14,10 +14,10 @@ export function applyIfPossible(node: XMLNode, attribute: string, value: any): v
   }
 }
 
-function isEmptyString(value: any) {
+function isEmptyString(value: any): boolean {
   return value === '';
 }
 
-function isNil(value: any) {
-  return value == null;
+export function isNil(value: any): boolean {
+  return value === null || value === undefined;
 }

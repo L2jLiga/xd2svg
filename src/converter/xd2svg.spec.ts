@@ -41,10 +41,10 @@ describe('Complex test for xd2svg', () => {
   });
 
   it('should be able to convert from buffer', () => {
-    const inputBuffer: Buffer = Buffer.from(readFileSync(process.cwd() + '/test/input/multi.xd'));
+    const inputBuffer = Buffer.from(readFileSync(process.cwd() + '/test/input/multi.xd'));
 
-    return xd2svg(inputBuffer, {single: false, preferCompoundPath: false, prettyPrint: false});
+    return xd2svg(inputBuffer, { single: false, preferCompoundPath: false, prettyPrint: false });
   });
 
-  it('should be able to convert from path', () => xd2svg(process.cwd() + '/test/input/unpacked', {single: true, prettyPrint: true, preferCompoundPath: true}));
+  it('should be able to convert from path', () => xd2svg(process.cwd() + '/test/input/unpacked', { single: true, prettyPrint: true, preferCompoundPath: true }));
 });

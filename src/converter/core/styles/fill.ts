@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLNode }                          from 'xmlbuilder';
+import { XMLNode }                                      from 'xmlbuilder';
 import * as logger                                      from '../../../common/utils/logger';
 import { manifestInfo }                                 from '../manifest-parser';
 import { applyIfPossible, colorTransformer, gradients } from '../utils';
@@ -25,7 +25,7 @@ export function fillParser(src: Fill, defs: XMLNode): string {
     case 'solid':
       return colorTransformer(src.color);
     case 'gradient':
-      const gradientId: string = makeGradient(src.gradient, defs);
+      const gradientId = makeGradient(src.gradient, defs);
 
       return `url(#${gradientId})`;
     case 'pattern':
@@ -41,7 +41,7 @@ export function fillParser(src: Fill, defs: XMLNode): string {
   }
 }
 
-function makeGradient(gradientInfo: GradientFill['gradient'], defs: XMLNode) {
+function makeGradient(gradientInfo: GradientFill['gradient'], defs: XMLNode): string {
   const gradient = gradients[gradientInfo.ref];
   const gradientId = 'gradient-' + Object.values(gradientInfo).join('-');
 
@@ -64,9 +64,9 @@ function createPattern(patternObject: Pattern, defs: XMLNode): void {
   const resources = manifestInfo.resources;
   const scaleBehaviors = ['fill', 'cover'];
 
-  const {width, height, meta: {ux: {uid, scaleBehavior}}} = patternObject;
+  const { width, height, meta: { ux: { uid, scaleBehavior } } } = patternObject;
 
-  if (!scaleBehaviors.includes(scaleBehavior )) {
+  if (!scaleBehaviors.includes(scaleBehavior)) {
     return console.warn(`${logger.bold(logger.red('Fill/Stroke parser:'))} unknown property: %j`, patternObject);
   }
 

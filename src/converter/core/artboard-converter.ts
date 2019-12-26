@@ -17,8 +17,8 @@ export function artboardConverter(artboardsRoot: Artboard, artboardInfo: Artboar
   return artboardsRoot.children.map(toArtboards(artboardInfo, options));
 }
 
-function toArtboards(artboardInfo: ArtboardInfo, options: Options) {
-  return (root: Artboard): string => {
+function toArtboards(artboardInfo: ArtboardInfo, options: Options): (root: Artboard) => string {
+  return (root: Artboard) => {
     const svg = builder.begin().element('svg', {
       'enable-background': `new ${artboardInfo.x} ${artboardInfo.y} ${artboardInfo.width} ${artboardInfo.height}`,
       'id': `${root.id}`,
@@ -40,6 +40,6 @@ function toArtboards(artboardInfo: ArtboardInfo, options: Options) {
 
     const defs = svg.element('defs');
 
-    return createElem(root.artboard, svg, defs, options).end({pretty: options.prettyPrint});
+    return createElem(root.artboard, svg, defs, options).end({ pretty: options.prettyPrint });
   };
 }

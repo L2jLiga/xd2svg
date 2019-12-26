@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import * as assert   from 'assert';
 import { gradients } from './gradients-list';
 
 describe('Gradients list', () => {

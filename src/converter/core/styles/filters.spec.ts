@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert     from 'assert';
+import { strictEqual } from 'assert';
 import * as builder    from 'xmlbuilder';
 import { camelToDash } from '../utils';
 import { filters }     from './filters';
@@ -24,7 +24,7 @@ describe('Core > Styles parsers > Filters', () => {
 
     const result = filters.parse(filtersSrc, builder.create('svg'));
 
-    assert.equal(result, '');
+    strictEqual(result, '');
   });
 
   it('should correctly parse blur filter', () => {
@@ -54,8 +54,8 @@ describe('Core > Styles parsers > Filters', () => {
 
     const result = filters.parse([blurFilter], defs);
 
-    assert.equal(result, `url(#filter-1-blur-12-15)`);
-    assert.equal(defs.end(), expectedOutput);
+    strictEqual(result, `url(#filter-1-blur-12-15)`);
+    strictEqual(defs.end(), expectedOutput);
   });
 
   it('should correctly parse drop-shadow filter', () => {
@@ -91,8 +91,8 @@ describe('Core > Styles parsers > Filters', () => {
 
     const result = filters.parse([dropShadow], defs);
 
-    assert.equal(result, `url(#filter-1-drop-shadow-0-3-3-RGB)`);
-    assert.equal(defs.end(), expectedOutput);
+    strictEqual(result, `url(#filter-1-drop-shadow-0-3-3-RGB)`);
+    strictEqual(defs.end(), expectedOutput);
   });
 
   it('should log to console when unknown filter', (done) => {
@@ -100,11 +100,11 @@ describe('Core > Styles parsers > Filters', () => {
     const filterName = 'unknownFilter';
     const log = console.log;
 
-    const filterSrc = [{type: filterName}];
+    const filterSrc = [{ type: filterName }];
 
     console.log = (msg) => {
       console.log = log;
-      assert.equal(msg, `Unsupported filter type: ${camelToDash(filterName)}`);
+      strictEqual(msg, `Unsupported filter type: ${camelToDash(filterName)}`);
 
       done();
     };

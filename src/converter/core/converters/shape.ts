@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { XMLNode } from 'xmlbuilder';
+import { XMLElement, XMLNode } from 'xmlbuilder';
 import { bold, red }           from '../../../common/utils';
-import { Shape }               from '../models';
-import { applyIfPossible }     from '../utils';
+import { Shape }           from '../models';
+import { applyIfPossible } from '../utils';
 
 type Strategy = 'circle' | 'ellipse' | 'line' | 'path' | 'rect';
 
@@ -21,7 +21,7 @@ const strategies = {
   rect: ['x', 'y', 'width', 'height'],
 };
 
-export function createShape(srcObj: Shape, parentElement: XMLNode) {
+export function createShape(srcObj: Shape, parentElement: XMLNode): XMLElement {
   const type: Strategy = srcObj.type === 'compound' ? 'path' : srcObj.type;
   const shape = parentElement.element(type);
 

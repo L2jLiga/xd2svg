@@ -7,13 +7,14 @@
  */
 
 import { Color } from '../styles/models';
+import { isNil } from './guarded-ops';
 
 export function colorTransformer(color: Color = {}): string {
   switch (color.mode) {
     case 'RGB':
       const rgb = `${color.value.r},${color.value.g},${color.value.b}`;
 
-      if (color.alpha != null) {
+      if (!isNil(color.alpha)) {
         return `rgba(${rgb},${color.alpha})`;
       } else {
         return `rgb(${rgb})`;
@@ -21,7 +22,7 @@ export function colorTransformer(color: Color = {}): string {
     case 'HSL':
       const hsl = `${color.value.h},${color.value.s},${color.value.l}`;
 
-      if (color.alpha != null) {
+      if (!isNil(color.alpha)) {
         return `hsla(${hsl},${color.alpha})`;
       } else {
         return `hsl(${hsl})`;

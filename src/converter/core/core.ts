@@ -33,13 +33,13 @@ export function proceedFile(directory: Directory, options: SingleOutput): string
 export function proceedFile(directory: Directory, options: MultipleOutput): Dictionary<string>;
 export function proceedFile(directory: Directory, options: Options): string | Dictionary<string>;
 export function proceedFile(directory: Directory, options: Options): string | Dictionary<string> {
-  dimensions = {width: 0, height: 0};
+  dimensions = { width: 0, height: 0 };
   convertedArtboards = {};
 
   const manifest = manifestParser(directory);
-  const artboardsInfo: Dictionary<ArtboardInfo> = resourcesParser(directory);
+  const artboardsInfo = resourcesParser(directory);
 
-  const artboards: ConvertedArtboard[] = manifest.artboards.map(toArtboard(directory, artboardsInfo, options));
+  const artboards = manifest.artboards.map(toArtboard(directory, artboardsInfo, options));
 
   if (options.single) {
     artboards.forEach((artboard: ConvertedArtboard) => {
@@ -47,7 +47,7 @@ export function proceedFile(directory: Directory, options: Options): string | Di
     });
 
     return injectResources(Object.values(convertedArtboards), {
-      defs: defs.end({pretty: options.prettyPrint}),
+      defs: defs.end({ pretty: options.prettyPrint }),
       rootHeight: dimensions.height,
       rootId: manifest.id,
       rootWidth: dimensions.width,
@@ -59,13 +59,13 @@ export function proceedFile(directory: Directory, options: Options): string | Di
   return convertedArtboards;
 }
 
-function toArtboard(dir: Directory, artboardsInfo: Dictionary<ArtboardInfo>, options: Options) {
+function toArtboard(dir: Directory, artboardsInfo: Dictionary<ArtboardInfo>, options: Options): (artboardItem: ArtboardDefinition) => ConvertedArtboard {
   return (artboardItem: ArtboardDefinition): ConvertedArtboard => {
     const json = readFileSync(`${dir.name}/artwork/${artboardItem.path}/graphics/graphicContent.agc`, 'utf-8');
 
     const artboard: Artboard = JSON.parse(json);
 
-    const artboardContent: string[] = artboardConverter(artboard, artboardsInfo[artboardItem.name], options);
+    const artboardContent = artboardConverter(artboard, artboardsInfo[artboardItem.name], options);
 
     if (options.single) {
       const artboardDimensions = artboardsInfo[artboardItem.name];
@@ -74,15 +74,15 @@ function toArtboard(dir: Directory, artboardsInfo: Dictionary<ArtboardInfo>, opt
       dimensions.height = Math.max(dimensions.height, artboardDimensions.height);
     }
 
-    return {name: artboardItem.name, content: artboardContent};
+    return { name: artboardItem.name, content: artboardContent };
   };
 }
 
-function toConvertedArtboard(artboardsInfo: Dictionary<ArtboardInfo>, prettyPrint: boolean) {
-  const defsList = defs.end({pretty: prettyPrint});
+function toConvertedArtboard(artboardsInfo: Dictionary<ArtboardInfo>, prettyPrint: boolean): (data: ConvertedArtboard) => void {
+  const defsList = defs.end({ pretty: prettyPrint });
 
-  return (data: ConvertedArtboard): void => {
-    const {name, content} = data;
+  return (data: ConvertedArtboard) => {
+    const { name, content } = data;
 
     convertedArtboards[name] = injectResources(content, {
       defs: defsList,

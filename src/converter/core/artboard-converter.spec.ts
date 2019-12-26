@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert                from 'assert';
+import { deepStrictEqual }        from 'assert';
 import { artboardConverter }      from './artboard-converter';
 import { Artboard, ArtboardInfo } from './models';
 
@@ -35,6 +35,6 @@ describe('Core > Artboard converter', () => {
       '</svg>',
     ];
 
-    assert.deepEqual(actual, expected);
+    deepStrictEqual(actual, expected);
   });
 });

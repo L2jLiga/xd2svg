@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert    from 'assert';
-import * as builder   from 'xmlbuilder';
-import { createElem } from './create-elem';
+import { strictEqual } from 'assert';
+import * as builder    from 'xmlbuilder';
+import { createElem }  from './create-elem';
 
 describe('Create element', () => {
   it('should warn when unknown type', (done) => {
@@ -21,7 +21,7 @@ describe('Create element', () => {
     };
 
     createElem({
-      children: [{type: 'unknownType'}],
+      children: [{ type: 'unknownType' }],
     } as any, null, null);
   });
 
@@ -36,7 +36,7 @@ describe('Create element', () => {
             paragraphs: [
               {
                 lines: [
-                  [{from: 0, to: 3}],
+                  [{ from: 0, to: 3 }],
                 ],
               },
             ],
@@ -50,7 +50,7 @@ describe('Create element', () => {
 
     createElem(svgObjCollection, parent, null);
 
-    assert.equal(parent.end(), '<text style="display: none"><tspan>raw</tspan></text>');
+    strictEqual(parent.end(), '<text style="display: none"><tspan>raw</tspan></text>');
   });
 
   it('should warn when unsupported shape', (done) => {
@@ -63,7 +63,7 @@ describe('Create element', () => {
     };
 
     createElem({
-      children: [{type: 'shape', shape: {type: 'unknownShape'}}],
+      children: [{ type: 'shape', shape: { type: 'unknownShape' } }],
     } as any, builder.begin(), null);
   });
 
@@ -91,8 +91,8 @@ describe('Create element', () => {
       '<path d="M5 0h4a 6 5 0 0 1 6 5v4a 6 5 0 0 1 -6 5h-4a 5 6 0 0 1 -5 -6v-4a 6 5 0 0 1 6 -5z"/>' +
       '</clipPath>';
 
-    assert.equal(defs.end(), clipPath);
-    assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="15" style="clip-path: url(#clip-path-15-15-5-6-5-6)"/>');
+    strictEqual(defs.end(), clipPath);
+    strictEqual(parent.end(), '<rect x="1" y="2" width="15" height="15" style="clip-path: url(#clip-path-15-15-5-6-5-6)"/>');
   });
 
   it('should create style object for invisible element if it does not have any styles', () => {
@@ -116,6 +116,6 @@ describe('Create element', () => {
 
     createElem(svgObjCollection, parent, null);
 
-    assert.equal(parent.end(), '<rect x="1" y="2" width="15" height="15" style="display: none"/>');
+    strictEqual(parent.end(), '<rect x="1" y="2" width="15" height="15" style="display: none"/>');
   });
 });

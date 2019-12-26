@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import * as assert                      from 'assert';
+import { strictEqual }                  from 'assert';
 import * as builder                     from 'xmlbuilder';
 import { gradients }                    from '../utils';
 import { fill }                         from './fill';
@@ -29,34 +29,34 @@ describe(`Core > Styles parsers > Fill`, () => {
   it(`should return none when type is none`, () => {
     const type = 'none';
 
-    const result = fill.parse({type});
+    const result = fill.parse({ type });
 
-    assert.equal(result, type);
+    strictEqual(result, type);
   });
 
   it(`should return color when type is color`, () => {
     const type = 'color';
-    const color: Color = {value: 123456};
+    const color: Color = { value: 123456 };
 
-    const result = fill.parse({type, fill: {color}});
+    const result = fill.parse({ type, fill: { color } });
 
-    assert.equal(result, `#${color.value.toString(16)}`);
+    strictEqual(result, `#${color.value.toString(16)}`);
   });
 
   it(`should return color when type is solid`, () => {
     const type = 'solid';
-    const color: Color = {value: 123456};
+    const color: Color = { value: 123456 };
 
-    const result = fill.parse({type, color});
+    const result = fill.parse({ type, color });
 
-    assert.equal(result, `#${color.value.toString(16)}`);
+    strictEqual(result, `#${color.value.toString(16)}`);
   });
 
   it(`should return empty string when type is unknown`, () => {
     const fillSrc = {};
     const result = fill.parse(fillSrc);
 
-    assert.equal(result, '');
+    strictEqual(result, '');
   });
 
   it(`should return ref to gradient when type is gradient`, () => {
@@ -71,19 +71,19 @@ describe(`Core > Styles parsers > Fill`, () => {
     };
     gradients[gradientInfo.ref] = builder.begin().element('gradient');
 
-    const result = fill.parse({type: 'gradient', gradient: gradientInfo}, defs);
+    const result = fill.parse({ type: 'gradient', gradient: gradientInfo }, defs);
 
-    assert.equal(result, `url(#gradient-${Object.values(gradientInfo).join('-')})`);
+    strictEqual(result, `url(#gradient-${Object.values(gradientInfo).join('-')})`);
   });
 
   it(`should create pattern element when scale behavior is fill`, () => {
     const defs: any = builder.begin().ele('defs');
     pattern.meta.ux.scaleBehavior = 'fill';
 
-    const result = fill.parse({type: 'pattern', pattern}, defs);
+    const result = fill.parse({ type: 'pattern', pattern }, defs);
 
-    assert.equal(result, `url(#${pattern.meta.ux.uid})`);
-    assert.equal(
+    strictEqual(result, `url(#${pattern.meta.ux.uid})`);
+    strictEqual(
       defs.end(),
       '<defs>' +
       '<pattern height="100%" id="uid" viewBox="0 0 1 1" width="100%">' +
@@ -97,10 +97,10 @@ describe(`Core > Styles parsers > Fill`, () => {
     const defs: any = builder.begin().ele('defs');
     pattern.meta.ux.scaleBehavior = 'cover';
 
-    const result = fill.parse({type: 'pattern', pattern}, defs);
+    const result = fill.parse({ type: 'pattern', pattern }, defs);
 
-    assert.equal(result, `url(#${pattern.meta.ux.uid})`);
-    assert.equal(
+    strictEqual(result, `url(#${pattern.meta.ux.uid})`);
+    strictEqual(
       defs.end(),
       '<defs>' +
       '<pattern height="100%" id="uid" viewBox="0 0 1 1" width="100%" preserveAspectRatio="xMidYMid slice">' +
@@ -116,9 +116,9 @@ describe(`Core > Styles parsers > Fill`, () => {
 
     const expected = '<defs/>';
 
-    const actual = fill.parse({type: 'pattern', pattern}, defs);
+    const actual = fill.parse({ type: 'pattern', pattern }, defs);
 
-    assert.equal(actual, `url(#${pattern.meta.ux.uid})`);
-    assert.equal(defs.end(), expected);
+    strictEqual(actual, `url(#${pattern.meta.ux.uid})`);
+    strictEqual(defs.end(), expected);
   });
 });
