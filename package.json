@@ -75,7 +75,7 @@
     "blink-diff": "1.0.13",
     "convert-svg-to-png": "0.5.0",
     "cross-env": "6.0.3",
-    "mocha": "6.2.2",
+    "mocha": "7.0.0",
     "nyc": "15.0.0",
     "rimraf": "3.0.0",
     "sinon": "8.0.2",
