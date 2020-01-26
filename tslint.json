@@ -10,6 +10,7 @@
     "tslint:recommended"
   ],
   "rules": {
+    "no-bitwise": false,
     "max-line-length": {
       "options": [
         200

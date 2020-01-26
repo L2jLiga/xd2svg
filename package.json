@@ -59,7 +59,6 @@
   "dependencies": {
     "extract-zip": "1.6.7",
     "minimist": "1.2.0",
-    "mkdirp": "1.0.3",
     "sanitize-filename": "1.6.3",
     "tmp": "0.1.0",
     "xmlbuilder": "13.0.2"
