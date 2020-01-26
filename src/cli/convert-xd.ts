@@ -6,15 +6,13 @@
  * found in the LICENSE file at https://github.com/L2jLiga/xd2svg/LICENSE
  */
 
-import { writeFile }    from 'fs';
-import * as mkdirp      from 'mkdirp';
-import { promisify }    from 'util';
-import * as logger      from '../common/utils/logger';
-import xd2svg           from '../converter/xd2svg';
-import { CliOptions }   from './models';
+import { writeFile }  from 'fs';
+import * as mkdirp    from 'mkdirp';
+import * as logger    from '../common/utils/logger';
+import xd2svg         from '../converter/xd2svg';
+import { CliOptions } from './models';
 
 const sanitize = require('sanitize-filename');
-const mkdirPromise = promisify(mkdirp);
 
 export async function convertXd(input: string, options: CliOptions): Promise<void> {
   const svgImages = await xd2svg(input, options);
@@ -30,7 +28,7 @@ async function preparePath(options: CliOptions): Promise<void> {
   const path = options.output.replace(/\\+/g, '/').split('/');
   if (options.single) path.pop();
 
-  await mkdirPromise(path.join('/'));
+  await mkdirp(path.join('/'));
 }
 
 function errorHandler(error): void {
