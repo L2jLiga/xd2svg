@@ -61,7 +61,7 @@
     "minimist": "1.2.0",
     "sanitize-filename": "1.6.3",
     "tmp": "0.1.0",
-    "xmlbuilder": "14.0.0"
+    "xmlbuilder": "15.0.0"
   },
   "devDependencies": {
     "@types/extract-zip": "1.6.2",
