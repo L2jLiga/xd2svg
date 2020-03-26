@@ -57,7 +57,7 @@
     "prepublish": "yarn lint && yarn clean && yarn build"
   },
   "dependencies": {
-    "extract-zip": "1.6.7",
+    "extract-zip": "1.7.0",
     "minimist": "1.2.5",
     "sanitize-filename": "1.6.3",
     "tmp": "0.1.0",
