@@ -10,12 +10,9 @@ import * as extractZip                                                          
 import { existsSync, lstatSync, writeFileSync }                                                       from 'fs';
 import { join }                                                                                       from 'path';
 import { dirSync }                                                                                    from 'tmp';
-import { promisify }                                                                                  from 'util';
 import { defaultOptions, Dictionary, Directory, MultipleOutput, Options, OutputFormat, SingleOutput } from '../common';
 import * as logger                                                                                    from '../common/utils/logger';
 import { proceedFile }                                                                                from './core';
-
-const extract = promisify(extractZip);
 
 export default async function xd2svg(input: string | Buffer, options?: SingleOutput): Promise<string>;
 export default async function xd2svg(input: string | Buffer, options?: MultipleOutput): Promise<Dictionary<string>>;
@@ -43,7 +40,7 @@ async function openMockup(input: string | Buffer): Promise<Directory> {
 
   const directory = dirSync({ unsafeCleanup: true, postfix: `_${Date.now()}` });
 
-  await extract(input, { dir: directory.name })
+  await extractZip(input, { dir: directory.name })
     .catch((error) => {
       logger.error(`Unable to unpack XD, please make sure that provided file is correct`);
 
