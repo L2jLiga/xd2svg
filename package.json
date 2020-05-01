@@ -60,7 +60,7 @@
     "extract-zip": "2.0.0",
     "minimist": "1.2.5",
     "sanitize-filename": "1.6.3",
-    "tmp": "0.2.0",
+    "tmp": "0.2.1",
     "xmlbuilder": "15.1.1"
   },
   "devDependencies": {
