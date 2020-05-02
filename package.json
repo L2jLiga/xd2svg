@@ -68,7 +68,7 @@
     "@types/mocha": "7.0.2",
     "@types/node": "10.17.17",
     "@types/sinon": "9.0.0",
-    "@types/tmp": "0.1.0",
+    "@types/tmp": "0.2.0",
     "blink-diff": "1.0.13",
     "convert-svg-to-png": "0.5.0",
     "cross-env": "7.0.2",
