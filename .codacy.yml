@@ -1,6 +1,0 @@
-engines:
-  coverage:
-    enabled: true
-    exclude_paths:
-      test/**/*
-      example/**/*
