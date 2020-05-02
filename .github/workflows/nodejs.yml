@@ -1,0 +1,35 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [10.x, 12.x, 13.x, 14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      run: yarn --frozen-lockfile --network-timeout=500000
+    - name: Build project
+      run: yarn build
+    - name: Lint files
+      run: yarn lint
+    - name: Run unit tests
+      run: yarn test:coverage
+    - name: Run e2e tests
+      run: yarn test:e2e
+    - name: Collect coverage
+      uses: codecov/codecov-action@v1
