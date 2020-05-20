@@ -68,7 +68,7 @@
     "@types/minimist": "1.2.0",
     "@types/mocha": "7.0.2",
     "@types/node": "10.17.21",
-    "@types/sinon": "9.0.1",
+    "@types/sinon": "9.0.3",
     "@types/tmp": "0.2.0",
     "blink-diff": "1.0.13",
     "convert-svg-to-png": "0.5.0",
