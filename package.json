@@ -66,7 +66,7 @@
   },
   "devDependencies": {
     "@types/minimist": "1.2.0",
-    "@types/mocha": "8.0.1",
+    "@types/mocha": "8.0.2",
     "@types/node": "10.17.21",
     "@types/sinon": "9.0.4",
     "@types/tmp": "0.2.0",
